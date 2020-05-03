@@ -4,6 +4,7 @@ import 'package:logger/logger.dart';
 import '../convert/gradient.dart';
 import '../convert/border.dart';
 import '../convert/edge.dart';
+import '../convert/util.dart';
 
 
 class HeadingParser extends WidgetParser {
@@ -20,7 +21,8 @@ class HeadingParser extends WidgetParser {
       padding: getEdgeInset(map['box']['padding']),
       alignment: Alignment(0.0, 0.0),
       child: Text(
-        map['data']['text']
+        map['data']['text'],
+        style: TextStyle(fontFamily: 'Kanit',fontSize: 16)
       )
     );
       

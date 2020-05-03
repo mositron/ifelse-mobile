@@ -30,16 +30,19 @@ class ButtonParser extends WidgetParser {
             gradient: getGradient(map['data']['normal']['bg']),
             borderRadius: getBorderRadius(map['data']['border']['radius'])
           ),
+          padding:getEdgeInset(map['data']['space']),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Icon(
                 getIcon(map['data']['icon']),
                 color: Colors.white,
+                size: 16,
               ),
+              SizedBox(width: 8),
               Text(
                 map['data']['text'],
-                style: TextStyle(color:getColor(map['data']['normal']['text']))
+                style: TextStyle(color:getColor(map['data']['normal']['text']),fontFamily: 'Kanit',fontSize: 16)
               ),
             ],
           )

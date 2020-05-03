@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:ifelse/src/convert/util.dart';
 import 'package:logger/logger.dart';
-
+import 'package:flutter/services.dart';
+import 'layer/appbar.dart';
 import 'layer/split1.dart';
 import 'layer/split2.dart';
 import 'layer/image.dart';
@@ -39,45 +41,60 @@ class Layer {
       List<Widget> widgets = [];
       for (var obj in json) {
         Widget widget = buildFromMap(obj, buildContext);
-        if(widget != null) {
+        if (widget != null) {
           widgets.add(widget);
         }
       }
       //return widget;
-      if(widgets.length > 0) {
+      if (widgets.length > 0) {
         return widgets;
       }
     }
-    return [Container(
+    return [
+      Container(
         color: Colors.white,
         alignment: Alignment.center,
         child: Text('ไม่มีข้อมูล'),
-      ),];
+      ),
+    ];
   }
 
   static Widget buildContent(dynamic json, BuildContext buildContext) {
     init();
-    //log.i(json);
+    log.i(json);
     if ((json != null) && (json[0] != null) && (json[0]['type'] == 'content')) {
-      return Scaffold(
-        appBar: AppBar(
-          title: Text('zz'),
-        ),
-        body: Container(
+      log.i(json[0]['data']['bg']['color']);
+      var appbar = getInt(json[0]['data']['appbar']);
+      var tabbar = getInt(json[0]['data']['tabbar']);
+
+      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+      ));
+      SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
+
+      return Container(
           decoration: BoxDecoration(
             gradient: getGradient(json[0]['data']['bg']['color']),
           ),
-          child: Column(
-            mainAxisAlignment: getAlignMain(json[0]['data']['align']),
-            children: build(json[0]['child'][1], buildContext),
-          ),
-        ),
-      );
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+            appBar: (appbar == 1
+                ? getAppbar(json[0]['child']['appbar'], buildContext)
+                : null),
+            body: Container(
+              color: Colors.transparent,
+              child: Column(
+                mainAxisAlignment: getAlignMain(json[0]['data']['align']),
+                children: build(json[0]['child']['body'], buildContext),
+              ),
+            ),
+          ));
     }
     return Scaffold(
       body: Container(
         color: Colors.white,
         alignment: Alignment.center,
+        padding: EdgeInsets.all(15.0),
         child: Text('ไม่มีข้อมูล'),
       ),
     );
