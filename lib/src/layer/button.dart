@@ -6,6 +6,7 @@ import '../convert/util.dart';
 import '../convert/gradient.dart';
 import '../convert/border.dart';
 import '../convert/edge.dart';
+import '../convert/icon.dart';
 
 
 class ButtonParser extends WidgetParser {
@@ -23,26 +24,24 @@ class ButtonParser extends WidgetParser {
       child: RawMaterialButton(
         onPressed: ()=>{},
         shape: RoundedRectangleBorder(borderRadius: getBorderRadius(map['data']['border']['radius'])),
-        
-        //margin: getEdgeInset(map['box']['margin']),
         padding: EdgeInsets.all(0.0),
-        //child: SizedBox(
-         // width: double.infinity,
-          child: Ink(
-            decoration: BoxDecoration(
-              gradient: getGradient(map['data']['normal']['bg']),
-              borderRadius: getBorderRadius(map['data']['border']['radius'])
-            ),
-            child: Container(
-              //data.space.width
-              padding: getEdgeInset(map['data']['space']),
-              //constraints: BoxConstraints(maxWidth: 300.0, minHeight: 50.0),
-              alignment: Alignment.center,
-              child: Text(
+        child: Ink(
+          decoration: BoxDecoration(
+            gradient: getGradient(map['data']['normal']['bg']),
+            borderRadius: getBorderRadius(map['data']['border']['radius'])
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Icon(
+                getIcon(map['data']['icon']),
+                color: Colors.white,
+              ),
+              Text(
                 map['data']['text'],
                 style: TextStyle(color:getColor(map['data']['normal']['text']))
-              )
-         //   )
+              ),
+            ],
           )
         )
       )
