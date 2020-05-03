@@ -1,60 +1,64 @@
-library layer;
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:logger/logger.dart';
 
 import 'layer/split1.dart';
+import 'layer/split2.dart';
 import 'layer/image.dart';
 import 'layer/heading.dart';
 import 'layer/button.dart';
 import 'convert/gradient.dart';
 import 'convert/align.dart';
 
-import 'package:flutter/material.dart';
-
-
-import 'package:flutter/widgets.dart';
-import 'package:logger/logger.dart';
-
-
 class Layer {
   static final Logger log = Logger();
 
   static final _parsers = [
     Split1Parser(),
+    Split2Parser(),
     ImageParser(),
     HeadingParser(),
     ButtonParser(),
-
   ];
 
-  static final _widgetNameParserMap = <String, WidgetParser>{};
+  static final _widgetPraseMap = <String, WidgetParser>{};
 
-  static bool _defaultParserInited = false;
+  static bool _parseInit = false;
 
   static void init() {
-    if (!_defaultParserInited) {
+    if (!_parseInit) {
       for (var parser in _parsers) {
-        _widgetNameParserMap[parser.widgetName] = parser;
+        _widgetPraseMap[parser.widgetName] = parser;
       }
-      _defaultParserInited = true;
+      _parseInit = true;
     }
   }
 
   static List<Widget> build(dynamic json, BuildContext buildContext) {
-    if(json != null) {
-      List<Widget> rt = [];
-      for (var value in json) {
-        rt.add(buildFromMap(value, buildContext));
+    if (json != null) {
+      List<Widget> widgets = [];
+      for (var obj in json) {
+        Widget widget = buildFromMap(obj, buildContext);
+        if(widget != null) {
+          widgets.add(widget);
+        }
       }
       //return widget;
-      return rt;
+      if(widgets.length > 0) {
+        return widgets;
+      }
     }
-    return [Container()];
+    return [Container(
+        color: Colors.white,
+        alignment: Alignment.center,
+        child: Text('ไม่มีข้อมูล'),
+      ),];
   }
 
   static Widget buildContent(dynamic json, BuildContext buildContext) {
     init();
     //log.i(json);
-    if((json != null) && (json[0] != null) && (json[0]['type'] == 'content')) {
-      //log.w(getAlignMain(json[0]['data']['align']));
+    if ((json != null) && (json[0] != null) && (json[0]['type'] == 'content')) {
       return Scaffold(
         appBar: AppBar(
           title: Text('zz'),
@@ -63,18 +67,13 @@ class Layer {
           decoration: BoxDecoration(
             gradient: getGradient(json[0]['data']['bg']['color']),
           ),
-          //getAlignContent(json[0]['data']['align'])
-          //alignment: Alignment.bottomLeft,
-          
           child: Column(
             mainAxisAlignment: getAlignMain(json[0]['data']['align']),
             children: build(json[0]['child'][1], buildContext),
           ),
         ),
       );
-
     }
-    //var map = jsonDecode(json);
     return Scaffold(
       body: Container(
         color: Colors.white,
@@ -84,9 +83,10 @@ class Layer {
     );
   }
 
-  static Widget buildFromMap(Map<String, dynamic> map, BuildContext buildContext) {
+  static Widget buildFromMap(
+      Map<String, dynamic> map, BuildContext buildContext) {
     String widgetName = map['type'];
-    var parser = _widgetNameParserMap[widgetName];
+    var parser = _widgetPraseMap[widgetName];
     if (parser != null) {
       return parser.parse(map, buildContext);
     }
@@ -94,7 +94,8 @@ class Layer {
     return null;
   }
 
-  static List<Widget> buildWidgets( List<dynamic> values, BuildContext buildContext) {
+  static List<Widget> buildWidgets(
+      List<dynamic> values, BuildContext buildContext) {
     List<Widget> rt = [];
     for (var value in values) {
       rt.add(buildFromMap(value, buildContext));

@@ -29,14 +29,16 @@ class SplashScreenState extends State<SplashPage> {
         headers: {'user-agent': 'ifelse.co-'+Site.version},
         body: {'token': Site.token}
       );
-      var load = json.decode(response.body);      
+      var data = json.decode(response.body);      
+      //log.i(data);
       //  {"nav":{"name":"\u0e2a\u0e23\u0e49\u0e32\u0e07\u0e40\u0e27\u0e47\u0e1a\u0e44\u0e0b\u0e15\u0e4c","txt":"#ffffff","bg":"#008ad5"},"menu":{"type":"bottom","txt":"#555555","focus":"#ff4400","bg":"#f5f5f5"},"tab":[{"icon":"home","name":"\u0e25\u0e48\u0e32\u0e2a\u0e38\u0e14","type":"last","cate":"","article":0,"order":"last"},{"icon":"education","name":"\u0e2b\u0e21\u0e27\u0e14\u0e17\u0e31\u0e49\u0e07\u0e2b\u0e21\u0e14","type":"cate","cate":"","article":0,"order":"last"}]}
-      Site.getData(load);
+      Site.getData(data);
       
       
     } finally {
       client.close();
     }
+    //log.e('................');
     return new Timer(Duration(seconds: 1),() {
       if(Site.template['login'] != null) {
         Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LoginPage()));

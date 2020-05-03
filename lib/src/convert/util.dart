@@ -1,0 +1,41 @@
+import 'package:flutter/material.dart';
+
+int getInt(dynamic val, [int def]) {
+  if ((val == null) || (val.toString().isEmpty)) {
+    return def == null ? 0 : def;
+  }
+  return int.parse(val);
+}
+
+double getDouble(dynamic val, [double def]) {
+  if ((val == null) || (val.toString().isEmpty)) {
+    return def == null ? 0 : def;
+  }
+  return double.parse(val);
+}
+
+Color getColor(String hex, [String def]) {
+  hex = hex.toUpperCase().replaceAll('#', '');
+  if (hex.length == 3) {
+    String tmp = '';
+    for (int i = 0; i < 3; i++) {
+      var h = hex.substring(i, i + 1);
+      tmp += h + h;
+    }
+    hex = 'FF' + tmp;
+  } else if (hex.length == 4) {
+    String tmp = '';
+    for (int i = 0; i < 4; i++) {
+      var h = hex.substring(i, i + 1);
+      tmp += h + h;
+    }
+    hex = tmp.substring(6, 8) + tmp.substring(0, 6);
+  } else if (hex.length == 6) {
+    hex = 'FF' + hex;
+  } else if (hex.length == 8) {
+    hex = hex.substring(6, 8) + hex.substring(0, 6);
+  } else {
+    hex = 'FF' + def.toUpperCase().replaceAll('#', '');
+  }
+  return Color(int.parse(hex, radix: 16));
+}

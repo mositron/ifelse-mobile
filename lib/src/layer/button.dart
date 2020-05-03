@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:ifelse/src/convert/color.dart';
-
-import '../layer.dart';
 import 'package:flutter/widgets.dart';
 import 'package:logger/logger.dart';
+import '../layer.dart';
+import '../convert/util.dart';
 import '../convert/gradient.dart';
 import '../convert/border.dart';
 import '../convert/edge.dart';

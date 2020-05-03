@@ -1,10 +1,9 @@
+import 'package:flutter/widgets.dart';
+import 'package:logger/logger.dart';
 import '../layer.dart';
 import '../convert/image.dart'; 
 import '../convert/gradient.dart';
 import '../convert/border.dart';
-//import '../utils.dart';
-import 'package:flutter/widgets.dart';
-import 'package:logger/logger.dart';
 import '../convert/edge.dart';
 
 

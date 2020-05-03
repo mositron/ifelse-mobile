@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'double.dart';
+import 'util.dart';
 
-
-EdgeInsetsGeometry getEdgeInset (dynamic rad) {  
-  if((rad != null) && !(rad is List)) {
+EdgeInsetsGeometry getEdgeInset(dynamic rad) {
+  if ((rad != null) && !(rad is List)) {
     return EdgeInsets.only(
       top: getDouble(rad['top']),
       right: getDouble(rad['right']),
