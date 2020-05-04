@@ -6,6 +6,7 @@ import '../convert/gradient.dart';
 import '../convert/border.dart';
 import '../convert/edge.dart';
 import '../convert/util.dart';
+import '../convert/align.dart';
 
 
 class HeadingParser extends WidgetParser {
@@ -23,14 +24,18 @@ class HeadingParser extends WidgetParser {
       margin: getEdgeInset(getVal(box,'margin')),
       padding: getEdgeInset(getVal(box,'bg.padding')),
       alignment: Alignment(0.0, 0.0),
-      child: Text(
-        getVal(data,'text'),
-        style: TextStyle(fontFamily: 'Kanit',fontSize: 16)
+      child: SizedBox(
+        width: double.infinity,
+        child: Text(
+          getVal(data,'text'),
+          style: TextStyle(fontFamily: 'Kanit',fontSize: getDouble(getVal(data,'size')),color: getColor(getVal(data,'color'))),
+          textAlign: getAlignText(getVal(data,'align')),
+        )
       )
     );
       
   }
 
   @override
-  String get widgetName => "heading";
+  String get widgetName => 'heading';
 }

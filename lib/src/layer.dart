@@ -39,7 +39,6 @@ class Layer {
   static List<Widget> build(dynamic json, BuildContext buildContext) {
     if (json != null) {
       List<Widget> widgets = [];
-       log.i(json);
       for (var obj in json) {
         Widget widget = buildFromMap(obj, buildContext);
         if (widget != null) {
@@ -97,7 +96,7 @@ class Layer {
     if (parser != null) {
       return parser.parse(map, buildContext);
     }
-    log.w("Not support type: $widgetName");
+    log.w("Not support - $widgetName");
     return null;
   }
 }

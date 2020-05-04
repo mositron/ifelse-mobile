@@ -35,6 +35,19 @@ Alignment getAlign(dynamic align) {
   return alignment;
 }
 
+TextAlign getAlignText(dynamic align) {
+  TextAlign alignment = TextAlign.left;
+  switch (align) {
+    case 'center':
+      alignment = TextAlign.center;
+      break;
+    case 'right':
+      alignment = TextAlign.right;
+      break;
+  }
+  return alignment;
+}
+
 MainAxisAlignment getAlignMain(dynamic align) {
   MainAxisAlignment alignment = MainAxisAlignment.start;
   switch (getInt(align)) {

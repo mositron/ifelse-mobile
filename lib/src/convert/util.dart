@@ -1,13 +1,12 @@
 
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
+//import 'package:logger/logger.dart';
 
 int getInt(dynamic val, [int def]) {
-  final log = Logger();
+  //final log = Logger();
   if ((val == null) || (val.toString().isEmpty)) {
     return def == null ? 0 : def;
   }
-  log.e(val);
   return int.parse(val);
 }
 
@@ -21,6 +20,9 @@ double getDouble(dynamic val, [double def]) {
 }
 
 Color getColor(String hex, [String def]) {
+  if(hex is! String) {
+    return Colors.black;
+  }
   hex = hex.toUpperCase().replaceAll('#', '');
   if (hex.length == 3) {
     String tmp = '';
@@ -40,8 +42,10 @@ Color getColor(String hex, [String def]) {
     hex = 'FF' + hex;
   } else if (hex.length == 8) {
     hex = hex.substring(6, 8) + hex.substring(0, 6);
+  } else if(def.length >= 3) {
+    return getColor(def);
   } else {
-    hex = 'FF' + def.toUpperCase().replaceAll('#', '');
+    hex = 'FF000000';
   }
   return Color(int.parse(hex, radix: 16));
 }

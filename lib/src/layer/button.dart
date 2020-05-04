@@ -55,5 +55,5 @@ class ButtonParser extends WidgetParser {
   }
 
   @override
-  String get widgetName => "button";
+  String get widgetName => 'button';
 }

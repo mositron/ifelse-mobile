@@ -16,7 +16,6 @@ class ImageParser extends WidgetParser {
     dynamic box = getVal(map,'box');
     dynamic data = getVal(map,'data');
     Map image = getImageObj(getVal(data,'image'),getVal(data,'size'));
-    log.d(image);
     return Container(
       decoration: BoxDecoration(
         gradient: getGradient(getVal(box,'bg.color')),
