@@ -6,6 +6,10 @@ import 'package:flutter/services.dart';
 import 'layer/appbar.dart';
 import 'layer/split1.dart';
 import 'layer/split2.dart';
+import 'layer/split3.dart';
+import 'layer/split4.dart';
+import 'layer/split5.dart';
+import 'layer/split6.dart';
 import 'layer/image.dart';
 import 'layer/heading.dart';
 import 'layer/button.dart';
@@ -18,6 +22,10 @@ class Layer {
   static final _parsers = [
     Split1Parser(),
     Split2Parser(),
+    Split3Parser(),
+    Split4Parser(),
+    Split5Parser(),
+    Split6Parser(),
     ImageParser(),
     HeadingParser(),
     ButtonParser(),
@@ -90,7 +98,7 @@ class Layer {
   }
 
   static Widget buildFromMap(
-      Map<String, dynamic> map, BuildContext buildContext) {
+    Map<String, dynamic> map, BuildContext buildContext) {
     String widgetName = map['type'];
     var parser = _widgetPraseMap[widgetName];
     if (parser != null) {

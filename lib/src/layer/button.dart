@@ -46,8 +46,8 @@ class ButtonParser extends WidgetParser {
               ),
               SizedBox(width: 8),
               Text(
-                map['data']['text'],
-                style: TextStyle(color:getColor(getVal(data,'normal.text')),fontFamily: 'Kanit',fontSize: 16)
+                getVal(data,'text'),
+                style: TextStyle(color:getColor(getVal(data,'normal.text')),fontFamily: 'Kanit',fontSize: getVal(data,'size') ?? 16)
               ),
             ],
           )
