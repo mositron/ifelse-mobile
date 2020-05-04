@@ -3,6 +3,7 @@ import 'package:logger/logger.dart';
 import '../layer.dart';
 import '../convert/image.dart'; 
 import '../convert/gradient.dart';
+import '../convert/shadow.dart';
 import '../convert/border.dart';
 import '../convert/edge.dart';
 import '../convert/util.dart';
@@ -19,7 +20,8 @@ class ImageParser extends WidgetParser {
     return Container(
       decoration: BoxDecoration(
         gradient: getGradient(getVal(box,'bg.color')),
-        borderRadius: getBorderRadius(getVal(box,'border.radius'))
+        borderRadius: getBorderRadius(getVal(box,'border.radius')),
+        boxShadow: getBoxShadow(getVal(box,'shadow')),
       ),
       margin: getEdgeInset(getVal(box,'margin')),
       padding: getEdgeInset(getVal(box,'padding')),

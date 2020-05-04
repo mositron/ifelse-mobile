@@ -5,14 +5,14 @@ import 'package:flutter/material.dart';
 int getInt(dynamic val, [int def]) {
   //final log = Logger();
   if ((val == null) || (val.toString().isEmpty)) {
-    return def == null ? 0 : def;
+    return def ?? 0;
   }
   return int.parse(val);
 }
 
 double getDouble(dynamic val, [double def]) {
   if ((val == null) || (val.toString().isEmpty)) {
-    return def == null ? 0 : def;
+    return def ?? 0.0;
   } else if(val is int) {
     return val.toDouble();
   }

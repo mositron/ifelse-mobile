@@ -5,6 +5,7 @@ import '../layer.dart';
 import 'util.dart';
 import 'gradient.dart';
 import 'border.dart';
+import 'shadow.dart';
 import 'edge.dart';
 
 Widget getSplit(int col, Map<String, dynamic> map, BuildContext buildContext) {
@@ -45,7 +46,8 @@ Widget getSplit(int col, Map<String, dynamic> map, BuildContext buildContext) {
         child: Container(
           decoration: BoxDecoration(
             gradient: getGradient(getVal(box,'bg.color')),
-            borderRadius: getBorderRadius(getVal(box,'border.radius'))
+            borderRadius: getBorderRadius(getVal(box,'border.radius')),
+            boxShadow: getBoxShadow(getVal(box,'shadow')),
           ),
           margin: getEdgeInset(getVal(box,'margin')),
           padding: getEdgeInset(getVal(box,'padding')),

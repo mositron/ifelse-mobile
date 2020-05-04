@@ -1,6 +1,6 @@
 
 String getImage(dynamic obj, [String size, String service]) {
-  if ((obj != null) && !(obj is List)) {
+  if ((obj != null) && (obj is! List)) {
     size ??= 'o';
     if (obj[size] == null) {
       size = 'o';
@@ -15,7 +15,7 @@ String getImage(dynamic obj, [String size, String service]) {
 }
 
 dynamic getImageObj(dynamic obj, [String size, String service]) {
-  if ((obj != null) && !(obj is List)) {
+  if ((obj != null) && (obj is! List)) {
     size ??= 'o';
     if (obj[size] == null) {
       size = 'o';

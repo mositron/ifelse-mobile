@@ -3,7 +3,7 @@ import 'util.dart';
 
 Gradient getGradient(dynamic obj) {
   List<Color> colors = [];
-  if ((obj != null) && !(obj is List)) {
+  if ((obj != null) && (obj is! List)) {
     if ((obj['color1'] != null) && (obj['color1'].toString().isNotEmpty)) {
       colors.add(getColor(obj['color1']));
     }

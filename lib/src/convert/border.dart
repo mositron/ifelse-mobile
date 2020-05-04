@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'util.dart';
 
 BorderRadius getBorderRadius(dynamic rad) {
-  if ((rad != null) && !(rad is List)) {
+  if ((rad != null) && (rad is! List)) {
     return BorderRadius.only(
       topLeft: Radius.circular(getDouble(rad['top'])),
       topRight: Radius.circular(getDouble(rad['right'])),

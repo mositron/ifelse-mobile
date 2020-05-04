@@ -7,6 +7,7 @@ import '../convert/gradient.dart';
 import '../convert/border.dart';
 import '../convert/edge.dart';
 import '../convert/icon.dart';
+import '../convert/shadow.dart';
 
 
 class ButtonParser extends WidgetParser {
@@ -20,7 +21,7 @@ class ButtonParser extends WidgetParser {
     return Container(
       decoration: BoxDecoration(
         gradient: getGradient(getVal(box,'bg.color')),
-        borderRadius: getBorderRadius(getVal(box,'border,radius'))
+        borderRadius: getBorderRadius(getVal(box,'border.radius'))
       ),
       margin: getEdgeInset(getVal(box,'margin')),
       padding: getEdgeInset(getVal(box,'padding')),
@@ -30,8 +31,9 @@ class ButtonParser extends WidgetParser {
         padding: EdgeInsets.all(0.0),
         child: Ink(
           decoration: BoxDecoration(
-            gradient: getGradient(getVal(data,'normal.bg')),
-            borderRadius: radius
+            gradient: getGradient(getVal(data,'color.bg')),
+            borderRadius: radius,
+            boxShadow: getBoxShadow(getVal(data,'shadow')),
           ),
           padding:getEdgeInset(getVal(data,'border.space')),
           child: Row(
