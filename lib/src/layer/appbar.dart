@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:ifelse/src/convert/edge.dart';
-import 'package:ifelse/src/convert/gradient.dart';
+import '../convert/edge.dart';
+import '../convert/gradient.dart';
+import '../convert/util.dart';
 
 AppBar getAppbar(dynamic obj, BuildContext buildContext) {
   if ((obj != null) && !(obj is List)) {
+    dynamic box = getVal(obj,'box');
     return AppBar(
       //automaticallyImplyLeading: false,
       title: Text('ทดสอบ'), //obj['data']['text'],
@@ -15,9 +17,9 @@ AppBar getAppbar(dynamic obj, BuildContext buildContext) {
       backgroundColor: Colors.transparent,
       elevation: 0,
       flexibleSpace: Container(
-        padding: getEdgeInset(obj['box']['padding']),
+        padding: getEdgeInset(getVal(box,'padding')),
        // margin: getEdgeInset(obj['box']['margin']),
-        decoration: BoxDecoration(gradient: getGradient(obj['box']['bg']['color']))
+        decoration: BoxDecoration(gradient: getGradient(getVal(box,'bg.color')))
       ),
       actions:
           null, /*<Widget>[

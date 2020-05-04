@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'login.dart';
 import 'package:logger/logger.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -27,24 +26,15 @@ class SplashScreenState extends State<SplashPage> {
       var response = await client.post(
         Site.api + 'load',
         headers: {'user-agent': 'ifelse.co-'+Site.version},
-        body: {'token': Site.token}
+        body: {'token': Site.token, 'session': Site.session}
       );
-      var data = json.decode(response.body);      
-      //log.i(data);
-      //  {"nav":{"name":"\u0e2a\u0e23\u0e49\u0e32\u0e07\u0e40\u0e27\u0e47\u0e1a\u0e44\u0e0b\u0e15\u0e4c","txt":"#ffffff","bg":"#008ad5"},"menu":{"type":"bottom","txt":"#555555","focus":"#ff4400","bg":"#f5f5f5"},"tab":[{"icon":"home","name":"\u0e25\u0e48\u0e32\u0e2a\u0e38\u0e14","type":"last","cate":"","article":0,"order":"last"},{"icon":"education","name":"\u0e2b\u0e21\u0e27\u0e14\u0e17\u0e31\u0e49\u0e07\u0e2b\u0e21\u0e14","type":"cate","cate":"","article":0,"order":"last"}]}
-      Site.getData(data);
-      
-      
+      Site.getData(json.decode(response.body));
     } finally {
       client.close();
     }
     //log.e('................');
     return new Timer(Duration(seconds: 1),() {
-      if(Site.template['login'] != null) {
-        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LoginPage()));
-      }
-      //log.w(Site.template['home']);
-      //Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => MyPage()));
+      Navigator.pushNamed(context, '/home');
     });
   }
 

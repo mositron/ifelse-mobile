@@ -1,9 +1,13 @@
+
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 
 int getInt(dynamic val, [int def]) {
+  final log = Logger();
   if ((val == null) || (val.toString().isEmpty)) {
     return def == null ? 0 : def;
   }
+  log.e(val);
   return int.parse(val);
 }
 
@@ -38,4 +42,19 @@ Color getColor(String hex, [String def]) {
     hex = 'FF' + def.toUpperCase().replaceAll('#', '');
   }
   return Color(int.parse(hex, radix: 16));
+}
+
+dynamic getVal(dynamic obj, String key) {
+  if((obj != null) && (obj is Map)) {
+    List<String> point = key.split('.');
+    String cur = point.removeLast();
+    while(point.length > 0) {
+      String start = point.removeAt(0);
+      obj = obj[start]  = obj[start] ?? new Map();
+    }
+    if((obj != null) && (obj is Map)) {
+      return obj[cur];
+    }
+  }
+  return null;
 }

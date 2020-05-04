@@ -1,6 +1,7 @@
-import '../layer.dart';
+
 import 'package:flutter/widgets.dart';
 import 'package:logger/logger.dart';
+import '../layer.dart';
 import '../convert/gradient.dart';
 import '../convert/border.dart';
 import '../convert/edge.dart';
@@ -12,16 +13,18 @@ class HeadingParser extends WidgetParser {
 
   @override
   Widget parse(Map<String, dynamic> map, BuildContext buildContext) {
+    dynamic box = getVal(map,'box');
+    dynamic data = getVal(map,'data');
     return Container(
       decoration: BoxDecoration(
-        gradient: getGradient(map['box']['bg']['color']),
-        borderRadius: getBorderRadius(map['box']['border']['radius'])
+        gradient: getGradient(getVal(box,'bg.color')),
+        borderRadius: getBorderRadius(getVal(box,'border.radius'))
       ),
-      margin: getEdgeInset(map['box']['margin']),
-      padding: getEdgeInset(map['box']['padding']),
+      margin: getEdgeInset(getVal(box,'margin')),
+      padding: getEdgeInset(getVal(box,'bg.padding')),
       alignment: Alignment(0.0, 0.0),
       child: Text(
-        map['data']['text'],
+        getVal(data,'text'),
         style: TextStyle(fontFamily: 'Kanit',fontSize: 16)
       )
     );

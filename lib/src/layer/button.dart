@@ -14,35 +14,38 @@ class ButtonParser extends WidgetParser {
 
   @override
   Widget parse(Map<String, dynamic> map, BuildContext buildContext) {
+    dynamic box = getVal(map,'box');
+    dynamic data = getVal(map,'data');
+    BorderRadius radius = getBorderRadius(getVal(data,'border.radius'));
     return Container(
       decoration: BoxDecoration(
-        gradient: getGradient(map['box']['bg']['color']),
-        borderRadius: getBorderRadius(map['box']['border']['radius'])
+        gradient: getGradient(getVal(box,'bg.color')),
+        borderRadius: getBorderRadius(getVal(box,'border,radius'))
       ),
-      margin: getEdgeInset(map['box']['margin']),
-      padding: getEdgeInset(map['box']['padding']),
+      margin: getEdgeInset(getVal(box,'margin')),
+      padding: getEdgeInset(getVal(box,'padding')),
       child: RawMaterialButton(
         onPressed: ()=>{},
-        shape: RoundedRectangleBorder(borderRadius: getBorderRadius(map['data']['border']['radius'])),
+        shape: RoundedRectangleBorder(borderRadius: radius),
         padding: EdgeInsets.all(0.0),
         child: Ink(
           decoration: BoxDecoration(
-            gradient: getGradient(map['data']['normal']['bg']),
-            borderRadius: getBorderRadius(map['data']['border']['radius'])
+            gradient: getGradient(getVal(data,'normal.bg')),
+            borderRadius: radius
           ),
-          padding:getEdgeInset(map['data']['space']),
+          padding:getEdgeInset(getVal(data,'border.space')),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Icon(
-                getIcon(map['data']['icon']),
+                getIcon(getVal(data,'icon')),
                 color: Colors.white,
                 size: 16,
               ),
               SizedBox(width: 8),
               Text(
                 map['data']['text'],
-                style: TextStyle(color:getColor(map['data']['normal']['text']),fontFamily: 'Kanit',fontSize: 16)
+                style: TextStyle(color:getColor(getVal(data,'normal.text')),fontFamily: 'Kanit',fontSize: 16)
               ),
             ],
           )

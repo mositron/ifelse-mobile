@@ -39,6 +39,7 @@ class Layer {
   static List<Widget> build(dynamic json, BuildContext buildContext) {
     if (json != null) {
       List<Widget> widgets = [];
+       log.i(json);
       for (var obj in json) {
         Widget widget = buildFromMap(obj, buildContext);
         if (widget != null) {
@@ -51,21 +52,17 @@ class Layer {
       }
     }
     return [
-      Container(
-        color: Colors.white,
-        alignment: Alignment.center,
-        child: Text('ไม่มีข้อมูล'),
-      ),
+      Container(),
     ];
   }
 
   static Widget buildContent(dynamic json, BuildContext buildContext) {
     init();
-    log.i(json);
     if ((json != null) && (json[0] != null) && (json[0]['type'] == 'content')) {
-      log.i(json[0]['data']['bg']['color']);
-      var appbar = getInt(json[0]['data']['appbar']);
-      var tabbar = getInt(json[0]['data']['tabbar']);
+      dynamic box = getVal(json[0],'box');
+      dynamic child = getVal(json[0],'child');
+      dynamic data = getVal(json[0],'data');
+      int appbar = getInt(getVal(data,'appbar'));
 
       SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
@@ -74,30 +71,23 @@ class Layer {
 
       return Container(
           decoration: BoxDecoration(
-            gradient: getGradient(json[0]['data']['bg']['color']),
+            gradient: getGradient(getVal(box,'bg.color')),
           ),
           child: Scaffold(
             backgroundColor: Colors.transparent,
             appBar: (appbar == 1
-                ? getAppbar(json[0]['child']['appbar'], buildContext)
+                ? getAppbar(getVal(child,'appbar'), buildContext)
                 : null),
             body: Container(
               color: Colors.transparent,
               child: Column(
-                mainAxisAlignment: getAlignMain(json[0]['data']['align']),
-                children: build(json[0]['child']['body'], buildContext),
+                mainAxisAlignment: getAlignMain(getVal(data,'align')),
+                children: build(getVal(child,'body'), buildContext),
               ),
             ),
           ));
     }
-    return Scaffold(
-      body: Container(
-        color: Colors.white,
-        alignment: Alignment.center,
-        padding: EdgeInsets.all(15.0),
-        child: Text('ไม่มีข้อมูล'),
-      ),
-    );
+    return Container();
   }
 
   static Widget buildFromMap(
@@ -109,15 +99,6 @@ class Layer {
     }
     log.w("Not support type: $widgetName");
     return null;
-  }
-
-  static List<Widget> buildWidgets(
-      List<dynamic> values, BuildContext buildContext) {
-    List<Widget> rt = [];
-    for (var value in values) {
-      rt.add(buildFromMap(value, buildContext));
-    }
-    return rt;
   }
 }
 
