@@ -15,7 +15,8 @@ class ImageParser extends WidgetParser {
   Widget parse(Map<String, dynamic> map, BuildContext buildContext) {
     dynamic box = getVal(map,'box');
     dynamic data = getVal(map,'data');
-    String image = getImage(getVal(data,'image'),getVal(data,'size'));
+    Map image = getImageObj(getVal(data,'image'),getVal(data,'size'));
+    log.d(image);
     return Container(
       decoration: BoxDecoration(
         gradient: getGradient(getVal(box,'bg.color')),
@@ -24,7 +25,7 @@ class ImageParser extends WidgetParser {
       margin: getEdgeInset(getVal(box,'margin')),
       padding: getEdgeInset(getVal(box,'padding')),
       alignment: Alignment(0.0, 0.0),
-      child: image != null ? new Image.network(image) : null,
+      child: image != null ? new Image.network(image['src'], width: getDouble(image['width']), height: getDouble(image['height']),) : null,
     );    
   }
 

@@ -14,6 +14,8 @@ int getInt(dynamic val, [int def]) {
 double getDouble(dynamic val, [double def]) {
   if ((val == null) || (val.toString().isEmpty)) {
     return def == null ? 0 : def;
+  } else if(val is int) {
+    return val.toDouble();
   }
   return double.parse(val);
 }
