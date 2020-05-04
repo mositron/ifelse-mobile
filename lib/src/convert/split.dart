@@ -1,15 +1,17 @@
 import 'package:flutter/widgets.dart';
-//import 'package:logger/logger.dart';
+import 'package:ifelse/src/convert/align.dart';
+import 'package:logger/logger.dart';
 import '../layer.dart';
 import 'util.dart';
 import 'gradient.dart';
 import 'border.dart';
 import 'edge.dart';
 
-
 Widget getSplit(int col, Map<String, dynamic> map, BuildContext buildContext) {
+  Logger log = Logger();
   List<dynamic> child = map['child'];
   dynamic box = getVal(map,'box');
+  dynamic data = getVal(map,'data');
   List<Widget> widget = [];
   if(col == 1) {
       widget.add(Column(
@@ -27,11 +29,19 @@ Widget getSplit(int col, Map<String, dynamic> map, BuildContext buildContext) {
       );
     }    
   }
+  dynamic flex = getVal(data,'flex');
+  String width = getVal(flex,'width').toString();
+  BoxConstraints boxwidth = BoxConstraints();
+  Alignment align = Alignment.center;
+  if(width == 'pixel') {
+    boxwidth = BoxConstraints(maxWidth: getDouble(getVal(flex,'pixel')));
+    align = getAlignBox(getVal(flex,'align'));
+  }
   return Container(
     child: Align(
-      alignment: Alignment.bottomRight,
+      alignment: align,
       child: ConstrainedBox(
-        constraints: BoxConstraints(/*minWidth: 100.0, maxWidth: 300.0*/),
+        constraints: boxwidth,
         child: Container(
           decoration: BoxDecoration(
             gradient: getGradient(getVal(box,'bg.color')),
