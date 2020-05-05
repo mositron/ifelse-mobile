@@ -18,7 +18,23 @@ class ButtonParser extends WidgetParser {
     dynamic box = getVal(map,'box');
     dynamic data = getVal(map,'data');
     BorderRadius radius = getBorderRadius(getVal(data,'border.radius'));
-    return Container(
+    String title = '';//getVal(data,'text').toString();
+    
+    List<Widget> widget = [];
+    widget = [
+                Icon(
+                  getIcon(getVal(data,'icon')),
+                  color: Colors.white,
+                  size: 16,
+                ),
+                SizedBox(width: 8),
+                Text(
+                  getVal(data,'text'),
+                  style: TextStyle(color:getColor(getVal(data,'normal.text')),fontFamily: 'Kanit',fontSize: getVal(data,'size') ?? 16)
+                ),
+              ];
+    return Expanded(
+      child: Container(
       decoration: BoxDecoration(
         gradient: getGradient(getVal(box,'bg.color')),
         borderRadius: getBorderRadius(getVal(box,'border.radius'))
@@ -28,7 +44,7 @@ class ButtonParser extends WidgetParser {
       child: RawMaterialButton(
         onPressed: ()=>{},
         shape: RoundedRectangleBorder(borderRadius: radius),
-        padding: EdgeInsets.all(0.0),
+        //padding: EdgeInsets.all(0.0),
         child: Ink(
           decoration: BoxDecoration(
             gradient: getGradient(getVal(data,'color.bg')),
@@ -37,21 +53,11 @@ class ButtonParser extends WidgetParser {
           ),
           padding:getEdgeInset(getVal(data,'border.space')),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Icon(
-                getIcon(getVal(data,'icon')),
-                color: Colors.white,
-                size: 16,
-              ),
-              SizedBox(width: 8),
-              Text(
-                getVal(data,'text'),
-                style: TextStyle(color:getColor(getVal(data,'normal.text')),fontFamily: 'Kanit',fontSize: getVal(data,'size') ?? 16)
-              ),
-            ],
+            mainAxisSize: MainAxisSize.min,
+            children: widget,
           )
         )
+      )
       )
     );
   }

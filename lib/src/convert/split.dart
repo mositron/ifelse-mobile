@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:ifelse/src/convert/align.dart';
-import 'package:logger/logger.dart';
+//import 'package:logger/logger.dart';
 import '../layer.dart';
 import 'util.dart';
 import 'gradient.dart';
@@ -9,7 +9,7 @@ import 'shadow.dart';
 import 'edge.dart';
 
 Widget getSplit(int col, Map<String, dynamic> map, BuildContext buildContext) {
-  Logger log = Logger();
+  //Logger log = Logger();
   List<dynamic> child = map['child'];
   dynamic box = getVal(map,'box');
   dynamic data = getVal(map,'data');
@@ -35,7 +35,7 @@ Widget getSplit(int col, Map<String, dynamic> map, BuildContext buildContext) {
   BoxConstraints boxwidth = BoxConstraints();
   Alignment align = Alignment.center;
   if(width == 'pixel') {
-    boxwidth = BoxConstraints(maxWidth: getDouble(getVal(flex,'pixel')));
+    boxwidth = BoxConstraints(maxWidth: getDPI(getVal(flex,'pixel')));
     align = getAlignBox(getVal(flex,'align'));
   }
   return Container(

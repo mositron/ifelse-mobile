@@ -28,7 +28,7 @@ class SplashScreenState extends State<SplashPage> {
         headers: {'user-agent': 'ifelse.co-'+Site.version},
         body: {'token': Site.token, 'session': Site.session}
       );
-      Site.getData(json.decode(response.body));
+      Site.getData(json.decode(response.body), context);
     } finally {
       client.close();
     }

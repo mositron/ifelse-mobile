@@ -1,6 +1,15 @@
 
 import 'package:flutter/material.dart';
+import '../site.dart';
 //import 'package:logger/logger.dart';
+
+double getDPI(dynamic val, [double def]) {
+  if ((val == null) || (val.toString().isEmpty)) {
+    return def ?? 0.0;
+  } else {
+    return getDouble(val) * 1.4;
+  }
+}
 
 int getInt(dynamic val, [int def]) {
   //final log = Logger();

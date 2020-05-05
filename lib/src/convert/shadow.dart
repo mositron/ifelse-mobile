@@ -4,16 +4,16 @@ import 'util.dart';
 List<BoxShadow> getBoxShadow(dynamic rad) {
   if ((rad != null) && (rad is! List)) {
     String color = getVal(rad,'color').toString();
-    double blur = getDouble(getVal(rad,'blur'));
+    double blur = getDPI(getVal(rad,'blur'));
     if(color.isNotEmpty && blur > 0) {
       return [
         BoxShadow(
           color: getColor(color),
           blurRadius: blur,
-          spreadRadius: getDouble(getVal(rad,'spread')),
+          spreadRadius: getDPI(getVal(rad,'spread')),
           offset: Offset(
-            getDouble(getVal(rad,'x')),
-            getDouble(getVal(rad,'y')),
+            getDPI(getVal(rad,'x')),
+            getDPI(getVal(rad,'y')),
           ),
         )
       ];

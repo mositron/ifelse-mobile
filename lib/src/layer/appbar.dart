@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
-import '../convert/edge.dart';
+//import '../convert/edge.dart';
 import '../convert/gradient.dart';
 import '../convert/util.dart';
 
 AppBar getAppbar(dynamic obj, BuildContext buildContext) {
   if ((obj != null) && !(obj is List)) {
     dynamic box = getVal(obj,'box');
+    dynamic heading = getVal(obj,'heading');
     return AppBar(
       //automaticallyImplyLeading: false,
-      title: Text('ทดสอบ'), //obj['data']['text'],
+      title: Text(
+        getVal(heading, 'text') ?? '',
+        style: TextStyle(fontFamily: 'Kanit',fontSize: getDPI(getVal(heading,'size'), 16),color: getColor(getVal(heading,'color'),'fff'))
+      ), //obj['data']['text'],
       leading: IconButton(
         tooltip: 'Previous choice',
         icon: const Icon(Icons.arrow_back),
@@ -17,7 +21,7 @@ AppBar getAppbar(dynamic obj, BuildContext buildContext) {
       backgroundColor: Colors.transparent,
       elevation: 0,
       flexibleSpace: Container(
-        padding: getEdgeInset(getVal(box,'padding')),
+        //padding: getEdgeInset(getVal(box,'padding')),
        // margin: getEdgeInset(obj['box']['margin']),
         decoration: BoxDecoration(gradient: getGradient(getVal(box,'bg.color')))
       ),

@@ -30,7 +30,7 @@ class HeadingParser extends WidgetParser {
         width: double.infinity,
         child: Text(
           getVal(data,'text'),
-          style: TextStyle(fontFamily: 'Kanit',fontSize: getDouble(getVal(data,'size')),color: getColor(getVal(data,'color'))),
+          style: TextStyle(fontFamily: 'Kanit',fontSize: getDouble(getVal(data,'size'), 16),color: getColor(getVal(data,'color'))),
           textAlign: getAlignText(getVal(data,'align')),
         )
       )

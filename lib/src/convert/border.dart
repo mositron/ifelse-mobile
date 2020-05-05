@@ -4,10 +4,10 @@ import 'util.dart';
 BorderRadius getBorderRadius(dynamic rad) {
   if ((rad != null) && (rad is! List)) {
     return BorderRadius.only(
-      topLeft: Radius.circular(getDouble(rad['top'])),
-      topRight: Radius.circular(getDouble(rad['right'])),
-      bottomRight: Radius.circular(getDouble(rad['bottom'])),
-      bottomLeft: Radius.circular(getDouble(rad['left'])),
+      topLeft: Radius.circular(getDPI(rad['top'])),
+      topRight: Radius.circular(getDPI(rad['right'])),
+      bottomRight: Radius.circular(getDPI(rad['bottom'])),
+      bottomLeft: Radius.circular(getDPI(rad['left'])),
     );
   }
   return BorderRadius.zero;
