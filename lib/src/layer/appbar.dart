@@ -6,7 +6,8 @@ import '../convert/util.dart';
 AppBar getAppbar(dynamic obj, BuildContext buildContext) {
   if ((obj != null) && !(obj is List)) {
     dynamic box = getVal(obj,'box');
-    dynamic heading = getVal(obj,'heading');
+    dynamic data = getVal(obj,'data');
+    dynamic heading = getVal(data,'heading');
     return AppBar(
       //automaticallyImplyLeading: false,
       title: Text(
