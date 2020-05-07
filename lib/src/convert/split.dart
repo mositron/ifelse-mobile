@@ -35,15 +35,15 @@ Widget getSplit(int col, Map<String, dynamic> map, BuildContext buildContext) {
   BoxConstraints boxwidth = BoxConstraints();
   Alignment align = Alignment.center;
   if(width == 'pixel') {
-    boxwidth = BoxConstraints(maxWidth: getDPI(getVal(flex,'pixel')));
+    boxwidth = BoxConstraints(maxWidth: getDouble(getVal(flex,'pixel')));
     align = getAlignBox(getVal(flex,'align'));
   }
-  return Container(
-    child: Align(
-      alignment: align,
+  return Center(
       child: ConstrainedBox(
         constraints: boxwidth,
         child: Container(
+          alignment: Alignment.center,    
+
           decoration: BoxDecoration(
             gradient: getGradient(getVal(box,'bg.color')),
             borderRadius: getBorderRadius(getVal(box,'border.radius')),
@@ -51,12 +51,13 @@ Widget getSplit(int col, Map<String, dynamic> map, BuildContext buildContext) {
           ),
           margin: getEdgeInset(getVal(box,'margin')),
           padding: getEdgeInset(getVal(box,'padding')),
+          //child: Text("dddd")
+
           child: col == 1 ? widget[0] : 
               Row(
                 children: widget
               )
         )
       )
-    )
   );
 }

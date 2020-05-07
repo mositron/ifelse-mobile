@@ -34,7 +34,7 @@ class SplashScreenState extends State<SplashPage> {
     }
     //log.e('................');
     return new Timer(Duration(seconds: 1),() {
-      Navigator.pushNamed(context, '/home');
+      Navigator.pushNamed(context, '/login');
     });
   }
 

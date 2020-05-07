@@ -1,3 +1,8 @@
+import 'dart:math';
+
+import 'package:flutter/material.dart';
+import '../site.dart';
+import 'util.dart';
 
 String getImage(dynamic obj, [String size, String service]) {
   if ((obj != null) && (obj is! List)) {
@@ -30,6 +35,32 @@ dynamic getImageObj(dynamic obj, [String size, String service]) {
         'width': obj[size]['w'],
         'height': obj[size]['h'],
       };
+    }
+  }
+  return null;
+}
+
+
+
+DecorationImage getImageBG(dynamic obj) {
+  if ((obj != null) && (obj is! List)) {
+    dynamic img =  getImageObj(obj['image'],'o');
+    Site.log.w(obj);
+    Site.log.w(img);
+    BoxFit bfit = BoxFit.none;
+    switch(obj['size'].toString()) {
+      case 'cover':
+        bfit = BoxFit.cover;
+        break;
+      case 'contain':
+        bfit = BoxFit.contain;
+        break;
+    }
+    if(img != null) {
+      return DecorationImage(
+        image: Image.network(img['src'], width: getDouble(img['width']), height: getDouble(img['height'])).image,
+        fit: bfit
+      );
     }
   }
   return null;

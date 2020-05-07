@@ -85,13 +85,15 @@ class Layer {
             appBar: (appbar == 1
                 ? getAppbar(getVal(child,'appbar'), buildContext)
                 : null),
-            body: Container(
-              color: Colors.transparent,
-              child: Column(
-                mainAxisAlignment: getAlignMain(getVal(data,'align')),
-                children: build(getVal(child,'body'), buildContext),
+            body: Center(
+              child: Container(
+                alignment: Alignment.center,
+                child: Column(
+                  mainAxisAlignment: getAlignMain(getVal(data,'align')),
+                  children: build(getVal(child,'body'), buildContext),
+                ),
               ),
-            ),
+            )
           ));
     }
     return Container();

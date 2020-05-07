@@ -4,10 +4,10 @@ import 'util.dart';
 EdgeInsetsGeometry getEdgeInset(dynamic rad) {
   if ((rad != null) && (rad is! List)) {
     return EdgeInsets.only(
-      top: getDPI(rad['top']),
-      right: getDPI(rad['right']),
-      bottom: getDPI(rad['bottom']),
-      left: getDPI(rad['left']),
+      top: getDouble(rad['top']),
+      right: getDouble(rad['right']),
+      bottom: getDouble(rad['bottom']),
+      left: getDouble(rad['left']),
     );
   }
   return EdgeInsets.zero;

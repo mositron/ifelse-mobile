@@ -11,7 +11,7 @@ AppBar getAppbar(dynamic obj, BuildContext buildContext) {
       //automaticallyImplyLeading: false,
       title: Text(
         getVal(heading, 'text') ?? '',
-        style: TextStyle(fontFamily: 'Kanit',fontSize: getDPI(getVal(heading,'size'), 16),color: getColor(getVal(heading,'color'),'fff'))
+        style: TextStyle(fontFamily: 'Kanit',fontSize: getDouble(getVal(heading,'size'), 16),color: getColor(getVal(heading,'color'),'fff'))
       ), //obj['data']['text'],
       leading: IconButton(
         tooltip: 'Previous choice',

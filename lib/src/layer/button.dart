@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:ifelse/src/convert/image.dart';
 import 'package:logger/logger.dart';
 import '../layer.dart';
 import '../convert/util.dart';
+import '../convert/align.dart';
 import '../convert/gradient.dart';
 import '../convert/border.dart';
 import '../convert/edge.dart';
@@ -17,8 +19,7 @@ class ButtonParser extends WidgetParser {
   Widget parse(Map<String, dynamic> map, BuildContext buildContext) {
     dynamic box = getVal(map,'box');
     dynamic data = getVal(map,'data');
-    BorderRadius radius = getBorderRadius(getVal(data,'border.radius'));
-    String title = '';//getVal(data,'text').toString();
+    String align = getVal(data,'align').toString();
     
     List<Widget> widget = [];
     widget = [
@@ -30,34 +31,46 @@ class ButtonParser extends WidgetParser {
                 SizedBox(width: 8),
                 Text(
                   getVal(data,'text'),
-                  style: TextStyle(color:getColor(getVal(data,'normal.text')),fontFamily: 'Kanit',fontSize: getVal(data,'size') ?? 16)
+                  style: TextStyle(color:getColor(getVal(data,'color')),fontFamily: 'Kanit',fontSize: getDouble(getVal(data,'size') ?? 16))
                 ),
               ];
-    return Expanded(
+    return Center(
+      
       child: Container(
-      decoration: BoxDecoration(
-        gradient: getGradient(getVal(box,'bg.color')),
-        borderRadius: getBorderRadius(getVal(box,'border.radius'))
-      ),
-      margin: getEdgeInset(getVal(box,'margin')),
-      padding: getEdgeInset(getVal(box,'padding')),
-      child: RawMaterialButton(
-        onPressed: ()=>{},
-        shape: RoundedRectangleBorder(borderRadius: radius),
-        //padding: EdgeInsets.all(0.0),
-        child: Ink(
-          decoration: BoxDecoration(
-            gradient: getGradient(getVal(data,'color.bg')),
-            borderRadius: radius,
-            boxShadow: getBoxShadow(getVal(data,'shadow')),
-          ),
-          padding:getEdgeInset(getVal(data,'border.space')),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: widget,
+        margin: getEdgeInset(getVal(box,'margin')),
+        padding: EdgeInsets.all(0),
+        //width: null,
+        //width: double.minPositive,
+        alignment: getAlignBox(align),
+        decoration: BoxDecoration(
+          borderRadius: getBorderRadius(getVal(box,'border.radius')),
+          boxShadow: getBoxShadow(getVal(box,'shadow')),
+
+        ),
+      
+        child: RawMaterialButton(
+          onPressed: ()=>{},
+          padding: EdgeInsets.all(0.0),
+          elevation: 0.0,
+          //shape: RoundedRectangleBorder(borderRadius: getBorderRadius(getVal(box,'border.radius'))),          
+          child: Ink(            
+            width: align == 'full' ? double.infinity : null,
+            decoration: BoxDecoration(
+              gradient: getGradient(getVal(box,'bg.color')),
+              borderRadius: getBorderRadius(getVal(box,'border')),
+              border: getBorder(getVal(box,'border')),
+              image: getImageBG(getVal(box,'bg')),
+              //boxShadow: getBoxShadow(getVal(box,'shadow')),
+            ),
+            padding: getEdgeInset(getVal(box,'padding')),
+            
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center ,
+              mainAxisSize: MainAxisSize.min,
+              children: widget,
+            )
           )
         )
-      )
       )
     );
   }
