@@ -13,6 +13,7 @@ import 'layer/split6.dart';
 import 'layer/image.dart';
 import 'layer/heading.dart';
 import 'layer/button.dart';
+import 'layer/article.dart';
 import 'convert/gradient.dart';
 import 'convert/align.dart';
 
@@ -28,6 +29,7 @@ class Layer {
     ImageParser(),
     HeadingParser(),
     ButtonParser(),
+    ArticleParser(),
   ];
   static final _widgetPraseMap = <String, WidgetParser>{};
   static bool _parseInit = false;
@@ -74,22 +76,26 @@ class Layer {
       SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
 
       return Container(
+        
           decoration: BoxDecoration(
             gradient: getGradient(getVal(box,'bg.color')),
           ),
           child: Scaffold(
+            extendBody: true,
             backgroundColor: Colors.transparent,
             appBar: (appbar == 1
                 ? getAppbar(getVal(child,'appbar'), buildContext)
                 : null),
-            body: Center(
-              child: Container(
-                alignment: Alignment.center,
-                child: Column(
-                  mainAxisAlignment: getAlignMain(getVal(data,'align')),
-                  children: build(getVal(child,'body'), buildContext),
-                ),
-              ),
+            body: SingleChildScrollView(
+              child: Center(
+                  child: Container(
+                    alignment: Alignment.center,
+                    child: Column(
+                      mainAxisAlignment: getAlignMain(getVal(data,'align')),
+                      children: build(getVal(child,'body'), buildContext),
+                    ),
+                  ),
+              )
             )
           ));
     }

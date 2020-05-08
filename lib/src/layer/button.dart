@@ -33,8 +33,7 @@ class ButtonParser extends WidgetParser {
         style: TextStyle(color:getColor(getVal(data,'color')),fontFamily: 'Kanit',fontSize: getDouble(getVal(data,'size') ?? 16))
       ),
     ];
-    return Center(
-      
+    return Center(      
       child: Container(
         margin: getEdgeInset(getVal(box,'margin')),
         padding: EdgeInsets.all(0),

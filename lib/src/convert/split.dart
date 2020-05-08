@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:ifelse/src/convert/align.dart';
+//import 'package:ifelse/src/convert/align.dart';
 import '../layer.dart';
 import 'util.dart';
 import 'gradient.dart';
@@ -31,10 +31,10 @@ Widget getSplit(int col, Map<String, dynamic> map, BuildContext buildContext) {
   dynamic flex = getVal(data,'flex');
   String width = getVal(flex,'width').toString();
   BoxConstraints boxwidth = BoxConstraints();
-  Alignment align = Alignment.center;
+  //Alignment align = Alignment.center;
   if(width == 'pixel') {
     boxwidth = BoxConstraints(maxWidth: getDouble(getVal(flex,'pixel')));
-    align = getAlignBox(getVal(flex,'align'));
+    //align = getAlignBox(getVal(flex,'align'));
   }
   return Center(
       child: ConstrainedBox(

@@ -10,8 +10,7 @@ AppBar getAppbar(dynamic obj, BuildContext buildContext) {
     dynamic box = getVal(obj,'box'),
       data = getVal(obj,'data'),
       logo = getVal(data,'logo'),
-      nav = getVal(data,'nav'),
-      action = getVal(data,'action');
+      nav = getVal(data,'nav');
     String logoStyle = getVal(logo,'style'),
       navStyle = getVal(nav,'style');
     Widget _title, _leading;
