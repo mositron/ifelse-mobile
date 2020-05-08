@@ -52,10 +52,11 @@ class ButtonParser extends WidgetParser {
           child: Ink(            
             width: align == 'full' ? double.infinity : null,
             decoration: BoxDecoration(
-              gradient: getGradient(getVal(box,'bg.color')),
+              //gradient: getGradient(getVal(box,'bg.color')),
               borderRadius: getBorderRadius(getVal(box,'border')),
-              border: getBorder(getVal(box,'border')),
-              image: getImageBG(getVal(box,'bg')),
+              //border: getBorder(getVal(box,'border')),
+              //image: getImageBG(getVal(box,'bg')),
+              color: Colors.amber
               //boxShadow: getBoxShadow(getVal(box,'shadow')),
             ),
             padding: getEdgeInset(getVal(box,'padding')),
