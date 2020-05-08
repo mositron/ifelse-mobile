@@ -11,7 +11,6 @@ import '../convert/edge.dart';
 import '../convert/icon.dart';
 import '../convert/shadow.dart';
 
-
 class ButtonParser extends WidgetParser {
   static final log = Logger();
 
@@ -37,8 +36,6 @@ class ButtonParser extends WidgetParser {
       child: Container(
         margin: getEdgeInset(getVal(box,'margin')),
         padding: EdgeInsets.all(0),
-        //width: null,
-        //width: double.minPositive,
         alignment: getAlignBox(align),
         decoration: BoxDecoration(
           borderRadius: getBorderRadius(getVal(box,'border')),
@@ -47,20 +44,17 @@ class ButtonParser extends WidgetParser {
         child: RawMaterialButton(
           onPressed: ()=>{},
           padding: EdgeInsets.all(0.0),
-          elevation: 0.0,
-          //shape: RoundedRectangleBorder(borderRadius: getBorderRadius(getVal(box,'border.radius'))),          
+          elevation: 0.0,     
           child: Ink(            
             width: align == 'full' ? double.infinity : null,
             decoration: BoxDecoration(
-              //gradient: getGradient(getVal(box,'bg.color')),
+              gradient: getGradient(getVal(box,'bg.color')),
               borderRadius: getBorderRadius(getVal(box,'border')),
-              //border: getBorder(getVal(box,'border')),
-              //image: getImageBG(getVal(box,'bg')),
-              color: Colors.amber
-              //boxShadow: getBoxShadow(getVal(box,'shadow')),
+              border: getBorder(getVal(box,'border')),
+              image: getImageBG(getVal(box,'bg')),
+              boxShadow: getBoxShadow(getVal(box,'shadow')),
             ),
             padding: getEdgeInset(getVal(box,'padding')),
-            
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center ,
               mainAxisSize: MainAxisSize.min,

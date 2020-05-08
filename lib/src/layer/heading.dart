@@ -9,7 +9,6 @@ import '../convert/edge.dart';
 import '../convert/util.dart';
 import '../convert/align.dart';
 
-
 class HeadingParser extends WidgetParser {
   static final log = Logger();
 
@@ -35,7 +34,6 @@ class HeadingParser extends WidgetParser {
         )
       )
     );
-      
   }
 
   @override

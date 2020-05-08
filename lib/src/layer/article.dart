@@ -7,15 +7,6 @@ import '../convert/article.dart';
 class ArticleParser extends WidgetParser {
   @override
   Widget parse(Map<String, dynamic> map, BuildContext buildContext) {
-    Site.log.i(map);
-    /*
-    dynamic box = getVal(map,'box'),
-      data = getVal(map,'data');
-    int col_mb = getInt(getVal(data,'col.mb')),
-      col_tl = getInt(getVal(data,'col.tl')),
-      col_limit = getInt(getVal(data,'limit')),
-      col_skip = getInt(getVal(data,'skip'));
-*/
     return ArticleView(map);    
   }
 
@@ -40,7 +31,6 @@ class _ArticleViewState extends State<ArticleView> {
     Site.log.w(_map);
   }
 
- 
   @override
   void initState() {
     super.initState();

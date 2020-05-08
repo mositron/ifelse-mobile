@@ -10,16 +10,8 @@ import 'border.dart';
 import 'edge.dart';
 import 'shadow.dart';
 import 'util.dart';
-
-
-class MESSAGES {
-  static const String INTERNET_ERROR = "No Internet Connection";
-  static const String INTERNET_ERROR_RETRY =
-      "No Internet Connection.\nPlease Retry";
-}
  
 class COLORS {
-  // App Colors //
   static const Color DRAWER_BG_COLOR = Colors.lightGreen;
   static const Color APP_THEME_COLOR = Colors.green;
 }
@@ -43,10 +35,9 @@ class Article {
         final List<CellModel> list = parsePostsForHome(response.body);
         return list;
       } else {
-        throw Exception(MESSAGES.INTERNET_ERROR);
+        throw Exception("No Internet Connection.\nPlease Retry");
       }
     } catch (e) {
-      //Site.log.e(e.toString());
       throw Exception(e.toString());
     }
   }
@@ -111,7 +102,6 @@ class Article {
     }
   }
  
- 
   static CircularProgressIndicator circularProgress() {
     return CircularProgressIndicator(
       valueColor: new AlwaysStoppedAnimation<Color>(COLORS.APP_THEME_COLOR),
@@ -121,7 +111,7 @@ class Article {
   static FlatButton retryButton(Function fetch) {
     return FlatButton(
       child: Text(
-        MESSAGES.INTERNET_ERROR_RETRY,
+        "No Internet Connection.\nPlease Retry",
         textAlign: TextAlign.center,
         overflow: TextOverflow.ellipsis,
         style: TextStyle(fontWeight: FontWeight.normal),
@@ -130,7 +120,6 @@ class Article {
     );
   }
 }
-
 
 class CellModel {
   String id;

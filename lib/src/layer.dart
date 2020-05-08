@@ -52,7 +52,6 @@ class Layer {
           widgets.add(widget);
         }
       }
-      //return widget;
       if (widgets.length > 0) {
         return widgets;
       }

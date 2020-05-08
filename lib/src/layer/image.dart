@@ -8,7 +8,6 @@ import '../convert/border.dart';
 import '../convert/edge.dart';
 import '../convert/util.dart';
 
-
 class ImageParser extends WidgetParser {
   static final log = Logger();
 

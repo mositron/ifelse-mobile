@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ifelse/src/convert/icon.dart';
 import 'package:ifelse/src/convert/image.dart';
-//import '../convert/edge.dart';
 import '../convert/gradient.dart';
 import '../convert/util.dart';
 
@@ -40,8 +39,6 @@ AppBar getAppbar(dynamic obj, BuildContext buildContext) {
       backgroundColor: Colors.transparent,
       elevation: 0,
       flexibleSpace: Container(
-        //padding: getEdgeInset(getVal(box,'padding')),
-       // margin: getEdgeInset(obj['box']['margin']),
         decoration: BoxDecoration(
           gradient: getGradient(getVal(box,'bg.color')),
           image: getImageBG(getVal(box,'bg')),          

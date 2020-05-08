@@ -41,8 +41,6 @@ dynamic getImageObj(dynamic obj, [String size, String service]) {
   return null;
 }
 
-
-
 DecorationImage getImageBG(dynamic obj) {
   if ((obj != null) && (obj is Map)) {
     dynamic img =  getImageObj(obj['image'],'o');
