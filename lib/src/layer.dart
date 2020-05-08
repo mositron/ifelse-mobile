@@ -18,7 +18,6 @@ import 'convert/align.dart';
 
 class Layer {
   static final Logger log = Logger();
-
   static final _parsers = [
     Split1Parser(),
     Split2Parser(),
@@ -30,9 +29,7 @@ class Layer {
     HeadingParser(),
     ButtonParser(),
   ];
-
   static final _widgetPraseMap = <String, WidgetParser>{};
-
   static bool _parseInit = false;
 
   static void init() {
@@ -66,9 +63,9 @@ class Layer {
   static Widget buildContent(dynamic json, BuildContext buildContext) {
     init();
     if ((json != null) && (json[0] != null) && (json[0]['type'] == 'content')) {
-      dynamic box = getVal(json[0],'box');
-      dynamic child = getVal(json[0],'child');
-      dynamic data = getVal(json[0],'data');
+      dynamic box = getVal(json[0],'box'),
+        child = getVal(json[0],'child'),
+        data = getVal(json[0],'data');
       int appbar = getInt(getVal(data,'appbar'));
 
       SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(

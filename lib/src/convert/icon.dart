@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
 IconData getIcon(String name) {
-  name = name.replaceAll('-', '');
-  return SIcons.icofont[name];
+  return SIcons.icofont[name.replaceAll('-', '')];
 }
 
 class SocialIcon extends StatelessWidget {

@@ -1,7 +1,6 @@
 
 import 'package:flutter/material.dart';
 
-//import 'package:logger/logger.dart';
 int getInt(dynamic val, [int def]) {
   //final log = Logger();
   if ((val == null) || (val.toString().isEmpty)) {

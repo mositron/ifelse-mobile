@@ -3,32 +3,32 @@ import 'util.dart';
 
 Alignment getAlign(dynamic align) {
   Alignment alignment = Alignment.center;
-  switch (getInt(align)) {
-    case 0:
+  switch (align.toString()) {
+    case '':
       alignment = Alignment.center;
       break;
-    case 1:
+    case 'top left':
       alignment = Alignment.topLeft;
       break;
-    case 2:
+    case 'top center':
       alignment = Alignment.topCenter;
       break;
-    case 3:
+    case 'top right':
       alignment = Alignment.topRight;
       break;
-    case 4:
+    case 'center right':
       alignment = Alignment.centerRight;
       break;
-    case 5:
+    case 'bottom right':
       alignment = Alignment.bottomRight;
       break;
-    case 6:
+    case 'bottom center':
       alignment = Alignment.bottomCenter;
       break;
-    case 7:
+    case 'bottom left':
       alignment = Alignment.bottomLeft;
       break;
-    case 8:
+    case 'center left':
       alignment = Alignment.centerLeft;
       break;
   }

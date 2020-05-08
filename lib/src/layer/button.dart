@@ -17,23 +17,22 @@ class ButtonParser extends WidgetParser {
 
   @override
   Widget parse(Map<String, dynamic> map, BuildContext buildContext) {
-    dynamic box = getVal(map,'box');
-    dynamic data = getVal(map,'data');
-    String align = getVal(data,'align').toString();
-    
+    dynamic box = getVal(map,'box'),
+      data = getVal(map,'data');
+    String align = getVal(data,'align').toString();    
     List<Widget> widget = [];
     widget = [
-                Icon(
-                  getIcon(getVal(data,'icon')),
-                  color: Colors.white,
-                  size: 16,
-                ),
-                SizedBox(width: 8),
-                Text(
-                  getVal(data,'text'),
-                  style: TextStyle(color:getColor(getVal(data,'color')),fontFamily: 'Kanit',fontSize: getDouble(getVal(data,'size') ?? 16))
-                ),
-              ];
+      Icon(
+        getIcon(getVal(data,'icon')),
+        color: Colors.white,
+        size: 16,
+      ),
+      SizedBox(width: 8),
+      Text(
+        getVal(data,'text'),
+        style: TextStyle(color:getColor(getVal(data,'color')),fontFamily: 'Kanit',fontSize: getDouble(getVal(data,'size') ?? 16))
+      ),
+    ];
     return Center(
       
       child: Container(
@@ -43,11 +42,9 @@ class ButtonParser extends WidgetParser {
         //width: double.minPositive,
         alignment: getAlignBox(align),
         decoration: BoxDecoration(
-          borderRadius: getBorderRadius(getVal(box,'border.radius')),
+          borderRadius: getBorderRadius(getVal(box,'border')),
           boxShadow: getBoxShadow(getVal(box,'shadow')),
-
-        ),
-      
+        ),      
         child: RawMaterialButton(
           onPressed: ()=>{},
           padding: EdgeInsets.all(0.0),

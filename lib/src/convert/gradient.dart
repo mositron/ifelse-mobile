@@ -16,8 +16,8 @@ Gradient getGradient(dynamic obj) {
       colors.add(colors[0]);
     }
     if (colors.length == 2) {
-      AlignmentGeometry begin = Alignment.centerLeft;
-      AlignmentGeometry end = Alignment.centerRight;
+      AlignmentGeometry begin = Alignment.centerLeft,
+        end = Alignment.centerRight;
       switch (getInt(obj['range'])) {
         case 0:
           begin = Alignment.bottomCenter;

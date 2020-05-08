@@ -5,10 +5,10 @@ Border getBorder(dynamic rad) {
   if ((rad != null) && (rad is! List)) {
     Color color = getColor(getVal(rad,'color'),'fff');
     String style = getVal(rad,'style').toString();
-    double bTop = getDouble(getVal(rad,'width.top'));
-    double bRight = getDouble(getVal(rad,'width.right'));
-    double bBottom = getDouble(getVal(rad,'width.bottom'));
-    double bLeft = getDouble(getVal(rad,'width.left'));
+    double bTop = getDouble(getVal(rad,'width.top')),
+      bRight = getDouble(getVal(rad,'width.right')),
+      bBottom = getDouble(getVal(rad,'width.bottom')),
+      bLeft = getDouble(getVal(rad,'width.left'));
     if((style == 'solid') && (bTop > 0 || bRight > 0 || bBottom > 0 || bLeft > 0)) {
       return Border(
         top: BorderSide( //                    <--- top side

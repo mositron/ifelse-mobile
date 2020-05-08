@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import '../site.dart';
 import '../layer.dart';
 
-
-
 class LoginPage extends StatelessWidget {
   LoginPage({Key key}) : super(key: key);
 
@@ -22,7 +20,6 @@ class MyPagefulWidget extends StatefulWidget {
 
 
 class _MyPagefulWidgetState extends State<MyPagefulWidget> with SingleTickerProviderStateMixin {
-
   TabController controller;
 
   @override

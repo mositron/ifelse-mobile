@@ -1,7 +1,5 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
-import '../site.dart';
+import 'align.dart';
 import 'util.dart';
 
 String getImage(dynamic obj, [String size, String service]) {
@@ -45,8 +43,6 @@ dynamic getImageObj(dynamic obj, [String size, String service]) {
 DecorationImage getImageBG(dynamic obj) {
   if ((obj != null) && (obj is! List)) {
     dynamic img =  getImageObj(obj['image'],'o');
-    Site.log.w(obj);
-    Site.log.w(img);
     BoxFit bfit = BoxFit.none;
     switch(obj['size'].toString()) {
       case 'cover':
@@ -59,7 +55,9 @@ DecorationImage getImageBG(dynamic obj) {
     if(img != null) {
       return DecorationImage(
         image: Image.network(img['src'], width: getDouble(img['width']), height: getDouble(img['height'])).image,
-        fit: bfit
+        fit: bfit,
+        alignment: getAlign(obj['pos']),
+        repeat:obj['size'].toString().isNotEmpty ? ImageRepeat.repeat : ImageRepeat.noRepeat
       );
     }
   }

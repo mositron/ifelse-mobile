@@ -14,13 +14,13 @@ class ImageParser extends WidgetParser {
 
   @override
   Widget parse(Map<String, dynamic> map, BuildContext buildContext) {
-    dynamic box = getVal(map,'box');
-    dynamic data = getVal(map,'data');
+    dynamic box = getVal(map,'box'),
+      data = getVal(map,'data');
     Map image = getImageObj(getVal(data,'image'),getVal(data,'size'));
     return Container(
       decoration: BoxDecoration(
         gradient: getGradient(getVal(box,'bg.color')),
-        borderRadius: getBorderRadius(getVal(box,'border.radius')),
+        borderRadius: getBorderRadius(getVal(box,'border')),
         boxShadow: getBoxShadow(getVal(box,'shadow')),
       ),
       margin: getEdgeInset(getVal(box,'margin')),

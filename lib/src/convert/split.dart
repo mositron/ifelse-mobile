@@ -1,6 +1,5 @@
 import 'package:flutter/widgets.dart';
 import 'package:ifelse/src/convert/align.dart';
-//import 'package:logger/logger.dart';
 import '../layer.dart';
 import 'util.dart';
 import 'gradient.dart';
@@ -9,7 +8,6 @@ import 'shadow.dart';
 import 'edge.dart';
 
 Widget getSplit(int col, Map<String, dynamic> map, BuildContext buildContext) {
-  //Logger log = Logger();
   List<dynamic> child = map['child'];
   dynamic box = getVal(map,'box');
   dynamic data = getVal(map,'data');
@@ -46,7 +44,7 @@ Widget getSplit(int col, Map<String, dynamic> map, BuildContext buildContext) {
 
           decoration: BoxDecoration(
             gradient: getGradient(getVal(box,'bg.color')),
-            borderRadius: getBorderRadius(getVal(box,'border.radius')),
+            borderRadius: getBorderRadius(getVal(box,'border')),
             boxShadow: getBoxShadow(getVal(box,'shadow')),
           ),
           margin: getEdgeInset(getVal(box,'margin')),
