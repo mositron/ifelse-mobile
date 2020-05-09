@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:ifelse/src/page/home.dart';
 import 'package:logger/logger.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -33,7 +34,7 @@ class SplashScreenState extends State<SplashPage> {
       client.close();
     }
     return new Timer(Duration(seconds: 1),() {
-      Navigator.pushNamed(context, '/home');
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()));
     });
   }
 

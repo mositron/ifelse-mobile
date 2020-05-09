@@ -33,7 +33,7 @@ class Article {
     );
     try {
       if (response.statusCode == 200) {
-        final List<CellModel> list = parsePostsForHome(response.body);
+        final List<CellModel> list = parsePostsForGrid(response.body);
         return list;
       } else {
         throw Exception("No Internet Connection.\nPlease Retry");
@@ -43,7 +43,7 @@ class Article {
     }
   }
 
-  static List<CellModel> parsePostsForHome(String responseBody) {
+  static List<CellModel> parsePostsForGrid(String responseBody) {
     try {
       final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();    
       return parsed.map<CellModel>((json) => CellModel.fromJson(json)).toList();
@@ -75,7 +75,6 @@ class Article {
     String colDirect = getVal(data,'col.direct').toString();
     double colHeight  = getDouble(getVal(data,'col.hieght'),200);
 
-  Site.log.i(colDirect);
     if(contentLine == 0) {
       contentLine = null;
     }
@@ -104,22 +103,27 @@ class Article {
           itemCount: snapshot.data.length,
           shrinkWrap: true,
           padding: EdgeInsets.all(0),
-          itemBuilder: (BuildContext context, int index) => Cell(
-              snapshot.data[index],
-              padding,
-              margin,
-              border,
-              radius,
-              boxShadow,
-              gradient,
-              align,
-              width,
-              contentAlign,
-              contentPadding,
-              contentLine,
-              textColor,
-              textSize,
-            ),
+          itemBuilder: (BuildContext context, int index) {
+            return GestureDetector(
+              child: Cell(
+                snapshot.data[index],
+                padding,
+                margin,
+                border,
+                radius,
+                boxShadow,
+                gradient,
+                align,
+                width,
+                contentAlign,
+                contentPadding,
+                contentLine,
+                textColor,
+                textSize,
+              ),
+              onTap: () => gridClicked(context, snapshot.data[index]),
+            );
+          },
           staggeredTileBuilder: (int index) => StaggeredTile.fit(1),
           mainAxisSpacing: 0,
           crossAxisSpacing: 0,

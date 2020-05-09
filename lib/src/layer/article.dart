@@ -1,24 +1,22 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:ifelse/src/page/article.dart';
 import '../layer.dart';
-import '../site.dart';
 import '../convert/article.dart';
+import '../convert/util.dart';
 
 class ArticleParser extends WidgetParser {
   @override
   Widget parse(Map<String, dynamic> map, BuildContext buildContext) {
     return ArticleView(map);    
   }
-
   @override
   String get widgetName => 'article';
 }
 
 class ArticleView extends StatefulWidget {
   final dynamic _map;
-
   ArticleView(this._map);
-
   @override
   _ArticleViewState createState() => _ArticleViewState(_map);
 }
@@ -69,5 +67,5 @@ class _ArticleViewState extends State<ArticleView> {
 }
  
 gridClicked(BuildContext context, CellModel cellModel) {
-  // Grid Click
+  Navigator.of(context).push(MaterialPageRoute(builder: (context) => ArticlePage(par:{'_id':getInt(cellModel.id,0)})));
 }

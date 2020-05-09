@@ -45,11 +45,11 @@ class Layer {
     }
   }
 
-  static List<Widget> build(dynamic json, BuildContext buildContext) {
+  static List<Widget> build(dynamic json, BuildContext buildContext, [Map<String, dynamic> par]) {
     if (json != null) {
       List<Widget> widgets = [];
       for (var obj in json) {
-        Widget widget = buildFromMap(obj, buildContext);
+        Widget widget = buildFromMap(obj, buildContext, par);
         if (widget != null) {
           widgets.add(widget);
         }
@@ -63,20 +63,18 @@ class Layer {
     ];
   }
 
-  static Widget buildContent(dynamic json, BuildContext buildContext) {
+  static Widget buildContent(dynamic json, BuildContext buildContext, [Map<String, dynamic> par]) {
     init();
-    if ((json != null) && (json[0] != null) && (json[0]['type'] == 'content')) {
+    if ((json is List) && (json[0] is Map) && (json[0]['type'] == 'content')) {
       dynamic box = getVal(json[0],'box'),
         child = getVal(json[0],'child'),
         data = getVal(json[0],'data');
       int appbar = getInt(getVal(data,'appbar')),
         navbar = getInt(getVal(data,'navbar'));
-
       SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
       ));
       SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
-
       return Container(        
           decoration: BoxDecoration(
             gradient: getGradient(getVal(box,'bg.color')),
@@ -90,13 +88,13 @@ class Layer {
                 : null),
             body: SingleChildScrollView(
               child: Center(
-                  child: Container(
-                    alignment: Alignment.center,
-                    child: Column(
-                      mainAxisAlignment: getAlignMain(getVal(data,'align')),
-                      children: build(getVal(child,'body'), buildContext),
-                    ),
+                child: Container(
+                  alignment: Alignment.center,
+                  child: Column(
+                    mainAxisAlignment: getAlignMain(getVal(data,'align')),
+                    children: build(getVal(child,'body'), buildContext, par),
                   ),
+                ),
               )
             ),
             bottomNavigationBar: (navbar == 1
@@ -105,11 +103,19 @@ class Layer {
             resizeToAvoidBottomInset: true,
           ));
     }
-    return Container();
+    return Center(
+      child: Container(
+        color: getColor('f5f5f5'),
+        alignment: Alignment.center,
+        child: Text('ยังไม่ได้สร้างเทมเพลทสำหรับหน้าเนื้อหาบทความ', 
+          textAlign: TextAlign.center,
+          style: TextStyle(color: getColor('c00'),fontFamily: 'Kanit', fontSize: 30),
+        )
+      )    
+    );
   }
 
-  static Widget buildFromMap(
-    Map<String, dynamic> map, BuildContext buildContext) {
+  static Widget buildFromMap(Map<String, dynamic> map, BuildContext buildContext, [Map<String, dynamic> par]) {
     String widgetName = map['type'];
     var parser = _widgetPraseMap[widgetName];
     if (parser != null) {
