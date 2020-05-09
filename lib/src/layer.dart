@@ -77,13 +77,13 @@ class Layer {
       ));
       SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
 
-      return Container(
-        
+      return Container(        
           decoration: BoxDecoration(
             gradient: getGradient(getVal(box,'bg.color')),
           ),
           child: Scaffold(
-            extendBody: true,
+            //extendBody: true,
+            //extendBodyBehindAppBar: true,
             backgroundColor: Colors.transparent,
             appBar: (appbar == 1
                 ? getAppBar(getVal(child,'appbar'), buildContext)
@@ -102,6 +102,7 @@ class Layer {
             bottomNavigationBar: (navbar == 1
                 ? getNavBar(getVal(child,'navbar'), buildContext)
                 : null),
+            resizeToAvoidBottomInset: true,
           ));
     }
     return Container();

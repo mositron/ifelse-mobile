@@ -71,7 +71,11 @@ class Article {
     Gradient gradient  = getGradient(getVal(dataBox,'bg.color'));
     Color textColor  = getColor(getVal(data,'color'),'000');
     double textSize  = getDouble(getVal(data,'fsize'),16);
+    
+    String colDirect = getVal(data,'col.direct').toString();
+    double colHeight  = getDouble(getVal(data,'col.hieght'),200);
 
+  Site.log.i(colDirect);
     if(contentLine == 0) {
       contentLine = null;
     }
@@ -80,7 +84,7 @@ class Article {
     }
     try {
       //Site.log.i(box);
-      return Container(
+      return  Container(
         alignment: Alignment.center,    
         decoration: BoxDecoration(
           gradient: getGradient(getVal(box,'bg.color')),
@@ -90,9 +94,13 @@ class Article {
         ),
         margin: getEdgeInset(getVal(box,'margin')),
         padding: getEdgeInset(getVal(box,'padding')),
+        width: double.infinity,
+        height: colDirect == 'horizon' ? colHeight : null,
         child: StaggeredGridView.countBuilder(
           primary: false,
-          crossAxisCount: colMb,
+          addAutomaticKeepAlives: true,
+          crossAxisCount: colDirect == 'horizon' ? 1 : colMb,
+          scrollDirection: colDirect == 'horizon' ? Axis.horizontal : Axis.vertical,
           itemCount: snapshot.data.length,
           shrinkWrap: true,
           padding: EdgeInsets.all(0),
@@ -112,9 +120,9 @@ class Article {
               textColor,
               textSize,
             ),
-          staggeredTileBuilder: (int index) => new StaggeredTile.fit(1),
-          mainAxisSpacing: 4.0,
-          crossAxisSpacing: 4.0,
+          staggeredTileBuilder: (int index) => StaggeredTile.fit(1),
+          mainAxisSpacing: 0,
+          crossAxisSpacing: 0,
         )
       );
     } catch (e) {
@@ -189,7 +197,7 @@ class Cell extends StatelessWidget {
  
   @override
   Widget build(BuildContext context) {
-    Site.log.e(contentAlign);
+    //Site.log.e(contentAlign);
     Widget _image = AspectRatio(
       aspectRatio: 3 / 2,
       child: Image.network(
@@ -247,9 +255,7 @@ class Cell extends StatelessWidget {
       );
     }
     try {
-      return Center(
-        
-        child: Container(
+      return Container(
           decoration: BoxDecoration(
             gradient: gradient,
             borderRadius: radius,
@@ -258,7 +264,6 @@ class Cell extends StatelessWidget {
           margin: margin,
           padding: padding,
           child: _child,
-        ),
       );
     } catch (e) {
       //Site.log.w(e.toString());
