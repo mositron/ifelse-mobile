@@ -4,6 +4,7 @@ import 'package:ifelse/src/convert/util.dart';
 import 'package:logger/logger.dart';
 import 'package:flutter/services.dart';
 import 'layer/appbar.dart';
+import 'layer/navbar.dart';
 import 'layer/split1.dart';
 import 'layer/split2.dart';
 import 'layer/split3.dart';
@@ -16,6 +17,7 @@ import 'layer/button.dart';
 import 'layer/article.dart';
 import 'convert/gradient.dart';
 import 'convert/align.dart';
+import 'site.dart';
 
 class Layer {
   static final Logger log = Logger();
@@ -67,7 +69,10 @@ class Layer {
       dynamic box = getVal(json[0],'box'),
         child = getVal(json[0],'child'),
         data = getVal(json[0],'data');
-      int appbar = getInt(getVal(data,'appbar'));
+      int appbar = getInt(getVal(data,'appbar')),
+        navbar = getInt(getVal(data,'navbar'));
+
+        Site.log.e(child);
 
       SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
@@ -83,7 +88,7 @@ class Layer {
             extendBody: true,
             backgroundColor: Colors.transparent,
             appBar: (appbar == 1
-                ? getAppbar(getVal(child,'appbar'), buildContext)
+                ? getAppBar(getVal(child,'appbar'), buildContext)
                 : null),
             body: SingleChildScrollView(
               child: Center(
@@ -95,7 +100,10 @@ class Layer {
                     ),
                   ),
               )
-            )
+            ),
+            bottomNavigationBar: (navbar == 1
+                ? getNavBar(getVal(child,'navbar'), buildContext)
+                : null),
           ));
     }
     return Container();

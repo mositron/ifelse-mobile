@@ -18,18 +18,21 @@ class ButtonParser extends WidgetParser {
   Widget parse(Map<String, dynamic> map, BuildContext buildContext) {
     dynamic box = getVal(map,'box'),
       data = getVal(map,'data');
-    String align = getVal(data,'align').toString();    
+    String align = getVal(data,'align').toString();
+    Color _color = getColor(getVal(data,'color'));
+    double _fSize = getDouble(getVal(data,'size') ?? 16);
+
     List<Widget> widget = [];
     widget = [
       Icon(
         getIcon(getVal(data,'icon')),
-        color: Colors.white,
-        size: 16,
+        color: _color,
+        size: _fSize,
       ),
       SizedBox(width: 8),
       Text(
         getVal(data,'text'),
-        style: TextStyle(color:getColor(getVal(data,'color')),fontFamily: 'Kanit',fontSize: getDouble(getVal(data,'size') ?? 16))
+        style: TextStyle(color:_color,fontFamily: 'Kanit',fontSize: _fSize)
       ),
     ];
     return Center(      

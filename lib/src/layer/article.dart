@@ -28,13 +28,13 @@ class _ArticleViewState extends State<ArticleView> {
   dynamic _map;
   
   _ArticleViewState(this._map) {
-    Site.log.w(_map);
+    //Site.log.w(_map);
   }
 
   @override
   void initState() {
     super.initState();
-    Site.log.w(_map);
+    //Site.log.w(_map);
     isHomeDataLoading = false;
   }
  
@@ -45,7 +45,7 @@ class _ArticleViewState extends State<ArticleView> {
         child: FutureBuilder<List<CellModel>>(
           future: Article.getData(_map),
           builder: (context, snapshot) {            
-            Site.log.e(_map);
+            //Site.log.e(_map);
             return snapshot.connectionState == ConnectionState.done
                 ? snapshot.hasData
                     ? Article.getGrid(snapshot, _map, gridClicked)

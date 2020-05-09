@@ -64,6 +64,8 @@ class Article {
     BorderRadius radius = getBorderRadius(getVal(dataBox,'border'));
     List<BoxShadow> boxShadow = getBoxShadow(getVal(dataBox,'shadow'));
     Gradient gradient  = getGradient(getVal(dataBox,'bg.color'));
+    Color textColor  = getColor(getVal(data,'color'),'000');
+    double textSize  = getDouble(getVal(data,'fsize'),16);
     try {
       //Site.log.i(box);
       return Container(
@@ -89,7 +91,9 @@ class Article {
               radius,
               boxShadow,
               gradient,
-              contentPadding
+              contentPadding,
+              textColor,
+              textSize,
             ),
           staggeredTileBuilder: (int index) => new StaggeredTile.fit(1),
           mainAxisSpacing: 4.0,
@@ -145,7 +149,7 @@ class CellModel {
 }
 
 class Cell extends StatelessWidget {
-  const Cell(this.cellModel,this.padding,this.margin,this.border,this.radius,this.shadow,this.gradient,this.contentPadding);
+  const Cell(this.cellModel,this.padding,this.margin,this.border,this.radius,this.shadow,this.gradient,this.contentPadding,this.textColor,this.textSize);
   @required
   final CellModel cellModel;
   final EdgeInsets padding;
@@ -155,6 +159,8 @@ class Cell extends StatelessWidget {
   final List<BoxShadow> shadow;
   final Gradient gradient;
   final EdgeInsets contentPadding;
+  final Color textColor;
+  final double textSize;
  
   @override
   Widget build(BuildContext context) {
@@ -187,7 +193,7 @@ class Cell extends StatelessWidget {
                   textAlign: TextAlign.center,
                   overflow: TextOverflow.ellipsis,
                   maxLines: 3,
-                  style: TextStyle(fontWeight: FontWeight.w500),
+                  style: TextStyle(color: textColor, fontSize: textSize, fontFamily:'Kanit', height: 1.5),
                 ),
               ),
             ],

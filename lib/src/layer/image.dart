@@ -1,5 +1,4 @@
 import 'package:flutter/widgets.dart';
-import 'package:logger/logger.dart';
 import '../layer.dart';
 import '../convert/image.dart'; 
 import '../convert/gradient.dart';
@@ -9,7 +8,6 @@ import '../convert/edge.dart';
 import '../convert/util.dart';
 
 class ImageParser extends WidgetParser {
-  static final log = Logger();
 
   @override
   Widget parse(Map<String, dynamic> map, BuildContext buildContext) {

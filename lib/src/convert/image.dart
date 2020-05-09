@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ifelse/src/site.dart';
 import 'align.dart';
 import 'util.dart';
 
@@ -21,8 +20,6 @@ String getImage(dynamic obj, [String size, String service]) {
 dynamic getImageObj(dynamic obj, [String size, String service]) {
   if ((obj != null) && (obj is Map)) {
     size ??= 'o';
-    Site.log.i(obj);
-    Site.log.i(size);
     if (obj[size] == null) {
       size = 'o';
     }
