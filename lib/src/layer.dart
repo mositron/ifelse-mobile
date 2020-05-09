@@ -72,8 +72,6 @@ class Layer {
       int appbar = getInt(getVal(data,'appbar')),
         navbar = getInt(getVal(data,'navbar'));
 
-        Site.log.e(child);
-
       SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
       ));

@@ -11,18 +11,25 @@ Widget getSplit(int col, Map<String, dynamic> map, BuildContext buildContext) {
   List<dynamic> child = map['child'];
   dynamic box = getVal(map,'box');
   dynamic data = getVal(map,'data');
+  EdgeInsets inPadding = getEdgeInset(getVal(data,'box.padding'));
   List<Widget> widget = [];
   if(col == 1) {
-      widget.add(Column(
+      widget.add(Container(
+        padding: inPadding,
+        child: Column(
           children: (child.length > 0 ? Layer.build(child[0], buildContext) : null)
         )
-      );
+      )
+    );
   } else {
     for(int i=0; i<col; i++) {
       widget.add(
-        Expanded(
-          child: Column(
+        Expanded(          
+          child: Container(
+            padding: inPadding,
+            child: Column(
             children: (child.length > i ? Layer.build(child[i], buildContext) : null)
+          )
           )
         )
       );
@@ -41,7 +48,6 @@ Widget getSplit(int col, Map<String, dynamic> map, BuildContext buildContext) {
         constraints: boxwidth,
         child: Container(
           alignment: Alignment.center,    
-
           decoration: BoxDecoration(
             gradient: getGradient(getVal(box,'bg.color')),
             borderRadius: getBorderRadius(getVal(box,'border')),

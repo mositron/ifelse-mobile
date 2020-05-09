@@ -3,6 +3,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:ifelse/src/convert/align.dart';
 import '../site.dart';
 import 'image.dart';
 import 'gradient.dart';
@@ -60,12 +61,23 @@ class Article {
     EdgeInsets padding = getEdgeInset(getVal(dataBox,'padding')),
       margin = getEdgeInset(getVal(dataBox,'margin')),
       contentPadding = getEdgeInset(getVal(data,'content.padding'));
+    TextAlign contentAlign = getAlignText(getVal(data,'content.align'));
+    int contentLine = getInt(getVal(data,'content.line'),0);
+    String align = getVal(data,'align').toString();
+    double width  = getDouble(getVal(data,'width'),80);
     Border border = getBorder(getVal(dataBox,'border'));
     BorderRadius radius = getBorderRadius(getVal(dataBox,'border'));
     List<BoxShadow> boxShadow = getBoxShadow(getVal(dataBox,'shadow'));
     Gradient gradient  = getGradient(getVal(dataBox,'bg.color'));
     Color textColor  = getColor(getVal(data,'color'),'000');
     double textSize  = getDouble(getVal(data,'fsize'),16);
+
+    if(contentLine == 0) {
+      contentLine = null;
+    }
+    if(width < 50) {
+      width = 50;
+    }
     try {
       //Site.log.i(box);
       return Container(
@@ -83,6 +95,7 @@ class Article {
           crossAxisCount: colMb,
           itemCount: snapshot.data.length,
           shrinkWrap: true,
+          padding: EdgeInsets.all(0),
           itemBuilder: (BuildContext context, int index) => Cell(
               snapshot.data[index],
               padding,
@@ -91,7 +104,11 @@ class Article {
               radius,
               boxShadow,
               gradient,
+              align,
+              width,
+              contentAlign,
               contentPadding,
+              contentLine,
               textColor,
               textSize,
             ),
@@ -149,7 +166,11 @@ class CellModel {
 }
 
 class Cell extends StatelessWidget {
-  const Cell(this.cellModel,this.padding,this.margin,this.border,this.radius,this.shadow,this.gradient,this.contentPadding,this.textColor,this.textSize);
+  const Cell(
+    this.cellModel,this.padding,this.margin,this.border,this.radius,this.shadow,this.gradient,  
+    this.align,this.width,this.contentAlign,this.contentPadding,this.contentLine,
+    this.textColor,this.textSize
+  );
   @required
   final CellModel cellModel;
   final EdgeInsets padding;
@@ -158,14 +179,76 @@ class Cell extends StatelessWidget {
   final BorderRadius radius;
   final List<BoxShadow> shadow;
   final Gradient gradient;
+  final String align;
+  final double width;
+  final TextAlign contentAlign;
   final EdgeInsets contentPadding;
+  final int contentLine;
   final Color textColor;
   final double textSize;
  
   @override
   Widget build(BuildContext context) {
+    Site.log.e(contentAlign);
+    Widget _image = AspectRatio(
+      aspectRatio: 3 / 2,
+      child: Image.network(
+        cellModel.image['src'],
+        width: cellModel.image['width'],
+        height: cellModel.image['height'],
+        alignment: Alignment.topCenter,
+        fit: BoxFit.fitHeight
+      ),
+    );
+    Widget _content = Container(
+      padding: contentPadding,       
+      margin: EdgeInsets.all(0),
+      child: Text(
+        cellModel.title,
+        textAlign: contentAlign,
+        overflow: TextOverflow.ellipsis,
+        maxLines: contentLine,
+        style: TextStyle(color: textColor, fontSize: textSize, fontFamily:'Kanit', height: 1.5),
+      ),
+    );
+
+    Widget _child;
+    if(align == 'left') {
+      _child = Row(            
+        children: [
+          Container(
+            width: width,
+            child: _image,
+          ),
+          Expanded(        
+            child: _content,
+          ),
+        ],
+      );
+    } else if(align == 'right') {
+      _child = Row(            
+        children: [
+          Expanded(        
+            child: _content,
+          ),
+          Container(
+            width: width,
+            child: _image,
+          ),
+        ],
+      );
+    } else {
+      _child = Column(       
+        crossAxisAlignment: CrossAxisAlignment.center,     
+        children: [
+          _image,
+          _content,
+        ],
+      );
+    }
     try {
       return Center(
+        
         child: Container(
           decoration: BoxDecoration(
             gradient: gradient,
@@ -174,30 +257,7 @@ class Cell extends StatelessWidget {
           ),
           margin: margin,
           padding: padding,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              AspectRatio(
-                aspectRatio: 3 / 2,
-                child: Image.network(
-                  cellModel.image['src'],
-                  width: cellModel.image['width'],
-                  height: cellModel.image['height'],
-                  alignment: Alignment.topCenter,
-                  fit: BoxFit.fitHeight),
-              ),
-              Padding(
-                padding: contentPadding,
-                child: Text(
-                  cellModel.title,
-                  textAlign: TextAlign.center,
-                  overflow: TextOverflow.ellipsis,
-                  maxLines: 3,
-                  style: TextStyle(color: textColor, fontSize: textSize, fontFamily:'Kanit', height: 1.5),
-                ),
-              ),
-            ],
-          ),
+          child: _child,
         ),
       );
     } catch (e) {

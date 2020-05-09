@@ -28,7 +28,7 @@ Widget getNavBar(dynamic obj, BuildContext buildContext) {
       for(int i=0; i<items.length; i++) {
         Map v = items[i];
         Icon _icon = Icon(getIcon(v['icon']), size: i==0?hoverIconSize:dataIconSize, color: i==0?hoverIconColor:dataIconColor,);
-        Text _title = Text(v['text'], style: TextStyle(fontSize: i==0?hoverTextSize:dataTextSize, color: i==0?hoverTextColor:dataTextColor, fontFamily: 'Kanit', height: 1.5));
+        Text _title = Text(v['text'], style: TextStyle(fontSize: i==0?hoverTextSize:dataTextSize, color: i==0?hoverTextColor:dataTextColor, fontFamily: 'Kanit'));
         _item.add(BottomNavigationBarItem(icon: _icon, title: _title));
       };
     }
@@ -48,12 +48,12 @@ Widget getNavBar(dynamic obj, BuildContext buildContext) {
           backgroundColor: Colors.transparent,
           //selectedItemColor: hoverIconColor,
           //selectedFontSize: hoverTextSize,
-          selectedLabelStyle: TextStyle(fontSize: hoverTextSize, color: hoverIconColor, fontFamily: 'Kanit', height: 1.5),
+          selectedLabelStyle: TextStyle(fontSize: hoverTextSize, color: hoverIconColor, fontFamily: 'Kanit'),
           selectedIconTheme: IconThemeData(size: hoverIconSize, color: hoverIconColor),
           
           //unselectedItemColor: dataTextColor,
           //unselectedFontSize: dataTextSize,
-          unselectedLabelStyle: TextStyle(fontSize: dataTextSize, color: dataTextColor, fontFamily: 'Kanit', height: 1.5),
+          unselectedLabelStyle: TextStyle(fontSize: dataTextSize, color: dataTextColor, fontFamily: 'Kanit'),
           unselectedIconTheme: IconThemeData(size: dataIconSize, color: dataIconColor),
           
           elevation: 0,

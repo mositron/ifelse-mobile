@@ -23,7 +23,7 @@ class HeadingParser extends WidgetParser {
         boxShadow: getBoxShadow(getVal(box,'shadow')),
       ),
       margin: getEdgeInset(getVal(box,'margin')),
-      padding: getEdgeInset(getVal(box,'bg.padding')),
+      padding: getEdgeInset(getVal(box,'padding')),
       alignment: Alignment(0.0, 0.0),
       child: SizedBox(
         width: double.infinity,
