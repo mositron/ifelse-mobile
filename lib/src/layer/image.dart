@@ -24,12 +24,7 @@ class ImageParser extends WidgetParser {
       padding: getEdgeInset(getVal(box,'padding')),
       alignment: Alignment(0.0, 0.0),
       child: 
-        image != null ? 
-        Image.network(image['src'],
-          //width: getDouble(image['width']), 
-          //height: getDouble(image['height']),
-        ) : 
-        null,
+        image != null ? getImageWidget(image['src']) : null,
     );    
   }
 
