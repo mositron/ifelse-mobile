@@ -36,6 +36,6 @@ class _MyPagefulWidgetState extends State<MyPagefulWidget> with SingleTickerProv
 
   @override
   Widget build(BuildContext context) {    
-    return Layer.buildContent(Site.template['login'],context);
+    return Layer.buildContent('login',context);
   }
 }

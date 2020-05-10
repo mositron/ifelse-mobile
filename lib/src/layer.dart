@@ -13,6 +13,7 @@ import 'layer/split5.dart';
 import 'layer/split6.dart';
 import 'layer/image.dart';
 import 'layer/heading.dart';
+import 'layer/detail.dart';
 import 'layer/button.dart';
 import 'layer/article.dart';
 import 'convert/gradient.dart';
@@ -30,6 +31,7 @@ class Layer {
     Split6Parser(),
     ImageParser(),
     HeadingParser(),
+    DetailParser(),
     ButtonParser(),
     ArticleParser(),
   ];
@@ -63,45 +65,52 @@ class Layer {
     ];
   }
 
-  static Widget buildContent(dynamic json, BuildContext buildContext, [Map<String, dynamic> par]) {
+  static Widget buildContent(String file, BuildContext buildContext, [Map<String, dynamic> par]) {
     init();
-    if ((json is List) && (json[0] is Map) && (json[0]['type'] == 'content')) {
-      dynamic box = getVal(json[0],'box'),
-        child = getVal(json[0],'child'),
-        data = getVal(json[0],'data');
-      int appbar = getInt(getVal(data,'appbar')),
-        navbar = getInt(getVal(data,'navbar'));
-      SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
-      ));
-      SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
-      return Container(        
-          decoration: BoxDecoration(
-            gradient: getGradient(getVal(box,'bg.color')),
-          ),
-          child: Scaffold(
-            //extendBody: true,
-            //extendBodyBehindAppBar: true,
-            backgroundColor: Colors.transparent,
-            appBar: (appbar == 1
-                ? getAppBar(getVal(child,'appbar'), buildContext)
-                : null),
-            body: SingleChildScrollView(
-              child: Center(
-                child: Container(
-                  alignment: Alignment.center,
-                  child: Column(
-                    mainAxisAlignment: getAlignMain(getVal(data,'align')),
-                    children: build(getVal(child,'body'), buildContext, par),
-                  ),
-                ),
-              )
+    if(Site.template[file] is List) {
+      dynamic json = Site.template[file];
+      // เทมเพลทที่มันได้หลายแบบ ให้ใช้แบบแรกไปก่อน
+      if(['article','articles','products','product'].contains(file)) {
+        json = json[0];
+      }
+      if ((json is List) && (json[0] is Map) && (json[0]['type'] == 'content')) {
+        dynamic box = getVal(json[0],'box'),
+          child = getVal(json[0],'child'),
+          data = getVal(json[0],'data');
+        int appbar = getInt(getVal(data,'appbar')),
+          navbar = getInt(getVal(data,'navbar'));
+        SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+        ));
+        SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
+        return Container(        
+            decoration: BoxDecoration(
+              gradient: getGradient(getVal(box,'bg.color')),
             ),
-            bottomNavigationBar: (navbar == 1
-                ? getNavBar(getVal(child,'navbar'), buildContext)
-                : null),
-            resizeToAvoidBottomInset: true,
-          ));
+            child: Scaffold(
+              //extendBody: true,
+              //extendBodyBehindAppBar: true,
+              backgroundColor: Colors.transparent,
+              appBar: (appbar == 1
+                  ? getAppBar(getVal(child,'appbar'), buildContext)
+                  : null),
+              body: SingleChildScrollView(
+                child: Center(
+                  child: Container(
+                    alignment: Alignment.center,
+                    child: Column(
+                      mainAxisAlignment: getAlignMain(getVal(data,'align')),
+                      children: build(getVal(child,'body'), buildContext, par),
+                    ),
+                  ),
+                )
+              ),
+              bottomNavigationBar: (navbar == 1
+                  ? getNavBar(getVal(child,'navbar'), buildContext)
+                  : null),
+              resizeToAvoidBottomInset: true,
+            ));
+      }
     }
     return Center(
       child: Container(
@@ -119,7 +128,7 @@ class Layer {
     String widgetName = map['type'];
     var parser = _widgetPraseMap[widgetName];
     if (parser != null) {
-      return parser.parse(map, buildContext);
+      return parser.parse(map, buildContext, par);
     }
     log.w("Not support - $widgetName");
     return null;
@@ -127,6 +136,6 @@ class Layer {
 }
 
 abstract class WidgetParser {
-  Widget parse(Map<String, dynamic> map, BuildContext buildContext);
+  Widget parse(Map<String, dynamic> map, BuildContext buildContext, [Map<String, dynamic> par]);
   String get widgetName;
 }

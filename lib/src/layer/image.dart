@@ -10,7 +10,7 @@ import '../convert/util.dart';
 class ImageParser extends WidgetParser {
 
   @override
-  Widget parse(Map<String, dynamic> map, BuildContext buildContext) {
+  Widget parse(Map<String, dynamic> map, BuildContext buildContext, [Map<String, dynamic> par]) {
     dynamic box = getVal(map,'box'),
       data = getVal(map,'data');
     Map image = getImageObj(getVal(data,'image'),getVal(data,'size'));
@@ -23,7 +23,13 @@ class ImageParser extends WidgetParser {
       margin: getEdgeInset(getVal(box,'margin')),
       padding: getEdgeInset(getVal(box,'padding')),
       alignment: Alignment(0.0, 0.0),
-      child: image != null ? new Image.network(image['src'], width: getDouble(image['width']), height: getDouble(image['height']),) : null,
+      child: 
+        image != null ? 
+        Image.network(image['src'],
+          //width: getDouble(image['width']), 
+          //height: getDouble(image['height']),
+        ) : 
+        null,
     );    
   }
 

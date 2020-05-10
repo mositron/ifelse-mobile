@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'align.dart';
 import 'util.dart';
 
@@ -58,6 +59,29 @@ DecorationImage getImageBG(dynamic obj) {
         repeat:obj['size'].toString().isNotEmpty ? ImageRepeat.repeat : ImageRepeat.noRepeat
       );
     }
+  }
+  return null;
+}
+
+Widget getImageWidget(String src) {
+  if(src.isNotEmpty) {
+    return CachedNetworkImage(
+      imageUrl: src,
+      alignment: Alignment.topCenter,
+      fit: BoxFit.fitHeight,
+      progressIndicatorBuilder: (context, url, downloadProgress) {
+        return Center(
+          child: Container(
+            padding: EdgeInsets.all(30),
+            width: 100,
+            height: 100,
+            alignment: Alignment.center,
+            child: CircularProgressIndicator(value: downloadProgress.progress)
+          )
+        );
+      },
+      errorWidget: (context, url, error) => Icon(Icons.error),
+    );
   }
   return null;
 }

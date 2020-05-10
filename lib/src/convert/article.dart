@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'dart:async';
@@ -18,7 +20,7 @@ class COLORS {
 }
 
 class Article {
-  static Future<List<CellModel>> getData(dynamic map) async {
+  static Future<List<CellModel>> getList(dynamic map) async {
     dynamic data = getVal(map,'data');
     final client = new http.Client();
     final response = await client.post(
@@ -35,6 +37,28 @@ class Article {
       if (response.statusCode == 200) {
         final List<CellModel> list = parsePostsForGrid(response.body);
         return list;
+      } else {
+        throw Exception("No Internet Connection.\nPlease Retry");
+      }
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  static Future<Map> getArticle(int id) async {
+    final client = new http.Client();
+    final response = await client.post(
+      Site.api + 'article',
+      headers: {'user-agent': 'ifelse.co-'+Site.version},
+      body: {
+        'token': Site.token,
+        'session': Site.session,
+        'id': id.toString()
+      }
+    );
+    try {
+      if (response.statusCode == 200) {
+        return json.decode(response.body);
       } else {
         throw Exception("No Internet Connection.\nPlease Retry");
       }
@@ -204,13 +228,7 @@ class Cell extends StatelessWidget {
     //Site.log.e(contentAlign);
     Widget _image = AspectRatio(
       aspectRatio: 3 / 2,
-      child: Image.network(
-        cellModel.image['src'],
-        width: cellModel.image['width'],
-        height: cellModel.image['height'],
-        alignment: Alignment.topCenter,
-        fit: BoxFit.fitHeight
-      ),
+      child: getImageWidget(cellModel.image['src']),
     );
     Widget _content = Container(
       padding: contentPadding,       

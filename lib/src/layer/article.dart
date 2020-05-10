@@ -7,8 +7,8 @@ import '../convert/util.dart';
 
 class ArticleParser extends WidgetParser {
   @override
-  Widget parse(Map<String, dynamic> map, BuildContext buildContext) {
-    return ArticleView(map);    
+  Widget parse(Map<String, dynamic> map, BuildContext buildContext, [Map<String, dynamic> par]) {
+    return ArticleView(map, par);    
   }
   @override
   String get widgetName => 'article';
@@ -16,18 +16,17 @@ class ArticleParser extends WidgetParser {
 
 class ArticleView extends StatefulWidget {
   final dynamic _map;
-  ArticleView(this._map);
+  final dynamic _par;
+  ArticleView(this._map, this._par);
   @override
-  _ArticleViewState createState() => _ArticleViewState(_map);
+  _ArticleViewState createState() => _ArticleViewState(_map, _par);
 }
  
 class _ArticleViewState extends State<ArticleView> {
   bool isHomeDataLoading;
   dynamic _map;
-  
-  _ArticleViewState(this._map) {
-    //Site.log.w(_map);
-  }
+  dynamic _par;
+  _ArticleViewState(this._map, this._par);
 
   @override
   void initState() {
@@ -41,9 +40,8 @@ class _ArticleViewState extends State<ArticleView> {
     return Center(
       child: Container(
         child: FutureBuilder<List<CellModel>>(
-          future: Article.getData(_map),
-          builder: (context, snapshot) {            
-            //Site.log.e(_map);
+          future: Article.getList(_map),
+          builder: (context, snapshot) {
             return snapshot.connectionState == ConnectionState.done
                 ? snapshot.hasData
                     ? Article.getGrid(snapshot, _map, gridClicked)

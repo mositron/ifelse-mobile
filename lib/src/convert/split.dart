@@ -7,7 +7,7 @@ import 'border.dart';
 import 'shadow.dart';
 import 'edge.dart';
 
-Widget getSplit(int col, Map<String, dynamic> map, BuildContext buildContext) {
+Widget getSplit(int col, Map<String, dynamic> map, BuildContext buildContext, [Map<String, dynamic> par]) {
   List<dynamic> child = map['child'];
   dynamic box = getVal(map,'box');
   dynamic data = getVal(map,'data');
@@ -17,7 +17,7 @@ Widget getSplit(int col, Map<String, dynamic> map, BuildContext buildContext) {
       widget.add(Container(
         padding: inPadding,
         child: Column(
-          children: (child.length > 0 ? Layer.build(child[0], buildContext) : null)
+          children: (child.length > 0 ? Layer.build(child[0], buildContext, par) : null)
         )
       )
     );
@@ -28,7 +28,7 @@ Widget getSplit(int col, Map<String, dynamic> map, BuildContext buildContext) {
           child: Container(
             padding: inPadding,
             child: Column(
-            children: (child.length > i ? Layer.build(child[i], buildContext) : null)
+            children: (child.length > i ? Layer.build(child[i], buildContext, par) : null)
           )
           )
         )

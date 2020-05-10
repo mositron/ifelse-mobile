@@ -1,26 +1,18 @@
 
 import 'package:flutter/widgets.dart';
 import '../layer.dart';
-import '../site.dart';
 import '../convert/gradient.dart';
 import '../convert/shadow.dart';
 import '../convert/border.dart';
 import '../convert/edge.dart';
 import '../convert/util.dart';
-import '../convert/align.dart';
+import '../convert/editor.dart';
 
-class HeadingParser extends WidgetParser {
+class DetailParser extends WidgetParser {
   @override
   Widget parse(Map<String, dynamic> map, BuildContext buildContext, [Map<String, dynamic> par]) {
     dynamic box = getVal(map,'box'),
       data = getVal(map,'data');
-    String text = getVal(data,'text');
-    if((par is Map) && (par['title'] is String)) {
-      String spec = getVal(map, 'spec');
-      if(spec == 'auto') {
-        text = par['title'];
-      }
-    }
     return Container(
       decoration: BoxDecoration(
         gradient: getGradient(getVal(box,'bg.color')),
@@ -30,16 +22,11 @@ class HeadingParser extends WidgetParser {
       margin: getEdgeInset(getVal(box,'margin')),
       padding: getEdgeInset(getVal(box,'padding')),
       alignment: Alignment(0.0, 0.0),
-      child: SizedBox(
-        width: double.infinity,
-        child: Text(
-          text,
-          style: TextStyle(fontFamily: 'Kanit',fontSize: getDouble(getVal(data,'size'), 16),color: getColor(getVal(data,'color'))),
-          textAlign: getAlignText(getVal(data,'align')),
-        )
+      child: Column(
+        children: getEditor(par['editor']),
       )
     );
   }
   @override
-  String get widgetName => 'heading';
+  String get widgetName => 'detail';
 }

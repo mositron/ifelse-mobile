@@ -18,18 +18,24 @@ class HomePageWidget extends StatefulWidget {
 
 class _HomePageWidgetState extends State<HomePageWidget> with SingleTickerProviderStateMixin {
   TabController controller;
+  Widget render;
   @override
   void initState() {
     super.initState();
+    render = null;
     controller = TabController(length: Site.pageTab.length, vsync: this);
   }
   @override
   void dispose() {
+    render = null;
     controller.dispose();
     super.dispose();
   }
   @override
-  Widget build(BuildContext context) {    
-    return Layer.buildContent(Site.template['home'],context);
+  Widget build(BuildContext context) {
+    if(render == null) {
+      render = Layer.buildContent('home',context);
+    }
+    return render;
   }
 }
