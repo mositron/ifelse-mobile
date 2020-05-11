@@ -1,7 +1,7 @@
 ### Changelog ###
 11/05/2563
 * ตั้ง Appbar/Navbar ลอยบนเนื้อหาได้
-* เริ่มแสดง heading/paragprah/list/image ของเนื้อหาบทความ
+* เริ่มแสดง heading/paragraph/list/image ของเนื้อหาบทความ
 
 01/05/2563
 * เริ่มพัฒนา
