@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:ifelse/src/convert/gradient.dart';
 import '../site.dart';
 import '../layer.dart';
 import '../convert/article.dart';
+import '../convert/gradient.dart';
 import '../convert/util.dart';
 
 class ArticlePage extends StatelessWidget {

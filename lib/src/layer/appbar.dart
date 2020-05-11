@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:ifelse/src/convert/icon.dart';
-import 'package:ifelse/src/convert/image.dart';
+import '../convert/icon.dart';
+import '../convert/image.dart';
 import '../convert/gradient.dart';
 import '../convert/util.dart';
 

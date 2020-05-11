@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:ifelse/src/convert/util.dart';
 import 'package:logger/logger.dart';
 import 'package:flutter/services.dart';
 import 'layer/appbar.dart';
@@ -18,6 +17,7 @@ import 'layer/button.dart';
 import 'layer/article.dart';
 import 'convert/gradient.dart';
 import 'convert/align.dart';
+import 'convert/util.dart';
 import 'site.dart';
 
 class Layer {
@@ -69,7 +69,7 @@ class Layer {
     init();
     if(Site.template[file] is List) {
       dynamic json = Site.template[file];
-      // เทมเพลทที่มันได้หลายแบบ ให้ใช้แบบแรกไปก่อน
+      // เทมเพลทที่มีได้หลายแบบ ให้ใช้แบบแรกไปก่อน
       if(['article','articles','products','product'].contains(file)) {
         json = json[0];
       }

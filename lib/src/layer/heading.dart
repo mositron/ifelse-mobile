@@ -1,7 +1,6 @@
 
 import 'package:flutter/widgets.dart';
 import '../layer.dart';
-import '../site.dart';
 import '../convert/gradient.dart';
 import '../convert/shadow.dart';
 import '../convert/border.dart';

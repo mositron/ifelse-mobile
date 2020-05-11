@@ -1,12 +1,10 @@
-import 'dart:io';
-
-import 'package:flutter/material.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'dart:async';
 import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:http/http.dart' as http;
-import 'package:ifelse/src/convert/align.dart';
 import '../site.dart';
+import 'align.dart';
 import 'image.dart';
 import 'gradient.dart';
 import 'border.dart';
@@ -14,11 +12,6 @@ import 'edge.dart';
 import 'shadow.dart';
 import 'util.dart';
  
-class COLORS {
-  static const Color DRAWER_BG_COLOR = Colors.lightGreen;
-  static const Color APP_THEME_COLOR = Colors.green;
-}
-
 class Article {
   static Future<List<CellModel>> getList(dynamic map) async {
     dynamic data = getVal(map,'data');
@@ -72,7 +65,6 @@ class Article {
       final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();    
       return parsed.map<CellModel>((json) => CellModel.fromJson(json)).toList();
     } catch (e) {
-      //Site.log.w(e.toString());
       throw Exception(e.toString());
     }
   }
@@ -94,11 +86,9 @@ class Article {
     List<BoxShadow> boxShadow = getBoxShadow(getVal(dataBox,'shadow'));
     Gradient gradient  = getGradient(getVal(dataBox,'bg.color'));
     Color textColor  = getColor(getVal(data,'color'),'000');
-    double textSize  = getDouble(getVal(data,'fsize'),16);
-    
+    double textSize  = getDouble(getVal(data,'fsize'),16);    
     String colDirect = getVal(data,'col.direct').toString();
     double colHeight  = getDouble(getVal(data,'col.hieght'),200);
-
     if(contentLine == 0) {
       contentLine = null;
     }
@@ -154,14 +144,13 @@ class Article {
         )
       );
     } catch (e) {
-      //Site.log.w(e.toString());
       throw Exception(e.toString());
     }
   }
  
   static CircularProgressIndicator circularProgress() {
     return CircularProgressIndicator(
-      valueColor: new AlwaysStoppedAnimation<Color>(COLORS.APP_THEME_COLOR),
+      valueColor: new AlwaysStoppedAnimation<Color>(Colors.redAccent),
     );
   }
 
@@ -182,10 +171,8 @@ class CellModel {
   String id;
   String title;
   String url;
-  dynamic image;
- 
-  CellModel({this.id, this.title, this.url, this.image});
- 
+  dynamic image; 
+  CellModel({this.id, this.title, this.url, this.image}); 
   factory CellModel.fromJson(Map<String, dynamic> json) {
     try {
       return new CellModel(
@@ -195,7 +182,6 @@ class CellModel {
         image: getImageObj(getVal(json,'image'), 't')
       );
     } catch (e) {
-      //Site.log.w(e.toString());
       throw Exception(e.toString());
     }
   }
@@ -288,7 +274,6 @@ class Cell extends StatelessWidget {
           child: _child,
       );
     } catch (e) {
-      //Site.log.w(e.toString());
       throw Exception(e.toString());
     }
   }

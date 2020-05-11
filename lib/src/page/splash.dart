@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:ifelse/src/page/home.dart';
 import 'package:logger/logger.dart';
 import 'dart:async';
 import 'dart:convert';
 import '../site.dart';
+import '../page/home.dart';
 
 class SplashPage extends StatefulWidget {
   @override

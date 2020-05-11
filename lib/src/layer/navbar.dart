@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:ifelse/src/convert/icon.dart';
-import '../site.dart';
+import '../convert/icon.dart';
 import '../convert/gradient.dart';
 import '../convert/shadow.dart';
 import '../convert/border.dart';

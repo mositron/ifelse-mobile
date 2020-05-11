@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:ifelse/src/convert/image.dart';
 import 'package:logger/logger.dart';
 import '../layer.dart';
 import '../convert/util.dart';
@@ -10,6 +9,7 @@ import '../convert/border.dart';
 import '../convert/edge.dart';
 import '../convert/icon.dart';
 import '../convert/shadow.dart';
+import '../convert/image.dart';
 
 class ButtonParser extends WidgetParser {
   static final log = Logger();
