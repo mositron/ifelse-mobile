@@ -89,7 +89,7 @@ class Layer {
         if(appbar == 2) {
           offsetTop = MediaQuery.of(buildContext).padding.top + _appbar.preferredSize.height + 5;
         }
-        Widget _navbar = (navbar > 0 ? getNavBar(getVal(child,'navbar'), buildContext) : null);
+        Widget _navbar = (navbar > 0 ? NavBar(getVal(child,'navbar'), navClick) : null);
         if(appbar == 2) {
           offsetBottom = getDouble(getVal(data,'bottom'));
         }
@@ -129,6 +129,10 @@ class Layer {
         )
       )    
     );
+  }
+
+  static void navClick(selectedIndex) {
+    Site.log.i(selectedIndex);
   }
 
   static Widget buildFromMap(Map<String, dynamic> map, BuildContext buildContext, [Map<String, dynamic> par]) {

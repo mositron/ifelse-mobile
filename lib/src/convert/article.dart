@@ -80,7 +80,8 @@ class Article {
     TextAlign contentAlign = getAlignText(getVal(data,'content.align'));
     int contentLine = getInt(getVal(data,'content.line'),0);
     String align = getVal(data,'align').toString();
-    double width  = getDouble(getVal(data,'width'),80);
+    double width  = getDouble(getVal(data,'width'),80),
+      ratio = getRatio(getVal(data,'ratio'));
     Border border = getBorder(getVal(dataBox,'border'));
     BorderRadius radius = getBorderRadius(getVal(dataBox,'border'));
     List<BoxShadow> boxShadow = getBoxShadow(getVal(dataBox,'shadow'));
@@ -89,9 +90,6 @@ class Article {
     double textSize  = getDouble(getVal(data,'fsize'),16);    
     String colDirect = getVal(data,'col.direct').toString();
     double colHeight  = getDouble(getVal(data,'col.hieght'),200);
-    if(contentLine == 0) {
-      contentLine = null;
-    }
     if(width < 50) {
       width = 50;
     }
@@ -129,6 +127,7 @@ class Article {
                 gradient,
                 align,
                 width,
+                ratio,
                 contentAlign,
                 contentPadding,
                 contentLine,
@@ -190,7 +189,7 @@ class CellModel {
 class Cell extends StatelessWidget {
   const Cell(
     this.cellModel,this.padding,this.margin,this.border,this.radius,this.shadow,this.gradient,  
-    this.align,this.width,this.contentAlign,this.contentPadding,this.contentLine,
+    this.align,this.width,this.ratio,this.contentAlign,this.contentPadding,this.contentLine,
     this.textColor,this.textSize
   );
   @required
@@ -203,6 +202,7 @@ class Cell extends StatelessWidget {
   final Gradient gradient;
   final String align;
   final double width;
+  final double ratio;
   final TextAlign contentAlign;
   final EdgeInsets contentPadding;
   final int contentLine;
@@ -212,10 +212,12 @@ class Cell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //Site.log.e(contentAlign);
-    Widget _image = AspectRatio(
-      aspectRatio: 3 / 2,
-      child: getImageWidget(cellModel.image['src']),
-    );
+    Widget _image = ratio > 0 ?
+      AspectRatio(
+        aspectRatio: ratio,
+        child: getImageWidget(cellModel.image['src']),
+      ) :
+      getImageWidget(cellModel.image['src']);
     Widget _content = Container(
       padding: contentPadding,       
       margin: EdgeInsets.all(0),
@@ -223,7 +225,7 @@ class Cell extends StatelessWidget {
         cellModel.title,
         textAlign: contentAlign,
         overflow: TextOverflow.ellipsis,
-        maxLines: contentLine,
+        maxLines: contentLine > 0 ? contentLine : null,
         style: TextStyle(color: textColor, fontSize: textSize, fontFamily:'Kanit', height: 1.5),
       ),
     );

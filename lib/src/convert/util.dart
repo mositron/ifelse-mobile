@@ -67,3 +67,20 @@ dynamic getVal(dynamic obj, String key) {
   }
   return null;
 }
+
+double getRatio(String size) {
+  switch(size) {
+    case '1by1':
+      return 1;
+    case '2by3':
+      return 2/3;
+    case '3by2':
+      return 3/2;
+    case '16by9':
+      return 16/9;
+    case '21by9':
+      return 21/9;
+    default:
+      return 0;
+  }
+}
