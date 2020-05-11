@@ -1,6 +1,12 @@
-#### เริ่มพัฒนา 01/05/2563
+### Changelog ###
+11/05/2563
+* ตั้ง Appbar/Navbar ลอยบนเนื้อหาได้
+* เริ่มแสดง heading/paragprah/list/image ของเนื้อหาบทความ
 
-<img src="screenshot.png">
+01/05/2563
+* เริ่มพัฒนา
+
+<img src="screenshot.gif">
 
 # แอพมือถือสำเร็จรูป (Flutter)
 แอพพลิเคชั่นมือถือแบบสำเร็จรูป ที่พัฒนาด้วย Flutter เพื่อให้รองรับสำหรับการใช้บน Android และ iOS 

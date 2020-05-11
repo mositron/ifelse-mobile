@@ -83,20 +83,29 @@ class Layer {
           statusBarColor: Colors.transparent,
         ));
         SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
+        double offsetTop = 0, 
+          offsetBottom = 0;
+        AppBar _appbar = (appbar > 0 ? getAppBar(getVal(child,'appbar'), buildContext) : null);
+        if(appbar == 2) {
+          offsetTop = MediaQuery.of(buildContext).padding.top + _appbar.preferredSize.height + 5;
+        }
+        Widget _navbar = (navbar > 0 ? getNavBar(getVal(child,'navbar'), buildContext) : null);
+        if(appbar == 2) {
+          offsetBottom = getDouble(getVal(data,'bottom'));
+        }
         return Container(        
             decoration: BoxDecoration(
               gradient: getGradient(getVal(box,'bg.color')),
             ),
             child: Scaffold(
-              //extendBody: true,
-              //extendBodyBehindAppBar: true,
+              extendBody: navbar == 2,
+              extendBodyBehindAppBar: appbar == 2,
               backgroundColor: Colors.transparent,
-              appBar: (appbar == 1
-                  ? getAppBar(getVal(child,'appbar'), buildContext)
-                  : null),
+              appBar: _appbar,
               body: SingleChildScrollView(
                 child: Center(
                   child: Container(
+                    padding: EdgeInsets.only(top:offsetTop, bottom:offsetBottom),
                     alignment: Alignment.center,
                     child: Column(
                       mainAxisAlignment: getAlignMain(getVal(data,'align')),
@@ -105,9 +114,7 @@ class Layer {
                   ),
                 )
               ),
-              bottomNavigationBar: (navbar == 1
-                  ? getNavBar(getVal(child,'navbar'), buildContext)
-                  : null),
+              bottomNavigationBar: _navbar,
               resizeToAvoidBottomInset: true,
             ));
       }

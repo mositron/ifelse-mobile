@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:ifelse/src/convert/image.dart';
+import 'package:flutter_html/flutter_html.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:html/dom.dart' as dom;
 import 'util.dart';
-import '../site.dart';
+import '../convert/image.dart';
 
 List<Widget> getEditor(dynamic data) {
   List<Widget> widget = [];
@@ -19,6 +21,8 @@ List<Widget> getEditor(dynamic data) {
           widget.add(editorImage(v));
           break;
         case 'list':
+          widget.add(editorList(v));
+          break;
         case 'delimiter':
         case 'embed':
         case 'table':
@@ -30,21 +34,41 @@ List<Widget> getEditor(dynamic data) {
   }
   return widget;
 }
+Widget _parse(String html,double fontSize) {
+  return Html(
+    data: html,
+    customTextStyle: (dom.Node node, TextStyle baseStyle) {
+      return baseStyle.merge(TextStyle(fontSize: fontSize, fontFamily:'Kanit'));
+    },
+    linkStyle: TextStyle(
+      decoration: TextDecoration.underline,
+    ),
+    onLinkTap: (url) => _launchURL(url),
+  );
+}
+
+_launchURL(String url) async {
+  if (await canLaunch(url)) {
+    await launch(url);
+  } else {
+    throw 'Could not launch $url';
+  }
+}
 
 Widget editorParagraph(Map block) {
   return Container(
     margin: EdgeInsets.only(bottom:15),
     alignment: Alignment.centerLeft,
-    child: Text(block['data']['text'], style: TextStyle(fontSize: 16, fontFamily:'Kanit'))
+    child: _parse(block['data']['text'], 16)
   );
 }
 
 Widget editorHeading(Map block) {
   Map<int,double> size = {0:16,1:40,2:32,3:28,4:24,5:20,6:16};
   return Container(
-    margin: EdgeInsets.only(bottom:15),
+    margin: EdgeInsets.only(bottom:10),
     alignment: Alignment.centerLeft,
-    child: Text(block['data']['text'], style: TextStyle(fontSize: size[getInt(getVal(block,'data.level')??0)], fontFamily:'Kanit'))
+    child: _parse(block['data']['text'], size[getInt(getVal(block,'data.level')??0)])
   );
 }
 
@@ -59,36 +83,28 @@ Widget editorImage(Map block) {
   );
 }
 
-/*
+Widget editorList(Map block) {
+  List<Widget> list = [];
 
-    $html = '';
-    if(is_array($block['data'])) {
-      if(is_array($block['data']['image'])) {
-        $cls = [];
-        if(in_array($block['data']['align'],['left','center','right'])) {
-          $cls[] = 'text-'.$block['data']['align'];
-        }
-        $c = [];
-        if($block['data']['rounded']) {
-          $c[] = 'rounded';
-        }
-        if($block['data']['border']) {
-          $c[] = 'border';
-        }
-        if($block['data']['shadow']) {
-          $c[] = 'shadow';
-        }
-        $a1 = $a2 = '';
-        $click = intval($block['data']['click']);
-        if($click == 2) {
-          $cls[] = 'layer-lightbox layer-lightbox-item';
-        } elseif($click == 1) {
-          $url = $this->str($block['data']['url'],false);
-          $a1 = '<a href="'.$url.'">';
-          $a2 = '</a>';
-        }
-        $img = Load::getImage($block['data']['image'],'o',null,true);
-        $html = '<figure'.(count($cls)?' class="'.implode(' ',$cls).'"':'').'>'.$a1.'<img data-src="'.$img['src'].'" data-color="'.$img['color'].'"'.($img['width']?' width="'.$img['width'].'"':'').''.($img['height']?' height="'.$img['height'].'"':'').''.(count($c)?' class="'.implode(' ',$c).'"':'').'>'.$a2.'</figure>';
-      }
+  List<dynamic> tmp = getVal(block,'data.items');
+  String style = getVal(block,'data.style').toString();
+  if(tmp is List) {
+    for(int i=0; i<tmp.length; i++) {
+      list.add(
+        Container(
+          margin: EdgeInsets.only(bottom:5),
+          alignment: Alignment.centerLeft,
+          child: _parse((style == 'unordered' ? '●' : (i+1).toString()) + ' ' + tmp[i], 16)
+        )
+      );
     }
-*/
+  }
+  return Container(
+    margin: EdgeInsets.only(bottom:10),
+    padding: EdgeInsets.only(left:20),
+    alignment: Alignment.centerLeft,
+    child: Column(
+      children: list
+    )
+  );
+}

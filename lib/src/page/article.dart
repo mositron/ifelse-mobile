@@ -46,27 +46,24 @@ class _ArticlePageWidgetState extends State<ArticlePageWidget> with SingleTicker
               ? snapshot.hasData
                   ? getWidget(snapshot.data)
                   : Article.retryButton(fetch)
-              : 
-                Container(
-                  color: Colors.transparent,
-                  child: Container(
-                    padding: EdgeInsets.all(30),
-                    decoration: BoxDecoration(
-                      gradient: getGradient({'color1':'fff','color2':'fff','range':1,'gragient':2}),
-                      borderRadius: BorderRadius.all(Radius.circular(20)),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        CircularProgressIndicator(
-                          valueColor: AlwaysStoppedAnimation<Color>(Colors.redAccent),
+              : Container(
+                    color: Colors.transparent,
+                    child: Center(
+                      child: Container(
+                        color: Colors.transparent,
+                        child: Container(
+                          padding: EdgeInsets.all(30),
+                          decoration: BoxDecoration(
+                            gradient: getGradient({'color1':'fff','color2':'fff','range':1,'gragient':2}),
+                            borderRadius: BorderRadius.all(Radius.circular(20)),
+                          ),                      
+                          child: CircularProgressIndicator(
+                            valueColor: AlwaysStoppedAnimation<Color>(Colors.redAccent),
+                          ),
                         ),
-                        SizedBox(width: 20),
-                        Text('รอซักครู่',style: TextStyle(fontFamily: 'Kanit', fontSize: 20, color: getColor('555')),),
-                      ],
-                    ),
-                  )
-                );
+                    )
+                  ),
+                ) ;
         },
       );
     } else {
