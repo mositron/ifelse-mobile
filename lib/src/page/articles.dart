@@ -5,29 +5,29 @@ import '../convert/article.dart';
 import '../convert/gradient.dart';
 import '../convert/util.dart';
 
-class ArticlePage extends StatelessWidget {
-  ArticlePage({Key key, this.par}) : super(key: key);
+class ArticlesPage extends StatelessWidget {
+  ArticlesPage({Key key, this.par}) : super(key: key);
   final Map<String, dynamic> par;
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(title: Site.name, home: ArticlePageWidget(par: par));
+    return MaterialApp(title: Site.name, home: ArticlesPageWidget(par: par));
   }
 }
 
-class ArticlePageWidget extends StatefulWidget {
+class ArticlesPageWidget extends StatefulWidget {
   final Map<String, dynamic> par;
-  ArticlePageWidget({Key key, this.par}) : super(key: key);
+  ArticlesPageWidget({Key key, this.par}) : super(key: key);
   @override
-  _ArticlePageWidgetState createState() => _ArticlePageWidgetState(par);
+  _ArticlesPageWidgetState createState() => _ArticlesPageWidgetState(par);
 }
 
-class _ArticlePageWidgetState extends State<ArticlePageWidget> with SingleTickerProviderStateMixin {
+class _ArticlesPageWidgetState extends State<ArticlesPageWidget> with SingleTickerProviderStateMixin {
   bool loaded;
   TabController controller;
   Map<String, dynamic> par;
 
-  _ArticlePageWidgetState(this.par);
+  _ArticlesPageWidgetState(this.par);
   
   @override
   void initState() {
@@ -88,7 +88,7 @@ class _ArticlePageWidgetState extends State<ArticlePageWidget> with SingleTicker
 
   Widget getWidget(dynamic data) {
     if(data is Map) {
-      return Layer.buildContent('article',context, data);
+      return Layer.buildContent('articles',context, data);
     }
     return Container();
   }

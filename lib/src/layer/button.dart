@@ -10,6 +10,7 @@ import '../convert/edge.dart';
 import '../convert/icon.dart';
 import '../convert/shadow.dart';
 import '../convert/image.dart';
+import '../convert/click.dart';
 
 class ButtonParser extends WidgetParser {
   static final log = Logger();
@@ -17,11 +18,11 @@ class ButtonParser extends WidgetParser {
   @override
   Widget parse(Map<String, dynamic> map, BuildContext buildContext, [Map<String, dynamic> par]) {
     dynamic box = getVal(map,'box'),
-      data = getVal(map,'data');
+      data = getVal(map,'data'),
+      click = getVal(data,'click');
     String align = getVal(data,'align').toString();
     Color _color = getColor(getVal(data,'color'));
     double _fSize = getDouble(getVal(data,'size') ?? 16);
-
     List<Widget> widget = [];
     widget = [
       Icon(
@@ -45,7 +46,7 @@ class ButtonParser extends WidgetParser {
           boxShadow: getBoxShadow(getVal(box,'shadow')),
         ),      
         child: RawMaterialButton(
-          onPressed: ()=>{},
+          onPressed: () => getClicked(buildContext, click),
           padding: EdgeInsets.all(0.0),
           elevation: 0.0,     
           child: Ink(            

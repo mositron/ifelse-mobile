@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../layer.dart';
 import '../convert/image.dart'; 
 import '../convert/gradient.dart';
@@ -6,13 +7,15 @@ import '../convert/shadow.dart';
 import '../convert/border.dart';
 import '../convert/edge.dart';
 import '../convert/util.dart';
+import '../convert/click.dart';
 
 class ImageParser extends WidgetParser {
 
   @override
   Widget parse(Map<String, dynamic> map, BuildContext buildContext, [Map<String, dynamic> par]) {
     dynamic box = getVal(map,'box'),
-      data = getVal(map,'data');
+      data = getVal(map,'data'),
+      click = getVal(data,'click');
     Map image = getImageObj(getVal(data,'image'),getVal(data,'size'));
     return Container(
       decoration: BoxDecoration(
@@ -23,8 +26,13 @@ class ImageParser extends WidgetParser {
       margin: getEdgeInset(getVal(box,'margin')),
       padding: getEdgeInset(getVal(box,'padding')),
       alignment: Alignment(0.0, 0.0),
-      child: 
-        image != null ? getImageWidget(image['src']) : null,
+      child: image != null ?
+        GestureDetector(
+          child: getImageWidget(image['src']),
+           onTap: () => getClicked(buildContext, click),
+        ) : 
+        null,
+      
     );    
   }
 
