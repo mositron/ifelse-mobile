@@ -74,7 +74,7 @@ class Layer {
       child: Container(
         color: getColor('f5f5f5'),
         alignment: Alignment.center,
-        child: Text('ยังไม่ได้สร้างเทมเพลทสำหรับหน้า '+file, 
+        child: Text('ยังไม่ได้สร้างเทมเพลทสำหรับหน้า 2 - '+file, 
           textAlign: TextAlign.center,
           style: TextStyle(color: getColor('c00'),fontFamily: 'Kanit', fontSize: 30),
         )
@@ -94,7 +94,7 @@ class Layer {
         if ((json is List) && (json[0] is Map) && (json[0]['type'] == 'content')) {
           dynamic child = getVal(json[0],'child'),
             data = getVal(json[0],'data');
-          Site.log.i(getVal(child,'body'));
+          //Site.log.i(getVal(child,'body'));
           return Column(
             mainAxisAlignment: getAlignMain(getVal(data,'align')),
             children: build(getVal(child,'body'), buildContext, par),
@@ -106,7 +106,7 @@ class Layer {
       child: Container(
         color: getColor('f5f5f5'),
         alignment: Alignment.center,
-        child: Text('ยังไม่ได้สร้างเทมเพลทสำหรับหน้า '+file, 
+        child: Text('ยังไม่ได้สร้างเทมเพลทสำหรับหน้า 4 - '+file, 
           textAlign: TextAlign.center,
           style: TextStyle(color: getColor('c00'),fontFamily: 'Kanit', fontSize: 30),
         )

@@ -16,26 +16,25 @@ class HomePageWidget extends StatefulWidget {
   _HomePageWidgetState createState() => _HomePageWidgetState();
 }
 
-class _HomePageWidgetState extends State<HomePageWidget> with SingleTickerProviderStateMixin {
+class _HomePageWidgetState extends State<HomePageWidget> {
   TabController controller;
   Widget render;
   @override
   void initState() {
     super.initState();
     render = null;
-    controller = TabController(length: Site.pageTab.length, vsync: this);
   }
   @override
   void dispose() {
     render = null;
-    controller.dispose();
     super.dispose();
   }
   @override
   Widget build(BuildContext context) {
-    if(render == null) {
+    Site.log.i('ddd');
+    //if(render == null) {
       render = Layer.buildContent('home',context);
-    }
+    //}
     return render;
   }
 }

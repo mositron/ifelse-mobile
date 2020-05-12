@@ -37,7 +37,7 @@ class _ArticlePageWidgetState extends State<ArticlePageWidget> with SingleTicker
 
   @override
   Widget build(BuildContext context) {
-    Site.log.e('get article - ' + getVal(par, '_id').toString());
+    //Site.log.e('get article - ' + getVal(par, '_id').toString());
     int id = getInt(getVal(par, '_id'));
     if(id > 0) {
       return FutureBuilder<Map>(

@@ -14,10 +14,14 @@ class HeadingParser extends WidgetParser {
     dynamic box = getVal(map,'box'),
       data = getVal(map,'data');
     String text = getVal(data,'text');
-    if((par is Map) && (par['title'] is String)) {
-      String spec = getVal(map, 'spec');
-      if(spec == 'auto') {
-        text = par['title'];
+    String spec = getVal(map, 'spec');
+    if(spec == 'auto') {
+      if(par is Map) {
+        if((par['title'] is String) && (par['title'].toString().isNotEmpty)) {
+          text = par['title'];
+        } else if((par['text'] is String) && (par['text'].toString().isNotEmpty)) {
+          text = par['text'];
+        }
       }
     }
     return Container(

@@ -9,7 +9,7 @@ import '../convert/util.dart';
 class ArticleParser extends WidgetParser {
   @override
   Widget parse(Map<String, dynamic> map, BuildContext buildContext, [Map<String, dynamic> par]) {
-    return new ArticleView(map, buildContext, par);    
+    return new ArticleView(key: UniqueKey(), map: map, buildContext: buildContext, par: par);    
   }
   
   @override
@@ -17,16 +17,15 @@ class ArticleParser extends WidgetParser {
 }
 
 class ArticleView extends StatefulWidget {
-  final dynamic _map;
-  final BuildContext _buildContext;
-  final dynamic _par;
-
-  ArticleView(this._map, this._buildContext, this._par);
+  final dynamic map;
+  final BuildContext buildContext;
+  final dynamic par;
+  ArticleView({Key key, this.map, this.buildContext, this.par}) : super(key: key);
 
   @override
   _ArticleViewState createState() {
-    Site.log.w(_map);
-    return new _ArticleViewState(_map, _buildContext, _par);
+    //Site.log.w(_map);
+    return new _ArticleViewState(map, par);
   }
 }
  
@@ -34,16 +33,15 @@ class _ArticleViewState extends State<ArticleView> {
   bool loaded;
   dynamic _map;
   dynamic _par;
-  BuildContext _buildContext;
-  _ArticleViewState(this._map, this._buildContext, this._par) {
-    Site.log.w(_map);
+  _ArticleViewState(this._map, this._par) {
+    //Site.log.w(_map);
 
   }
 
   @override
   void initState() {
     super.initState();
-    Site.log.w(' ---- state ---------------');
+    //Site.log.w(' ---- state ---------------');
     loaded = false;
   }
  
@@ -55,10 +53,8 @@ class _ArticleViewState extends State<ArticleView> {
     Map<String,String> request = {};
     request['limit'] = getVal(data,'limit').toString();
     request['category'] = '';
-      Site.log.e(_map);
     if(spec == 'auto') {
       List category = getVal(_par,'category');
-      Site.log.e(category);
       if((category is List) && (category.length > 0)) {
         request['category'] = category.join(',');
       }

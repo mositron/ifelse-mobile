@@ -1,6 +1,7 @@
 
 import 'package:flutter/widgets.dart';
 import '../layer.dart';
+import '../site.dart';
 import '../convert/gradient.dart';
 import '../convert/shadow.dart';
 import '../convert/border.dart';
@@ -11,8 +12,7 @@ import '../convert/editor.dart';
 class DetailParser extends WidgetParser {
   @override
   Widget parse(Map<String, dynamic> map, BuildContext buildContext, [Map<String, dynamic> par]) {
-    dynamic box = getVal(map,'box'),
-      data = getVal(map,'data');
+    dynamic box = getVal(map,'box');
     return Container(
       decoration: BoxDecoration(
         gradient: getGradient(getVal(box,'bg.color')),
