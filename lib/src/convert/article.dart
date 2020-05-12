@@ -14,18 +14,23 @@ import 'util.dart';
  
 class Article {
   static Future<List<CellModel>> getList(dynamic map) async {
-    dynamic data = getVal(map,'data');
     final client = new http.Client();
+    final Map<String,String> request = {
+        'token': Site.token,
+        'session': Site.session,
+        'category': map['category'].toString(),
+        'status': map['status'].toString(),
+        'tag': map['tag'].toString(),
+        'order': map['order'].toString(),
+        'skip': map['skip'].toString(),
+        'limit': map['limit'].toString(),
+      };
     final response = await client.post(
       Site.api + 'articles',
       headers: {'user-agent': 'ifelse.co-'+Site.version},
-      body: {
-        'token': Site.token,
-        'session': Site.session,
-        'skip': getInt(getVal(data,'skip'), 0).toString(),
-        'limit': getInt(getVal(data,'limit'), 6).toString(),
-      }
+      body: request
     );
+      Site.log.w(request);
     try {
       if (response.statusCode == 200) {
         final List<CellModel> list = parsePostsForGrid(response.body);
