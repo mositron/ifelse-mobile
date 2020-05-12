@@ -6,12 +6,12 @@ import '../convert/shadow.dart';
 import '../convert/border.dart';
 import '../convert/edge.dart';
 import '../convert/util.dart';
-import '../convert/editor.dart';
 
-class DetailParser extends WidgetParser {
+class SpaceParser extends WidgetParser {
   @override
   Widget parse(Map<String, dynamic> map, BuildContext buildContext, [Map<String, dynamic> par]) {
     dynamic box = getVal(map,'box');
+    double height = getDouble(getVal(map,'data.height'));
     return Container(
       decoration: BoxDecoration(
         gradient: getGradient(getVal(box,'bg.color')),
@@ -21,11 +21,12 @@ class DetailParser extends WidgetParser {
       margin: getEdgeInset(getVal(box,'margin')),
       padding: getEdgeInset(getVal(box,'padding')),
       alignment: Alignment(0.0, 0.0),
-      child: Column(
-        children: getEditor(par['editor']),
+      child: Container(
+        height: height,
+        width: double.infinity,
       )
     );
   }
   @override
-  String get widgetName => 'detail';
+  String get widgetName => 'space';
 }

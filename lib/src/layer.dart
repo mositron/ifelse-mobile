@@ -12,6 +12,9 @@ import 'layer/heading.dart';
 import 'layer/detail.dart';
 import 'layer/button.dart';
 import 'layer/article.dart';
+import 'layer/space.dart';
+import 'layer/divider.dart';
+import 'layer/gallery.dart';
 import 'convert/util.dart';
 import 'convert/align.dart';
 import 'site.dart';
@@ -31,6 +34,9 @@ class Layer {
     DetailParser(),
     ButtonParser(),
     ArticleParser(),
+    SpaceParser(),
+    DividerParser(),
+    GalleryParser(),
   ];
   static final _widgetPraseMap = <String, WidgetParser>{};
   static bool _parseInit = false;

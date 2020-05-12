@@ -46,8 +46,7 @@ class _ArticleViewState extends State<ArticleView> {
   }
  
   @override
-  Widget build(BuildContext context) {
-    
+  Widget build(BuildContext context) {    
     dynamic data = getVal(_map,'data');
     String spec = getVal(_map,'spec').toString();
     Map<String,String> request = {};

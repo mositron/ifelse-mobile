@@ -6,12 +6,15 @@ import '../convert/shadow.dart';
 import '../convert/border.dart';
 import '../convert/edge.dart';
 import '../convert/util.dart';
-import '../convert/editor.dart';
+import '../convert/align.dart';
 
-class DetailParser extends WidgetParser {
+class DividerParser extends WidgetParser {
   @override
   Widget parse(Map<String, dynamic> map, BuildContext buildContext, [Map<String, dynamic> par]) {
-    dynamic box = getVal(map,'box');
+    dynamic box = getVal(map,'box'),
+      data = getVal(map,'data');
+    double height = getDouble(getVal(data,'height')),
+      width = getDouble(getVal(data,'width'));
     return Container(
       decoration: BoxDecoration(
         gradient: getGradient(getVal(box,'bg.color')),
@@ -20,12 +23,18 @@ class DetailParser extends WidgetParser {
       ),
       margin: getEdgeInset(getVal(box,'margin')),
       padding: getEdgeInset(getVal(box,'padding')),
-      alignment: Alignment(0.0, 0.0),
-      child: Column(
-        children: getEditor(par['editor']),
+      alignment: getAlignBox(getVal(data,'align')),
+      child: FractionallySizedBox(
+        widthFactor: width / 100,
+        child: Container(
+          height: height,
+          decoration: BoxDecoration(
+            gradient: getGradient(getVal(data,'color')),
+          ),
+        ),
       )
     );
   }
   @override
-  String get widgetName => 'detail';
+  String get widgetName => 'divider';
 }
