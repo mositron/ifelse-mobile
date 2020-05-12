@@ -2,6 +2,9 @@
 
 
 ### Changelog ###
+12/05/2563
+* Bottom Narbar สามารถใช้งานได้
+
 11/05/2563
 * ตั้ง Appbar/Navbar ลอยบนเนื้อหาได้
 * เริ่มแสดง heading/paragraph/list/image ของเนื้อหาบทความ
