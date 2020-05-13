@@ -1,8 +1,9 @@
 import 'src/app.dart';
 
-// รหัสที่ได้รับจากหน้าเว็บจัดการแอพ ( ความยาว 10 หรือ 20 ตัวอักษร)
-//const IFELSE_TOKEN = '';
-const IFELSE_TOKEN = '1:03c0d816eb5afec540';
+// รหัสที่ได้รับจากหน้าเว็บจัดการแอพ ( ความยาว 10 ตัวอักษร)
+// หากกรอกค่านี้ แอพจะไม่แสดงหน้า Demo เพื่อให้กรอก Token
+// ตัวอย่างการใส่เช่น  const IFELSE_TOKEN = '1:c1c16e82';
+const IFELSE_TOKEN = '';
 
 void main() {
   App.run(IFELSE_TOKEN);
