@@ -53,18 +53,22 @@ class _ArticleViewState extends State<ArticleView> {
     request['limit'] = getVal(data,'limit').toString();
     request['category'] = '';
     if(spec == 'auto') {
-      List category = getVal(_par,'category');
+      dynamic category = getVal(_par,'category');
       if((category is List) && (category.length > 0)) {
         request['category'] = category.join(',');
+      } else {
+        request['category'] = category.toString();
       }
       request['status'] = getVal(_par,'staus') ?? '';
       request['tag'] = getVal(_par,'tag') ?? '';
       request['order'] = getVal(_par,'order') ?? '';
       request['skip'] = '0';
     } else {
-      List category = getVal(data,'category');
+      dynamic category = getVal(data,'category');
       if((category is List) && (category.length > 0)) {
         request['category'] = category.join(',');
+      } else {
+        request['category'] = category.toString();
       }
       request['status'] = getVal(data,'staus') ?? '';
       request['tag'] = getVal(data,'tag') ?? '';

@@ -31,10 +31,9 @@ class _HomePageWidgetState extends State<HomePageWidget> {
   }
   @override
   Widget build(BuildContext context) {
-    Site.log.i('ddd');
-    //if(render == null) {
+    if(render == null) {
       render = Layer.buildContent('home',context);
-    //}
+    }
     return render;
   }
 }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../site.dart';
 import '../layer.dart';
 import '../convert/article.dart';
-import '../convert/gradient.dart';
+import '../convert/loading.dart';
 import '../convert/util.dart';
 
 class ArticlePage extends StatelessWidget {
@@ -49,24 +49,7 @@ class _ArticlePageWidgetState extends State<ArticlePageWidget> with SingleTicker
                 ? snapshot.hasData
                     ? getWidget(snapshot.data)
                     : Article.retryButton(fetch)
-                : Container(
-                      color: Colors.transparent,
-                      child: Center(
-                        child: Container(
-                          color: Colors.transparent,
-                          child: Container(
-                            padding: EdgeInsets.all(30),
-                            decoration: BoxDecoration(
-                              gradient: getGradient({'color1':'fff','color2':'fff','range':1,'gragient':2}),
-                              borderRadius: BorderRadius.all(Radius.circular(20)),
-                            ),                      
-                            child: CircularProgressIndicator(
-                              valueColor: AlwaysStoppedAnimation<Color>(Colors.redAccent),
-                            ),
-                          ),
-                      )
-                    )
-                  );
+                : getLoading();
           }
         )
       );

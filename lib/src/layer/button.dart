@@ -21,21 +21,28 @@ class ButtonParser extends WidgetParser {
       data = getVal(map,'data'),
       click = getVal(data,'click');
     String align = getVal(data,'align').toString();
+    String ipos = getVal(data,'ipos').toString();
     Color _color = getColor(getVal(data,'color'));
     double _fSize = getDouble(getVal(data,'size') ?? 16);
     List<Widget> widget = [];
-    widget = [
-      Icon(
-        getIcon(getVal(data,'icon')),
-        color: _color,
-        size: _fSize,
-      ),
-      SizedBox(width: 8),
-      Text(
-        getVal(data,'text'),
-        style: TextStyle(color:_color,fontFamily: 'Kanit',fontSize: _fSize)
-      ),
-    ];
+    IconData icon = getIcon(getVal(data,'icon'));
+    String text = getVal(data,'text').toString();
+    Icon _icon = Icon(icon, color: _color, size: _fSize,);
+    Text _text = Text(text, style: TextStyle(color:_color,fontFamily: 'Kanit', fontSize: _fSize));
+    
+    if(text.isNotEmpty && icon != null) {
+      if(ipos == 'right') {
+        widget = [_text, SizedBox(width: 8), _icon,];
+      } else if(ipos == 'up') {
+        widget = [_icon, SizedBox(height: 3), _text,];
+      } else {
+        widget = [_icon, SizedBox(width: 8), _text,];
+      }
+    } else if(text.isNotEmpty) {
+      widget = [_text];
+    } else if(icon != null) {
+      widget = [_icon];
+    }
     return Center(      
       child: Container(
         margin: getEdgeInset(getVal(box,'margin')),
@@ -59,10 +66,17 @@ class ButtonParser extends WidgetParser {
               boxShadow: getBoxShadow(getVal(box,'shadow')),
             ),
             padding: getEdgeInset(getVal(box,'padding')),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center ,
-              mainAxisSize: MainAxisSize.min,
-              children: widget,
+            child: ipos == 'up' ?
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center ,
+                mainAxisSize: MainAxisSize.min,
+                children: widget,
+              )
+              :
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center ,
+                mainAxisSize: MainAxisSize.min,
+                children: widget,
             )
           )
         )

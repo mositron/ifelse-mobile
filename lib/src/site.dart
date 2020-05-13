@@ -13,17 +13,24 @@ class Site {
     domain = '',
     token = '',
     session = '';
-  static double dpi = 1;
   static Map<String, dynamic> template = {};
+  static List<dynamic> articles = [],
+    products = [];
   static List<Widget> pageType = <Widget>[],
     pageTab = <Widget>[];
 
   static void getData(dynamic load, BuildContext buildContext) {
-    id = getInt(load['_id']);
     name = load['name'];
     domain = load['domain'];
     ['splash','login','home','articles','article','products','product','cart','jobs','job'].forEach((v) {
       template[v] = load['theme'][v];
     });
+    if((load['articles'] != null) && (load['articles'] is List)) {
+      articles = load['articles'];
+    }
+    if((load['products'] != null) && (load['products'] is List)) {
+      products = load['products'];
+    }
+    log.e(articles);
   }
 } 

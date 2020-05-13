@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import '../site.dart';
 import '../layer.dart';
-import '../convert/article.dart';
-import '../convert/gradient.dart';
-import '../convert/util.dart';
 
 class ArticlesPage extends StatelessWidget {
   ArticlesPage({Key key, this.par}) : super(key: key);
@@ -37,59 +34,27 @@ class _ArticlesPageWidgetState extends State<ArticlesPageWidget> with SingleTick
 
   @override
   Widget build(BuildContext context) {
-    //Site.log.e('get article - ' + getVal(par, '_id').toString());
-    int id = getInt(getVal(par, '_id'));
-    if(id > 0) {
-      return Container(
-        color: Colors.transparent,
-        child: FutureBuilder<Map>(
-          future: Article.getArticle(id),
-          builder: (context, snapshot) {
-            return snapshot.connectionState == ConnectionState.done
-                ? snapshot.hasData
-                    ? getWidget(snapshot.data)
-                    : Article.retryButton(fetch)
-                : Container(
-                      color: Colors.transparent,
-                      child: Center(
-                        child: Container(
-                          color: Colors.transparent,
-                          child: Container(
-                            padding: EdgeInsets.all(30),
-                            decoration: BoxDecoration(
-                              gradient: getGradient({'color1':'fff','color2':'fff','range':1,'gragient':2}),
-                              borderRadius: BorderRadius.all(Radius.circular(20)),
-                            ),                      
-                            child: CircularProgressIndicator(
-                              valueColor: AlwaysStoppedAnimation<Color>(Colors.redAccent),
-                            ),
-                          ),
-                      )
-                    )
-                  );
+    Map<String, dynamic> request = {
+      'category': par['category'] ?? '0',
+      'status': '',
+      'tag': '',
+      'order': '',
+      'skip': '0'
+    };
+    if(request['category'] != '0') {
+      if((Site.articles is List) && (Site.articles.length > 0)) {
+        Site.articles.forEach((v) {
+          String _id = v['_id'].toString();
+          if(_id == request['category']) {
+            request['text'] = v['title'].toString();
           }
-        )
-      );
+        });
+      } else {
+        request['text'] = '';
+      }
     } else {
-      //throw Exception("Invalid ID.\nPlease Retry");
-      return Container();
+      request['text'] = 'บทความทั้งหมด';
     }
-  }
-
-  setLoading(bool loading) {
-    setState(() {
-      loaded = loading;
-    });
-  }
- 
-  fetch() {
-    setLoading(true);
-  }
-
-  Widget getWidget(dynamic data) {
-    if(data is Map) {
-      return Layer.buildContent('articles',context, data);
-    }
-    return Container();
+    return Layer.buildContent('articles',context, request);
   }
 }

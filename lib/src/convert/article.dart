@@ -30,15 +30,18 @@ class Article {
       headers: {'user-agent': 'ifelse.co-'+Site.version},
       body: request
     );
-    // Site.log.w(request);
+    Site.log.w(request);
+    Site.log.w(response.body);
     try {
       if (response.statusCode == 200) {
         final List<CellModel> list = parsePostsForGrid(response.body);
         return list;
       } else {
+      Site.log.w(request);
         throw Exception("No Internet Connection.\nPlease Retry");
       }
     } catch (e) {
+      Site.log.e(request);
       throw Exception(e.toString());
     }
   }
