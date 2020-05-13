@@ -185,7 +185,7 @@ class _DemoPageState extends State<DemoPage> with SingleTickerProviderStateMixin
         DelayedAnimation(          
           child: GestureDetector(
             onTap: () {
-              _launchLink('https://ifelse.co/docs/mobile');
+              _launchLink('https://ifelse.co/docs/apps');
             },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
