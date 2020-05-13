@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../site.dart';
 import '../page/articles.dart';
-
-
-
 
 void getClicked(BuildContext context,Map click) {
   if(click != null) {

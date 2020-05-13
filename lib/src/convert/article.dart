@@ -30,8 +30,6 @@ class Article {
       headers: {'user-agent': 'ifelse.co-'+Site.version},
       body: request
     );
-    Site.log.w(request);
-    Site.log.w(response.body);
     try {
       if (response.statusCode == 200) {
         final List<CellModel> list = parsePostsForGrid(response.body);

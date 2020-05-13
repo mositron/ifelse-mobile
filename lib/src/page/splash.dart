@@ -5,6 +5,7 @@ import 'dart:async';
 import 'dart:convert';
 import '../site.dart';
 import '../page/home.dart';
+import '../convert/dialog.dart';
 
 class SplashPage extends StatefulWidget {
   @override
@@ -21,21 +22,32 @@ class SplashScreenState extends State<SplashPage> {
     loadData();
   }
 
-  Future<Timer> loadData() async {    
-    var client = new http.Client();
+  loadData() async {    
+    var client = new http.Client();    
+    final response = await client.post(
+      Site.api + 'load',
+      headers: {'user-agent': 'ifelse.co-'+Site.version},
+      body: {'token': Site.token, 'session': Site.session}
+    );
+    String message = '';
     try {
-      var response = await client.post(
-        Site.api + 'load',
-        headers: {'user-agent': 'ifelse.co-'+Site.version},
-        body: {'token': Site.token, 'session': Site.session}
-      );
-      Site.getData(json.decode(response.body), context);
-    } finally {
-      client.close();
+      if (response.statusCode == 200) {
+        Site.log.e(response.body);
+        if(response.body.isNotEmpty) {
+          Site.getData(json.decode(response.body), context);        
+          return new Timer(Duration(seconds: 1),() {
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()));
+          });
+        } else {
+          message = 'รหัส Token ไม่ถูกต้อง';
+        }
+      } else {
+        message = 'เกิดข้อผิดพลาด ('+response.statusCode.toString()+')';
+      }
+    } catch (e) {
+      message = 'เกิดข้อผิดพลาด ('+e.toString()+')';
     }
-    return new Timer(Duration(seconds: 1),() {
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()));
-    });
+    await IfDialog.show(context: context, text: message);
   }
 
   @override
