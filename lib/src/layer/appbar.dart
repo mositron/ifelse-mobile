@@ -19,7 +19,7 @@ AppBar getAppBar(dynamic obj, BuildContext buildContext) {
         style: TextStyle(fontFamily: 'Kanit',fontSize: getDouble(getVal(logo,'size'), 16),color: getColor(getVal(logo,'color'),'fff'))
       );
     } else if(logoStyle == 'image') {
-      _title = Image.network(getImage(getVal(logo,'image'),'s'));
+      _title = Image.network(getImage(getVal(data,'image'),'s'));
     }
     if(navStyle == 'drawer') {
       _leading = IconButton(
