@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:logger/logger.dart';
+import 'site.dart';
+import 'page.dart';
 import 'layer/split1.dart';
 import 'layer/split2.dart';
 import 'layer/split3.dart';
@@ -12,13 +14,15 @@ import 'layer/heading.dart';
 import 'layer/detail.dart';
 import 'layer/button.dart';
 import 'layer/article.dart';
+import 'layer/product.dart';
+import 'layer/job.dart';
 import 'layer/space.dart';
 import 'layer/divider.dart';
 import 'layer/gallery.dart';
+import 'layer/request.dart';
+import 'layer/description.dart';
 import 'convert/util.dart';
 import 'convert/align.dart';
-import 'site.dart';
-import 'page.dart';
 
 class Layer {
   static final Logger log = Logger();
@@ -34,9 +38,13 @@ class Layer {
     DetailParser(),
     ButtonParser(),
     ArticleParser(),
+    ProductParser(),
+    JobParser(),
     SpaceParser(),
     DividerParser(),
     GalleryParser(),
+    RequestParser(),
+    DescriptionParser(),
   ];
   static final _widgetPraseMap = <String, WidgetParser>{};
   static bool _parseInit = false;
