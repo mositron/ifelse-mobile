@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:logger/logger.dart';
-import 'convert/util.dart';
 
 class Site {
   static final String api = 'https://api.ifelse.co/mobile/v1/',
@@ -31,6 +30,5 @@ class Site {
     if((load['products'] != null) && (load['products'] is List)) {
       products = load['products'];
     }
-    log.e(articles);
   }
 } 

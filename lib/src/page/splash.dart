@@ -32,7 +32,6 @@ class SplashScreenState extends State<SplashPage> {
     String message = '';
     try {
       if (response.statusCode == 200) {
-        Site.log.e(response.body);
         if(response.body.isNotEmpty) {
           Site.getData(json.decode(response.body), context);        
           return new Timer(Duration(seconds: 1),() {

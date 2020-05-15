@@ -94,7 +94,7 @@ class _PageWidgetState extends State<PageWidget> {
         // จัดการ AppBar
         _appbar = (_showAppbar > 0 ? getAppBar(getVal(child,'appbar'), buildContext) : null);
         if((_showAppbar == 2) && (_appbar != null)) {
-          _offsetTop = MediaQuery.of(buildContext).padding.top + _appbar.preferredSize.height + 5;
+          _offsetTop = MediaQuery.of(buildContext).padding.top + _appbar.preferredSize.height;
         }
         // จัดการ NavBar
         _navbar = (_showNavbar > 0 ? NavBar(getVal(child,'navbar'), navClick) : null);

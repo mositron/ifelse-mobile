@@ -5,23 +5,23 @@ import 'package:html/dom.dart' as dom;
 import 'util.dart';
 import '../convert/image.dart';
 
-List<Widget> getEditor(dynamic data) {
+List<Widget> getEditor(dynamic data, Color color, double size) {
   List<Widget> widget = [];
   if ((data is Map) && (data['blocks'] is List)) {
     data['blocks'].forEach((v){
       switch(v['type']) {
         case 'paragraph':
-          widget.add(editorParagraph(v));
+          widget.add(editorParagraph(v, color, size));
           break;
         case 'heading':
         case 'header':
-          widget.add(editorHeading(v));
+          widget.add(editorHeading(v, color, size));
           break;
         case 'image':
           widget.add(editorImage(v));
           break;
         case 'list':
-          widget.add(editorList(v));
+          widget.add(editorList(v, color, size));
           break;
         case 'delimiter':
         case 'embed':
@@ -34,11 +34,11 @@ List<Widget> getEditor(dynamic data) {
   }
   return widget;
 }
-Widget _parse(String html,double fontSize) {
+Widget _parse(String html,Color color, double fontSize) {
   return Html(
     data: html,
     customTextStyle: (dom.Node node, TextStyle baseStyle) {
-      return baseStyle.merge(TextStyle(fontSize: fontSize, fontFamily:'Kanit'));
+      return baseStyle.merge(TextStyle(fontSize: fontSize, fontFamily:'Kanit', color: color));
     },
     linkStyle: TextStyle(
       decoration: TextDecoration.underline,
@@ -55,20 +55,20 @@ _launchURL(String url) async {
   }
 }
 
-Widget editorParagraph(Map block) {
+Widget editorParagraph(Map block, Color color, double size) {
   return Container(
     margin: EdgeInsets.only(bottom:15),
     alignment: Alignment.centerLeft,
-    child: _parse(block['data']['text'], 16)
+    child: _parse(block['data']['text'], color, size)
   );
 }
 
-Widget editorHeading(Map block) {
-  Map<int,double> size = {0:16,1:40,2:32,3:28,4:24,5:20,6:16};
+Widget editorHeading(Map block, Color color, double size) {
+  Map<int,double> hSize = {0:size,1:40,2:32,3:28,4:24,5:20,6:16};
   return Container(
     margin: EdgeInsets.only(bottom:10),
     alignment: Alignment.centerLeft,
-    child: _parse(block['data']['text'], size[getInt(getVal(block,'data.level')??0)])
+    child: _parse(block['data']['text'], color, hSize[getInt(getVal(block,'data.level')??0)])
   );
 }
 
@@ -83,7 +83,7 @@ Widget editorImage(Map block) {
   );
 }
 
-Widget editorList(Map block) {
+Widget editorList(Map block, Color color, double size) {
   List<Widget> list = [];
 
   List<dynamic> tmp = getVal(block,'data.items');
@@ -94,7 +94,7 @@ Widget editorList(Map block) {
         Container(
           margin: EdgeInsets.only(bottom:5),
           alignment: Alignment.centerLeft,
-          child: _parse((style == 'unordered' ? '●' : (i+1).toString()) + ' ' + tmp[i], 16)
+          child: _parse((style == 'unordered' ? '●' : (i+1).toString()) + ' ' + tmp[i], color, size)
         )
       );
     }

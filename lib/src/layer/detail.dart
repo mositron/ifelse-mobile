@@ -11,7 +11,10 @@ import '../convert/editor.dart';
 class DetailParser extends WidgetParser {
   @override
   Widget parse(Map<String, dynamic> map, BuildContext buildContext, [Map<String, dynamic> par]) {
-    dynamic box = getVal(map,'box');
+    dynamic box = getVal(map,'box'),
+      data = getVal(map,'data');
+    Color _color = getColor(getVal(data,'color'), '000');
+    double _fSize = getDouble(getVal(data,'size') ?? 16);
     return Container(
       decoration: BoxDecoration(
         gradient: getGradient(getVal(box,'bg.color')),
@@ -22,7 +25,7 @@ class DetailParser extends WidgetParser {
       padding: getEdgeInset(getVal(box,'padding')),
       alignment: Alignment(0.0, 0.0),
       child: Column(
-        children: getEditor(par['editor']),
+        children: getEditor(par['editor'],_color,_fSize),
       )
     );
   }
