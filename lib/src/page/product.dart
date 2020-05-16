@@ -41,7 +41,7 @@ class _ProductPageWidgetState extends State<ProductPageWidget> with SingleTicker
     int id = getInt(getVal(par, '_id'));
     if(id > 0) {
       return Container(
-        color: Colors.transparent,
+        color: Color(0xfff0f0f0),
         child: FutureBuilder<Map>(
           future: Product.getProduct(id),
           builder: (context, snapshot) {

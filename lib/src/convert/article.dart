@@ -95,7 +95,7 @@ class Article {
     Color textColor  = getColor(getVal(data,'color'),'000');
     double textSize  = getDouble(getVal(data,'fsize'),16);    
     String colDirect = getVal(data,'col.direct').toString();
-    double colHeight  = getDouble(getVal(data,'col.hieght'),200);
+    double colHeight  = getDouble(getVal(data,'col.height'),200);
     if(width < 50) {
       width = 50;
     }
@@ -153,9 +153,12 @@ class Article {
     }
   }
  
-  static CircularProgressIndicator circularProgress() {
-    return CircularProgressIndicator(
-      valueColor: new AlwaysStoppedAnimation<Color>(Colors.redAccent),
+  static Widget circularProgress() {
+    return Container(
+      padding: EdgeInsets.all(20),
+      child: CircularProgressIndicator(
+        valueColor: AlwaysStoppedAnimation<Color>(Colors.redAccent)
+      )
     );
   }
 
@@ -176,7 +179,7 @@ class CellModel {
   String id;
   String title;
   String url;
-  dynamic image; 
+  Map image; 
   CellModel({this.id, this.title, this.url, this.image}); 
   factory CellModel.fromJson(Map<String, dynamic> json) {
     try {
@@ -184,7 +187,7 @@ class CellModel {
         id: json['_id'].toString(),
         title: json['title'].toString(),
         url: json['link'].toString(),
-        image: getImageObj(getVal(json,'image'), 't')
+        image: getVal(json,'image')
       );
     } catch (e) {
       throw Exception(e.toString());
@@ -218,12 +221,7 @@ class Cell extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //Site.log.e(contentAlign);
-    Widget _image = ratio > 0 ?
-      AspectRatio(
-        aspectRatio: ratio,
-        child: getImageWidget(cellModel.image['src']),
-      ) :
-      getImageWidget(cellModel.image['src']);
+    Widget _image = getImageRatio(cellModel.image, 't', ratio);
     Widget _content = Container(
       padding: contentPadding,       
       margin: EdgeInsets.all(0),
@@ -231,7 +229,7 @@ class Cell extends StatelessWidget {
         cellModel.title,
         textAlign: contentAlign,
         overflow: TextOverflow.ellipsis,
-        maxLines: contentLine > 0 ? contentLine : null,
+        maxLines: contentLine > 0 ? contentLine : 5,
         style: TextStyle(color: textColor, fontSize: textSize, fontFamily:'Kanit', height: 1.5),
       ),
     );
@@ -240,46 +238,33 @@ class Cell extends StatelessWidget {
     if(align == 'left') {
       _child = Row(            
         children: [
-          Container(
-            width: width,
-            child: _image,
-          ),
-          Expanded(        
-            child: _content,
-          ),
+          Container(width: width, child: _image,),
+          Expanded(child: _content),
         ],
       );
     } else if(align == 'right') {
       _child = Row(            
         children: [
-          Expanded(        
-            child: _content,
-          ),
-          Container(
-            width: width,
-            child: _image,
-          ),
+          Expanded(child: _content),
+          Container(width: width, child: _image),
         ],
       );
     } else {
       _child = Column(       
         crossAxisAlignment: CrossAxisAlignment.center,     
-        children: [
-          _image,
-          _content,
-        ],
+        children: [_image, _content],
       );
     }
     try {
       return Container(
           decoration: BoxDecoration(
-            gradient: gradient,
-            borderRadius: radius,
-            boxShadow: shadow,
-          ),
-          margin: margin,
-          padding: padding,
-          child: _child,
+          gradient: gradient,
+          borderRadius: radius,
+          boxShadow: shadow,
+        ),
+        margin: margin,
+        padding: padding,
+        child: _child,
       );
     } catch (e) {
       throw Exception(e.toString());

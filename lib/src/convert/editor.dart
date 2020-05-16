@@ -94,7 +94,7 @@ Widget editorList(Map block, Color color, double size) {
         Container(
           margin: EdgeInsets.only(bottom:5),
           alignment: Alignment.centerLeft,
-          child: _parse((style == 'unordered' ? '●' : (i+1).toString()) + ' ' + tmp[i], color, size)
+          child: _parse((style == 'unordered' ? '•' : (i+1).toString()) + ' ' + tmp[i], color, size)
         )
       );
     }

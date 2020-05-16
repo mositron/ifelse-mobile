@@ -19,6 +19,8 @@ import 'layer/job.dart';
 import 'layer/space.dart';
 import 'layer/divider.dart';
 import 'layer/gallery.dart';
+import 'layer/picture.dart';
+import 'layer/price.dart';
 import 'layer/request.dart';
 import 'layer/description.dart';
 import 'convert/util.dart';
@@ -43,6 +45,8 @@ class Layer {
     SpaceParser(),
     DividerParser(),
     GalleryParser(),
+    PriceParser(),
+    PictureParser(),
     RequestParser(),
     DescriptionParser(),
   ];

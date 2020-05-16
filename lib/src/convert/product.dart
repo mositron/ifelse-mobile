@@ -13,7 +13,7 @@ import 'shadow.dart';
 import 'util.dart';
  
 class Product {
-  static Future<List<CellModel>> getList(dynamic map) async {
+  static Future<List<CellProduct>> getList(dynamic map) async {
     final client = new http.Client();
     final Map<String,String> request = {
         'token': Site.token,
@@ -32,7 +32,7 @@ class Product {
     );
     try {
       if (response.statusCode == 200) {
-        final List<CellModel> list = parsePostsForGrid(response.body);
+        final List<CellProduct> list = parsePostsForGrid(response.body);
         return list;
       } else {
       Site.log.w(request);
@@ -66,16 +66,16 @@ class Product {
     }
   }
 
-  static List<CellModel> parsePostsForGrid(String responseBody) {
+  static List<CellProduct> parsePostsForGrid(String responseBody) {
     try {
       final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();    
-      return parsed.map<CellModel>((json) => CellModel.fromJson(json)).toList();
+      return parsed.map<CellProduct>((json) => CellProduct.fromJson(json)).toList();
     } catch (e) {
       throw Exception(e.toString());
     }
   }
   
-  static Widget getGrid(AsyncSnapshot<List<CellModel>> snapshot, dynamic map, Function gridClicked) {
+  static Widget getGrid(AsyncSnapshot<List<CellProduct>> snapshot, dynamic map, Function gridClicked) {
     dynamic box = getVal(map,'box'),
       data = getVal(map,'data'),
       dataBox = getVal(data,'box');
@@ -95,12 +95,21 @@ class Product {
     Color textColor  = getColor(getVal(data,'color'),'000');
     double textSize  = getDouble(getVal(data,'fsize'),16);    
     String colDirect = getVal(data,'col.direct').toString();
-    double colHeight  = getDouble(getVal(data,'col.hieght'),200);
+    double colHeight  = getDouble(getVal(data,'col.height'),200);
+    dynamic normal = getVal(data,'price.normal');
+    Color normalColor  = getColor(getVal(normal,'color'),'000');
+    double normalSize  = getDouble(getVal(normal,'size'),16);    
+    dynamic over = getVal(data,'price.over');
+    Color overColor  = getColor(getVal(over,'color'),'000');
+    double overSize  = getDouble(getVal(over,'size'),14);    
+
     if(width < 50) {
       width = 50;
     }
+
     try {
-      //Site.log.i(box);
+      //Site.log.i(colDirect);
+      //Site.log.i(colHeight);
       return  Container(
         alignment: Alignment.center,    
         decoration: BoxDecoration(
@@ -114,6 +123,7 @@ class Product {
         width: double.infinity,
         height: colDirect == 'horizon' ? colHeight : null,
         child: StaggeredGridView.countBuilder(
+          addRepaintBoundaries: true,
           primary: false,
           addAutomaticKeepAlives: true,
           crossAxisCount: colDirect == 'horizon' ? 1 : colMb,
@@ -121,6 +131,7 @@ class Product {
           itemCount: snapshot.data.length,
           shrinkWrap: true,
           padding: EdgeInsets.all(0),
+          
           itemBuilder: (BuildContext context, int index) {
             return GestureDetector(
               child: Cell(
@@ -139,11 +150,15 @@ class Product {
                 contentLine,
                 textColor,
                 textSize,
+                normalColor,
+                normalSize,
+                overColor,
+                overSize,
               ),
               onTap: () => gridClicked(context, snapshot.data[index]),
             );
           },
-          staggeredTileBuilder: (int index) => StaggeredTile.fit(1),
+          staggeredTileBuilder: (int index) => (colDirect == 'horizon' ? StaggeredTile.extent(1,150) : StaggeredTile.fit(1)),
           mainAxisSpacing: 0,
           crossAxisSpacing: 0,
         )
@@ -153,9 +168,12 @@ class Product {
     }
   }
  
-  static CircularProgressIndicator circularProgress() {
-    return CircularProgressIndicator(
-      valueColor: new AlwaysStoppedAnimation<Color>(Colors.redAccent),
+  static Widget circularProgress() {
+    return Container(
+      padding: EdgeInsets.all(20),
+      child: CircularProgressIndicator(
+        valueColor: AlwaysStoppedAnimation<Color>(Colors.redAccent)
+      )
     );
   }
 
@@ -172,19 +190,31 @@ class Product {
   }
 }
 
-class CellModel {
+class CellProduct {
   String id;
   String title;
   String url;
-  dynamic image; 
-  CellModel({this.id, this.title, this.url, this.image}); 
-  factory CellModel.fromJson(Map<String, dynamic> json) {
-    try {
-      return new CellModel(
+  Map image; 
+  int diff; 
+  List<double> price; 
+  CellProduct({this.id, this.title, this.url, this.image, this.price, this.diff}); 
+  factory CellProduct.fromJson(Map<String, dynamic> json) {    
+    List<double> _price = [0, 0]; 
+    if(json['price'] is List) {
+      List<dynamic> price = json['price'];
+      if(price.length == 2) {
+        _price = [getDouble(price[0]), getDouble(price[1])];
+      }
+    }
+    try {      
+      return new CellProduct(
         id: json['_id'].toString(),
         title: json['title'].toString(),
         url: json['link'].toString(),
-        image: getImageObj(getVal(json,'image'), 't')
+        image: getVal(json,'image'),
+        //image: getImageObj(getVal(json,'image')),
+        diff: getInt(json['diff']),
+        price: _price,
       );
     } catch (e) {
       throw Exception(e.toString());
@@ -194,12 +224,12 @@ class CellModel {
 
 class Cell extends StatelessWidget {
   const Cell(
-    this.cellModel,this.padding,this.margin,this.border,this.radius,this.shadow,this.gradient,  
+    this.cellProduct,this.padding,this.margin,this.border,this.radius,this.shadow,this.gradient,  
     this.align,this.width,this.ratio,this.contentAlign,this.contentPadding,this.contentLine,
-    this.textColor,this.textSize
+    this.textColor,this.textSize,this.normalColor,this.normalSize,this.overColor,this.overSize
   );
   @required
-  final CellModel cellModel;
+  final CellProduct cellProduct;
   final EdgeInsets padding;
   final EdgeInsets margin;
   final Border border;
@@ -214,72 +244,141 @@ class Cell extends StatelessWidget {
   final int contentLine;
   final Color textColor;
   final double textSize;
+  final Color normalColor;
+  final double normalSize;
+  final Color overColor;
+  final double overSize;
  
   @override
   Widget build(BuildContext context) {
-    //Site.log.e(contentAlign);
-    Widget _image = ratio > 0 ?
-      AspectRatio(
-        aspectRatio: ratio,
-        child: getImageWidget(cellModel.image['src']),
-      ) :
-      getImageWidget(cellModel.image['src']);
+    //Site.log.e(ratio);
+    Widget _image = getImageRatio(cellProduct.image,'t',ratio);
+
+      List<Widget> _detail = [
+        Container( 
+            child: Text(
+                  cellProduct.title,
+                  textAlign: contentAlign,
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: contentLine > 0 ? contentLine : 5,
+                  style: TextStyle(color: textColor, fontSize: textSize, fontFamily:'Kanit', height: 1.5),
+            )
+          ), 
+      ];
+
+    if(cellProduct.diff > 0) {
+      if(cellProduct.price[0] > 0 && cellProduct.price[1] > 0) {
+        _detail.add(
+          Container(
+            margin: EdgeInsets.only(top:5),
+            child: Text.rich(
+              TextSpan(
+                text: '฿' + getCurrency(cellProduct.price[0]),
+                style: TextStyle(color: normalColor,fontSize: normalSize),
+                children: <InlineSpan>[
+                  TextSpan(
+                    text: ' ~ ',  
+                    style: TextStyle(color: normalColor,fontSize: normalSize),
+                  ),
+                  TextSpan(
+                    text: '฿' + getCurrency(cellProduct.price[1]),             
+                    style: TextStyle(color: normalColor,fontSize: normalSize),
+                  ),
+                ],
+              )
+            )
+          )
+        );
+      } else if(cellProduct.price[1] > 0) {
+        _detail.add(
+          Container(
+            margin: EdgeInsets.only(top:5),
+            child: Text.rich(
+              TextSpan(
+                text: '฿' + getCurrency(cellProduct.price[1]),
+                style: TextStyle(color: normalColor,fontSize: normalSize),
+              ),
+            )
+          )
+        );
+      }
+    } else {
+      if(cellProduct.price[0] > 0 && cellProduct.price[1] > 0) {
+        _detail.add(
+          Container(
+            margin: EdgeInsets.only(top:5),
+            child: Text.rich(
+              TextSpan(
+                text: '฿' + getCurrency(cellProduct.price[0]),
+                style: TextStyle(color: normalColor,fontSize: normalSize),
+                children: <InlineSpan>[
+                  TextSpan(
+                    text: ' ',  
+                    style: TextStyle(color: Color(0xffffffff),fontSize: normalSize),
+                  ),
+                  TextSpan(
+                    text: '฿' + getCurrency(cellProduct.price[1]),             
+                    style: TextStyle(color: overColor,fontSize: overSize, decoration: TextDecoration.lineThrough),
+                  ),
+                ],
+              )
+            )
+          )
+        );
+      } else if(cellProduct.price[1] > 0) {
+        _detail.add(
+          Container(
+            margin: EdgeInsets.only(top:5),
+            child: Text.rich(
+              TextSpan(
+                text: '฿' + getCurrency(cellProduct.price[1]),
+                style: TextStyle(color: Color(0xffffffff),fontSize: 16),
+              )
+            )
+          )
+        );
+      }
+    }
+
     Widget _content = Container(
       padding: contentPadding,       
       margin: EdgeInsets.all(0),
-      child: Text(
-        cellModel.title,
-        textAlign: contentAlign,
-        overflow: TextOverflow.ellipsis,
-        maxLines: contentLine > 0 ? contentLine : null,
-        style: TextStyle(color: textColor, fontSize: textSize, fontFamily:'Kanit', height: 1.5),
-      ),
+      child: Column(
+        children: _detail,        
+      )
     );
 
     Widget _child;
     if(align == 'left') {
       _child = Row(            
         children: [
-          Container(
-            width: width,
-            child: _image,
-          ),
-          Expanded(        
-            child: _content,
-          ),
+          Container(width: width, child: _image,),
+          Expanded(child: _content),
         ],
       );
     } else if(align == 'right') {
       _child = Row(            
         children: [
-          Expanded(        
-            child: _content,
-          ),
-          Container(
-            width: width,
-            child: _image,
-          ),
+          Expanded(child: _content),
+          Container(width: width, child: _image),
         ],
       );
     } else {
       _child = Column(       
         crossAxisAlignment: CrossAxisAlignment.center,     
-        children: [
-          _image,
-          _content,
-        ],
+        children: [_image, Expanded(child: _content),],
       );
     }
     try {
       return Container(
           decoration: BoxDecoration(
-            gradient: gradient,
-            borderRadius: radius,
-            boxShadow: shadow,
-          ),
-          margin: margin,
-          padding: padding,
-          child: _child,
+          gradient: gradient,
+          borderRadius: radius,
+          boxShadow: shadow,
+        ),
+        margin: margin,
+        padding: padding,
+        child: _child,
       );
     } catch (e) {
       throw Exception(e.toString());

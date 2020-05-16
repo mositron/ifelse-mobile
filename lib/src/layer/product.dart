@@ -24,7 +24,6 @@ class ProductView extends StatefulWidget {
 
   @override
   _ProductViewState createState() {
-    //Site.log.w(_map);
     return new _ProductViewState(map, par);
   }
 }
@@ -33,15 +32,11 @@ class _ProductViewState extends State<ProductView> {
   bool loaded;
   dynamic _map;
   dynamic _par;
-  _ProductViewState(this._map, this._par) {
-    //Site.log.w(_map);
-
-  }
+  _ProductViewState(this._map, this._par);
 
   @override
   void initState() {
     super.initState();
-    //Site.log.w(' ---- state ---------------');
     loaded = false;
   }
  
@@ -78,7 +73,7 @@ class _ProductViewState extends State<ProductView> {
 
     return Center(
       child: Container(
-        child: FutureBuilder<List<CellModel>>(
+        child: FutureBuilder<List<CellProduct>>(
           future: Product.getList(request),
           builder: (context, snapshot) {
             return snapshot.connectionState == ConnectionState.done
@@ -103,6 +98,6 @@ class _ProductViewState extends State<ProductView> {
   }
 }
  
-gridClicked(BuildContext context, CellModel cellModel) {
-  Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProductPage(par:{'_id':getInt(cellModel.id,0)})));
+gridClicked(BuildContext context, CellProduct cellProduct) {
+  Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProductPage(par:{'_id':getInt(cellProduct.id,0)})));
 }

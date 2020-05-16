@@ -22,6 +22,14 @@ double getDouble(dynamic val, [double def]) {
   return double.parse(val);
 }
 
+String getCurrency(dynamic val, [double def]) {
+  double currency = getDouble(val, def);
+  if(currency > 0) {
+    return currency.toStringAsFixed(2).replaceAllMapped(new RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},');
+  }
+  return '';
+}
+
 Color getColor(String hex, [String def]) {
   if(hex is! String) {
     return Colors.black;
