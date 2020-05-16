@@ -24,7 +24,6 @@ import 'layer/price.dart';
 import 'layer/request.dart';
 import 'layer/description.dart';
 import 'convert/util.dart';
-import 'convert/align.dart';
 
 class Layer {
   static final Logger log = Logger();
@@ -110,11 +109,10 @@ class Layer {
           json = json[0];
         }
         if ((json is List) && (json[0] is Map) && (json[0]['type'] == 'content')) {
-          dynamic child = getVal(json[0],'child'),
-            data = getVal(json[0],'data');
-          //Site.log.i(getVal(child,'body'));
+          dynamic child = getVal(json[0],'child');
           return Column(
-            mainAxisAlignment: getAlignMain(getVal(data,'align')),
+            mainAxisAlignment: MainAxisAlignment.center, // getAlignMain(getVal(data,'align')),
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: build(getVal(child,'body'), buildContext, par),
           );
         }

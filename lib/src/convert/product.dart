@@ -285,7 +285,9 @@ class Cell extends StatelessWidget {
                     style: TextStyle(color: normalColor,fontSize: normalSize),
                   ),
                 ],
-              )
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             )
           )
         );
@@ -298,6 +300,8 @@ class Cell extends StatelessWidget {
                 text: '฿' + getCurrency(cellProduct.price[1]),
                 style: TextStyle(color: normalColor,fontSize: normalSize),
               ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             )
           )
         );
@@ -321,7 +325,9 @@ class Cell extends StatelessWidget {
                     style: TextStyle(color: overColor,fontSize: overSize, decoration: TextDecoration.lineThrough),
                   ),
                 ],
-              )
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             )
           )
         );
@@ -333,7 +339,9 @@ class Cell extends StatelessWidget {
               TextSpan(
                 text: '฿' + getCurrency(cellProduct.price[1]),
                 style: TextStyle(color: Color(0xffffffff),fontSize: 16),
-              )
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             )
           )
         );
@@ -366,12 +374,12 @@ class Cell extends StatelessWidget {
     } else {
       _child = Column(       
         crossAxisAlignment: CrossAxisAlignment.center,     
-        children: [_image, Expanded(child: _content),],
+        children: [_image, _content],
       );
     }
     try {
       return Container(
-          decoration: BoxDecoration(
+        decoration: BoxDecoration(
           gradient: gradient,
           borderRadius: radius,
           boxShadow: shadow,

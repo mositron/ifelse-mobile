@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:ifelse/src/layer/drawer.dart';
 import 'site.dart';
 import 'body.dart';
 import 'layer/appbar.dart';
 import 'layer/navbar.dart';
+import 'layer/drawer.dart';
+import 'convert/align.dart';
 import 'convert/gradient.dart';
 import 'convert/util.dart';
 
@@ -22,6 +25,7 @@ class _PageWidgetState extends State<PageWidget> {
   int _selectedIndex = 0;
   AppBar _appbar;
   Widget _navbar;
+  Widget _drawer;
   int _showNavbar;
   int _showAppbar;
   List<Map<String,dynamic>> _items = [];
@@ -30,6 +34,7 @@ class _PageWidgetState extends State<PageWidget> {
   double _offsetTop = 0;
   double _offsetBottom = 0;
   List<Widget> _pages = <Widget>[];
+  GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
 
   _PageWidgetState(this.file, this.par);
 
@@ -76,7 +81,8 @@ class _PageWidgetState extends State<PageWidget> {
   }
 
   @override
-  Widget build(BuildContext buildContext) {    
+  Widget build(BuildContext context) {    
+
     if(Site.template[file] is List) {
       dynamic json = Site.template[file];
       // เทมเพลทที่มีได้หลายแบบ ให้ใช้แบบแรกไปก่อน
@@ -92,34 +98,46 @@ class _PageWidgetState extends State<PageWidget> {
         ));
         SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
         // จัดการ AppBar
-        _appbar = (_showAppbar > 0 ? getAppBar(getVal(child,'appbar'), buildContext) : null);
+        _appbar = (_showAppbar > 0 ? getAppBar(getVal(child,'appbar'), context, appClick) : null);
         if((_showAppbar == 2) && (_appbar != null)) {
-          _offsetTop = MediaQuery.of(buildContext).padding.top + _appbar.preferredSize.height;
+          _offsetTop = MediaQuery.of(context).padding.top + _appbar.preferredSize.height;
         }
         // จัดการ NavBar
         _navbar = (_showNavbar > 0 ? NavBar(getVal(child,'navbar'), navClick) : null);
         if((_showNavbar == 2) && (_navbar != null)) {
           _offsetBottom = getDouble(getVal(data,'bottom'));
         }
+        // จัดการ Drawer
+        _drawer = (_showAppbar > 0 ? GetDrawer(getVal(child,'appbar'), context) : null);
+        //data.nav.style
         getPage(true);
         return Container(        
           decoration: BoxDecoration(
             gradient: getGradient(getVal(_box,'bg.color')),
           ),
           child: Scaffold(
+            key: _drawerKey,
             extendBody: _showNavbar == 2,
             extendBodyBehindAppBar: _showAppbar == 2,
             backgroundColor: Colors.transparent,
             appBar: _appbar,
-            body: SingleChildScrollView(
-              child: Center(
-                child: Container(
-                  padding: EdgeInsets.only(top:_offsetTop, bottom:_offsetBottom),
-                  alignment: Alignment.center,                    
-                  child: _pages[_selectedIndex],
-                ),
-              )
+            body: LayoutBuilder(
+              builder: (BuildContext context, BoxConstraints viewportConstraints) {
+                return SingleChildScrollView(
+                  child: Center(
+                    child: Container(
+                      constraints: BoxConstraints(
+                        minHeight: viewportConstraints.maxHeight,
+                      ),
+                      padding: EdgeInsets.only(top:_offsetTop, bottom:_offsetBottom),
+                      alignment: getAlignScreen(getVal(data,'align')),                 
+                      child: _pages[_selectedIndex],
+                    ),
+                  )
+                );
+              }
             ),
+            drawer: _drawer,
             bottomNavigationBar: _navbar,
             resizeToAvoidBottomInset: true,
           )
@@ -138,7 +156,15 @@ class _PageWidgetState extends State<PageWidget> {
     );
   }
 
-  void navClick(index) {
+  void appClick() {
+    if(file == 'home') {
+      _drawerKey.currentState.openDrawer();
+    } else {
+      Navigator.of(context).pop();
+    }
+  }
+
+  void navClick(int index) {
     setState(() {
       _selectedIndex = index;
       getPage(false);

@@ -76,3 +76,16 @@ MainAxisAlignment getAlignMain(dynamic align) {
   }
   return alignment;
 }
+
+Alignment getAlignScreen(dynamic align) {
+  Alignment alignment = Alignment.topCenter;
+  switch (getInt(align)) {
+    case 1:
+      alignment = Alignment.center;
+      break;
+    case 2:
+      alignment = Alignment.bottomCenter;
+      break;
+  }
+  return alignment;
+}

@@ -5,8 +5,8 @@ import '../page/articles.dart';
 import '../page/products.dart';
 import '../page/jobs.dart';
 
-void getClicked(BuildContext context,Map click) {
-  if(click != null) {
+void getClicked(BuildContext context,dynamic click) {
+  if(click != null && click is Map) {
     switch (click['type'].toString()) {
       case 'link':
         _launchLink(click['link'] ?? 'https://ifelse.co');

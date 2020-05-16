@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'align.dart';
 import 'util.dart';
-import '../site.dart';
 
 String getImage(dynamic obj, [String size, String service]) {
   if ((obj != null) && (obj is Map)) {

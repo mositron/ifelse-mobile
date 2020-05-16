@@ -4,7 +4,7 @@ import '../convert/image.dart';
 import '../convert/gradient.dart';
 import '../convert/util.dart';
 
-AppBar getAppBar(dynamic obj, BuildContext buildContext) {
+AppBar getAppBar(dynamic obj, BuildContext buildContext,  Function appClick) {
   if ((obj != null) && !(obj is List)) {
     dynamic box = getVal(obj,'box'),
       data = getVal(obj,'data'),
@@ -21,16 +21,19 @@ AppBar getAppBar(dynamic obj, BuildContext buildContext) {
     } else if(logoStyle == 'image') {
       _title = Image.network(getImage(getVal(data,'image'),'s'));
     }
-    if(navStyle == 'drawer') {
+    if(navStyle == 'action') {
       _leading = IconButton(
         icon: Icon(
           getIcon(getVal(nav,'icon')),
           color: getColor(getVal(nav,'color'),'000'),
           size: getDouble(getVal(nav,'size'),16),
         ),      
-        onPressed: () {},
+        onPressed: () {
+          appClick();
+        }
       );
     }
+    
 
     return AppBar(
       title: _title,

@@ -1,7 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
 import '../layer.dart';
-import '../site.dart';
 import '../page/product.dart';
 import '../convert/product.dart';
 import '../convert/util.dart';
