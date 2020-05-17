@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:ifelse/src/site.dart';
 import 'package:logger/logger.dart';
 import '../layer.dart';
 import '../convert/util.dart';
