@@ -8,7 +8,7 @@ import '../page/home.dart';
 import '../convert/util.dart';
 import '../convert/dialog.dart';
 import '../convert/icon.dart';
-import '../convert/loading.dart';
+import '../convert/dialog.dart';
 import '../convert/gradient.dart';
 
 
@@ -43,7 +43,7 @@ class _DemoPageState extends State<DemoPage> with SingleTickerProviderStateMixin
   Widget build(BuildContext context) {
     _scale = 1 - _controller.value;
     Widget _demoForm = demoForm();
-    Widget _loadingForm = getLoading();
+    Widget _loadingForm = IfDialog.getLoading();
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(

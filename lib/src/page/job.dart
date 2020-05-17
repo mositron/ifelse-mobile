@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../site.dart';
 import '../layer.dart';
 import '../convert/job.dart';
-import '../convert/loading.dart';
+import '../convert/dialog.dart';
 import '../convert/util.dart';
 
 class JobPage extends StatelessWidget {
@@ -49,7 +49,7 @@ class _JobPageWidgetState extends State<JobPageWidget> with SingleTickerProvider
                 ? snapshot.hasData
                     ? getWidget(snapshot.data)
                     : Job.retryButton(fetch)
-                : getLoading();
+                : IfDialog.getLoading();
           }
         )
       );

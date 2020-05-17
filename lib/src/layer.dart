@@ -61,11 +61,11 @@ class Layer {
     }
   }
 
-  static List<Widget> build(dynamic json, BuildContext buildContext, [Map<String, dynamic> par]) {
+  static List<Widget> build(String file, dynamic json, BuildContext buildContext, [Map<String, dynamic> par]) {
     if (json != null) {
       List<Widget> widgets = [];
       for (var obj in json) {
-        Widget widget = buildFromMap(obj, buildContext, par);
+        Widget widget = buildFromMap(file, obj, buildContext, par);
         if (widget != null) {
           widgets.add(widget);
         }
@@ -113,7 +113,7 @@ class Layer {
           return Column(
             mainAxisAlignment: MainAxisAlignment.center, // getAlignMain(getVal(data,'align')),
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: build(getVal(child,'body'), buildContext, par),
+            children: build(file, getVal(child,'body'), buildContext, par),
           );
         }
       }
@@ -134,11 +134,11 @@ class Layer {
     Site.log.i(selectedIndex);
   }
 
-  static Widget buildFromMap(Map<String, dynamic> map, BuildContext buildContext, [Map<String, dynamic> par]) {
+  static Widget buildFromMap(String file, Map<String, dynamic> map, BuildContext buildContext, [Map<String, dynamic> par]) {
     String widgetName = map['type'];
     var parser = _widgetPraseMap[widgetName];
     if (parser != null) {
-      return parser.parse(map, buildContext, par);
+      return parser.parse(file, map, buildContext, par);
     }
     log.w("Not support - $widgetName");
     return null;
@@ -146,6 +146,6 @@ class Layer {
 }
 
 abstract class WidgetParser {
-  Widget parse(Map<String, dynamic> map, BuildContext buildContext, [Map<String, dynamic> par]);
+  Widget parse(String file, Map<String, dynamic> map, BuildContext buildContext, [Map<String, dynamic> par]);
   String get widgetName;
 }

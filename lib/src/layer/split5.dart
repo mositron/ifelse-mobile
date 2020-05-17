@@ -5,8 +5,8 @@ import '../convert/split.dart';
 
 class Split5Parser extends WidgetParser {
   @override
-  Widget parse(Map<String, dynamic> map, BuildContext buildContext, [Map<String, dynamic> par]) {
-    return getSplit(5, map, buildContext, par);
+  Widget parse(String file, Map<String, dynamic> map, BuildContext buildContext, [Map<String, dynamic> par]) {
+    return getSplit(5, file, map, buildContext, par);
   }
 
   @override

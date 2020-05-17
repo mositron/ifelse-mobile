@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:ifelse/src/site.dart';
 import 'package:logger/logger.dart';
 import '../layer.dart';
 import '../convert/util.dart';
@@ -16,12 +17,14 @@ class ButtonParser extends WidgetParser {
   static final log = Logger();
 
   @override
-  Widget parse(Map<String, dynamic> map, BuildContext buildContext, [Map<String, dynamic> par]) {
+  Widget parse(String file, Map<String, dynamic> map, BuildContext buildContext, [Map<String, dynamic> par]) {
     dynamic box = getVal(map,'box'),
       data = getVal(map,'data'),
-      click = getVal(data,'click');
-    String align = getVal(data,'align').toString();
-    String ipos = getVal(data,'ipos').toString();
+      tmp = getVal(data,'click');
+    Map<String, dynamic> click;
+    String align = getVal(data,'align').toString(),
+      ipos = getVal(data,'ipos').toString(),
+      spec = getVal(map,'spec');
     Color _color = getColor(getVal(data,'color'));
     double _fSize = getDouble(getVal(data,'size') ?? 16);
     List<Widget> widget = [];
@@ -29,6 +32,17 @@ class ButtonParser extends WidgetParser {
     String text = getVal(data,'text').toString();
     Icon _icon = Icon(icon, color: _color, size: _fSize,);
     Text _text = Text(text, style: TextStyle(color:_color,fontFamily: 'Kanit', fontSize: _fSize));
+    
+    if(tmp is Map) {
+      click = tmp;
+    }
+    if(file == 'login') {
+      if((spec == 'google') || (spec == 'facebook')) {
+        click = {'type':spec};
+      }
+    }
+    Site.log.i(file);
+    Site.log.i(click);
     
     if(text.isNotEmpty && icon != null) {
       if(ipos == 'right') {

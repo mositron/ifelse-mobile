@@ -9,7 +9,7 @@ import '../convert/util.dart';
 
 class SpaceParser extends WidgetParser {
   @override
-  Widget parse(Map<String, dynamic> map, BuildContext buildContext, [Map<String, dynamic> par]) {
+  Widget parse(String file, Map<String, dynamic> map, BuildContext buildContext, [Map<String, dynamic> par]) {
     dynamic box = getVal(map,'box');
     double height = getDouble(getVal(map,'data.height'));
     return Container(

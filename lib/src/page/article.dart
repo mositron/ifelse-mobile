@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../site.dart';
 import '../layer.dart';
 import '../convert/article.dart';
-import '../convert/loading.dart';
+import '../convert/dialog.dart';
 import '../convert/util.dart';
 
 class ArticlePage extends StatelessWidget {
@@ -49,7 +49,7 @@ class _ArticlePageWidgetState extends State<ArticlePageWidget> with SingleTicker
                 ? snapshot.hasData
                     ? getWidget(snapshot.data)
                     : Article.retryButton(fetch)
-                : getLoading();
+                : IfDialog.getLoading();
           }
         )
       );

@@ -10,7 +10,7 @@ import '../convert/align.dart';
 
 class DescriptionParser extends WidgetParser {
   @override
-  Widget parse(Map<String, dynamic> map, BuildContext buildContext, [Map<String, dynamic> par]) {
+  Widget parse(String file, Map<String, dynamic> map, BuildContext buildContext, [Map<String, dynamic> par]) {
     dynamic box = getVal(map,'box'),
       data = getVal(map,'data');
     String text = getVal(par,'detail') ?? '';
