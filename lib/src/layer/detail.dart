@@ -10,7 +10,7 @@ import '../convert/editor.dart';
 
 class DetailParser extends WidgetParser {
   @override
-  Widget parse(String file, Map<String, dynamic> map, BuildContext buildContext, [Map<String, dynamic> par]) {
+  Widget parse(String file, Map<String, dynamic> map, BuildContext buildContext, [Map<String, dynamic> par, Function func]) {
     dynamic box = getVal(map,'box'),
       data = getVal(map,'data');
     Color _color = getColor(getVal(data,'color'), '000');

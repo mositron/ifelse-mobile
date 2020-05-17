@@ -10,15 +10,14 @@ class Site {
   static int id = 0;
   static String name = '',
     domain = '',
-    token = '',
-    session = '';
+    token = '';
   static Map<String, dynamic> template = {};
   static List<dynamic> articles = [],
     products = [];
   static List<Widget> pageType = <Widget>[],
     pageTab = <Widget>[];
 
-  static void getData(dynamic load, BuildContext buildContext) {
+  static void setData(dynamic load) {
     name = load['name'];
     domain = load['domain'];
     ['splash','login','home','articles','article','products','product','cart','jobs','job'].forEach((v) {

@@ -10,7 +10,7 @@ import '../convert/align.dart';
 
 class DividerParser extends WidgetParser {
   @override
-  Widget parse(String file, Map<String, dynamic> map, BuildContext buildContext, [Map<String, dynamic> par]) {
+  Widget parse(String file, Map<String, dynamic> map, BuildContext buildContext, [Map<String, dynamic> par, Function func]) {
     dynamic box = getVal(map,'box'),
       data = getVal(map,'data');
     double height = getDouble(getVal(data,'height')),

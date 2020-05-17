@@ -5,7 +5,8 @@ class My {
   static int id = 0;
   static String name = '',
     image = '',
-    email = '';
+    email = '',
+    session = '';
   static void getData(dynamic load, BuildContext buildContext) {
 
   }

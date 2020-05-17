@@ -7,8 +7,8 @@ import '../convert/util.dart';
 
 class ArticleParser extends WidgetParser {
   @override
-  Widget parse(String file, Map<String, dynamic> map, BuildContext buildContext, [Map<String, dynamic> par]) {
-    return new ArticleView(key: UniqueKey(), map: map, buildContext: buildContext, par: par);    
+  Widget parse(String file, Map<String, dynamic> map, BuildContext buildContext, [Map<String, dynamic> par, Function func]) {
+    return new ArticleView(key: UniqueKey(), map: map, buildContext: buildContext, par: par, func: func);    
   }
   
   @override
@@ -19,12 +19,13 @@ class ArticleView extends StatefulWidget {
   final dynamic map;
   final BuildContext buildContext;
   final dynamic par;
-  ArticleView({Key key, this.map, this.buildContext, this.par}) : super(key: key);
+  final Function func;
+  ArticleView({Key key, this.map, this.buildContext, this.par, this.func}) : super(key: key);
 
   @override
   _ArticleViewState createState() {
     //Site.log.w(_map);
-    return new _ArticleViewState(map, par);
+    return new _ArticleViewState(map, par, func);
   }
 }
  
@@ -32,7 +33,8 @@ class _ArticleViewState extends State<ArticleView> {
   bool loaded;
   dynamic _map;
   dynamic _par;
-  _ArticleViewState(this._map, this._par) {
+  Function _func;
+  _ArticleViewState(this._map, this._par, this._func) {
     //Site.log.w(_map);
 
   }

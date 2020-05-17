@@ -7,7 +7,7 @@ import '../convert/util.dart';
 
 class JobParser extends WidgetParser {
   @override
-  Widget parse(String file, Map<String, dynamic> map, BuildContext buildContext, [Map<String, dynamic> par]) {
+  Widget parse(String file, Map<String, dynamic> map, BuildContext buildContext, [Map<String, dynamic> par, Function func]) {
     return new JobView(key: UniqueKey(), map: map, buildContext: buildContext, par: par);    
   }
   

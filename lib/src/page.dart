@@ -13,15 +13,17 @@ import 'convert/util.dart';
 class PageWidget extends StatefulWidget {
   final String file;
   final Map<String, dynamic> par;
-  PageWidget({Key key, this.file, this.par}) : super(key: key);
+  final Function func;
+  PageWidget({Key key, this.file, this.par, this.func}) : super(key: key);
 
   @override
-  _PageWidgetState createState() => _PageWidgetState(file, par);
+  _PageWidgetState createState() => _PageWidgetState(file, par, func);
 }
 
 class _PageWidgetState extends State<PageWidget> {
   String file;
   Map<String,dynamic> par = {};
+  Function func;
   int _selectedIndex = 0;
   AppBar _appbar;
   Widget _navbar;
@@ -36,7 +38,7 @@ class _PageWidgetState extends State<PageWidget> {
   List<Widget> _pages = <Widget>[];
   GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
 
-  _PageWidgetState(this.file, this.par);
+  _PageWidgetState(this.file, this.par, this.func);
 
   @override
   void initState() {
@@ -175,9 +177,9 @@ class _PageWidgetState extends State<PageWidget> {
     if(_pages[_selectedIndex] == null) {      
       if(_items.length > _selectedIndex) {
         dynamic item = _items[_selectedIndex];
-        _pages[_selectedIndex] = BodyWidget(key: UniqueKey(), file:item['type'], par: current ? par : item);
+        _pages[_selectedIndex] = BodyWidget(key: UniqueKey(), file:item['type'], par: current ? par : item, func: func);
       } else {
-        _pages[_selectedIndex] = BodyWidget(key: UniqueKey(), file:file, par: par);
+        _pages[_selectedIndex] = BodyWidget(key: UniqueKey(), file:file, par: par, func: func);
       }
     }
   }

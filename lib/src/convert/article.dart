@@ -2,8 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:http/http.dart' as http;
-import '../site.dart';
+import 'api.dart';
 import 'align.dart';
 import 'image.dart';
 import 'gradient.dart';
@@ -11,68 +10,48 @@ import 'border.dart';
 import 'edge.dart';
 import 'shadow.dart';
 import 'util.dart';
+import '../site.dart';
  
 class Article {
   static Future<List<CellModel>> getList(dynamic map) async {
-    final client = new http.Client();
-    final Map<String,String> request = {
-        'token': Site.token,
-        'session': Site.session,
+    final Map response = await Api.call('articles', {
         'category': map['category'].toString(),
         'status': map['status'].toString(),
         'tag': map['tag'].toString(),
         'order': map['order'].toString(),
         'skip': map['skip'].toString(),
         'limit': map['limit'].toString(),
-      };
-    final response = await client.post(
-      Site.api + 'articles',
-      headers: {'user-agent': 'ifelse.co-'+Site.version},
-      body: request
-    );
-    try {
-      if (response.statusCode == 200) {
-        final List<CellModel> list = parsePostsForGrid(response.body);
-        return list;
-      } else {
-      Site.log.w(request);
-        throw Exception("No Internet Connection.\nPlease Retry");
-      }
-    } catch (e) {
-      Site.log.e(request);
-      throw Exception(e.toString());
+      });
+    if((response is Map) && (response['articles'] is List)) {
+
+      Site.log.w(response['articles']);
+      Site.log.w('0');
+      final List<CellModel> list = parsePostsForGrid(response['articles']);
+      Site.log.w('1');
+      return list;
     }
+    return null;
   }
 
   static Future<Map> getArticle(int id) async {
-    final client = new http.Client();
-    final response = await client.post(
-      Site.api + 'article',
-      headers: {'user-agent': 'ifelse.co-'+Site.version},
-      body: {
-        'token': Site.token,
-        'session': Site.session,
-        'id': id.toString()
-      }
-    );
-    try {
-      if (response.statusCode == 200) {
-        return json.decode(response.body);
-      } else {
-        throw Exception("No Internet Connection.\nPlease Retry");
-      }
-    } catch (e) {
-      throw Exception(e.toString());
+    final Map response = await Api.call('article', {
+        'id': id.toString(),
+      });
+    if((response is Map) && (response['article'] is Map)) {
+      return response['article'];
     }
+    return null;
   }
 
-  static List<CellModel> parsePostsForGrid(String responseBody) {
+  static List<CellModel> parsePostsForGrid(List body) {
     try {
-      final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();    
-      return parsed.map<CellModel>((json) => CellModel.fromJson(json)).toList();
+      if((body != null) && (body != null)) {
+        return body.map<CellModel>((json) => CellModel.fromJson(json)).toList();
+      }
     } catch (e) {
       throw Exception(e.toString());
     }
+    return null;
   }
   
   static Widget getGrid(AsyncSnapshot<List<CellModel>> snapshot, dynamic map, Function gridClicked) {

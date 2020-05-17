@@ -7,7 +7,7 @@ import '../convert/util.dart';
 
 class ProductParser extends WidgetParser {
   @override
-  Widget parse(String file, Map<String, dynamic> map, BuildContext buildContext, [Map<String, dynamic> par]) {
+  Widget parse(String file, Map<String, dynamic> map, BuildContext buildContext, [Map<String, dynamic> par, Function func]) {
     return new ProductView(key: UniqueKey(), map: map, buildContext: buildContext, par: par);    
   }
   

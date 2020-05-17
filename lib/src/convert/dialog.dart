@@ -80,7 +80,6 @@ class IfDialog {
   }
 
   static Future show({@required BuildContext context, String text, Widget container, Widget icon, Widget title}) {
-    Site.log.i(text);
     return showGeneralDialog(
         barrierColor: Colors.black.withOpacity(0.5),
         transitionBuilder: (context, a1, a2, widget) {

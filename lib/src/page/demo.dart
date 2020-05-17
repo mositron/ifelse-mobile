@@ -10,6 +10,7 @@ import '../convert/dialog.dart';
 import '../convert/icon.dart';
 import '../convert/dialog.dart';
 import '../convert/gradient.dart';
+import '../convert/api.dart';
 
 
 class DemoPage extends StatefulWidget {
@@ -260,31 +261,16 @@ class _DemoPageState extends State<DemoPage> with SingleTickerProviderStateMixin
     }
   }
   
-  _loadData() async {    
-    var client = new http.Client();    
-    final response = await client.post(
-      Site.api + 'load',
-      headers: {'user-agent': 'ifelse.co-'+Site.version},
-      body: {'token': Site.token, 'session': Site.session}
-    );
+  _loadData() async {
     String message = '';
-    try {
-      if (response.statusCode == 200) {
-        Site.log.e(response.body);
-        if(response.body.isNotEmpty) {
-          Site.getData(json.decode(response.body), context);        
-          return new Timer(Duration(seconds: 1), () {
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()));
-          });
-        } else {
-          message = 'รหัส Token ไม่ถูกต้อง';
-        }
-      } else {
-        message = 'เกิดข้อผิดพลาด ('+response.statusCode.toString()+')';
-      }
-    } catch (e) {
-      message = 'เกิดข้อผิดพลาด ('+e.toString()+')';
+    if(await Api.load()) {  
+      return Timer(Duration(seconds: 1),() {
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()));
+      });
+    } else {
+      message = 'รหัส Token ไม่ถูกต้อง';
     }
+    await IfDialog.show(context: context, text: message);
     
     setState(() {
       state = 0;

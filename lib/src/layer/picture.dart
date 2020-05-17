@@ -12,7 +12,7 @@ import '../convert/align.dart';
 
 class PictureParser extends WidgetParser {
   @override
-  Widget parse(String file, Map<String, dynamic> map, BuildContext buildContext, [Map<String, dynamic> par]) {
+  Widget parse(String file, Map<String, dynamic> map, BuildContext buildContext, [Map<String, dynamic> par, Function func]) {
     dynamic box = getVal(map,'box'),
       data = getVal(map,'data'),
       col = getVal(data,'col');

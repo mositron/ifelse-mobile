@@ -17,7 +17,7 @@ class ButtonParser extends WidgetParser {
   static final log = Logger();
 
   @override
-  Widget parse(String file, Map<String, dynamic> map, BuildContext buildContext, [Map<String, dynamic> par]) {
+  Widget parse(String file, Map<String, dynamic> map, BuildContext buildContext, [Map<String, dynamic> par, Function func]) {
     dynamic box = getVal(map,'box'),
       data = getVal(map,'data'),
       tmp = getVal(data,'click');
@@ -36,13 +36,6 @@ class ButtonParser extends WidgetParser {
     if(tmp is Map) {
       click = tmp;
     }
-    if(file == 'login') {
-      if((spec == 'google') || (spec == 'facebook')) {
-        click = {'type':spec};
-      }
-    }
-    Site.log.i(file);
-    Site.log.i(click);
     
     if(text.isNotEmpty && icon != null) {
       if(ipos == 'right') {
@@ -67,7 +60,20 @@ class ButtonParser extends WidgetParser {
           boxShadow: getBoxShadow(getVal(box,'shadow')),
         ),      
         child: RawMaterialButton(
-          onPressed: () => getClicked(buildContext, click),
+          onPressed: () {
+            if(file == 'login') {
+                print(0);
+              if((spec == 'google') || (spec == 'facebook')) {
+                click = {'type':spec};
+                print(func);
+                if(func is Function) {
+                  print(2);
+                  func(spec);
+                }
+              }
+            }
+            getClicked(buildContext, click);
+          },
           padding: EdgeInsets.all(0.0),
           elevation: 0.0,     
           child: Ink(            

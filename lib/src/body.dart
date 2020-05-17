@@ -6,22 +6,23 @@ import 'convert/util.dart';
 class BodyWidget extends StatefulWidget {
   final String file;
   final Map<String, dynamic> par;
-  BodyWidget({Key key, this.file, this.par}) : super(key: key);
+  final Function func;
+  BodyWidget({Key key, this.file, this.par, this.func}) : super(key: key);
 
   @override
-  _BodyWidgetState createState() => new _BodyWidgetState(file, par);
+  _BodyWidgetState createState() => new _BodyWidgetState(file, par, func);
 }
 
 class _BodyWidgetState extends State<BodyWidget> {
   String file;
   Map<String,dynamic> par = {};
-  _BodyWidgetState(this.file, this.par);
+  final Function func;
+  _BodyWidgetState(this.file, this.par, this.func);
 
   @override
   Widget build(BuildContext buildContext) {
     if(Site.template[file] is List) {
-      //Site.log.i(file);
-      return Layer.buildBody(file, context, par);
+      return Layer.buildBody(file, context, par, func);
     }
     return Center(
       child: Container(
