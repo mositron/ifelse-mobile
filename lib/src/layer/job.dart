@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../layer.dart';
 import '../page/job.dart';
 import '../convert/job.dart';
@@ -86,6 +87,7 @@ class _JobViewState extends State<JobView> {
   }
   
   gridClicked(CellModel cellModel) {
-    Navigator.of(buildContext).push(MaterialPageRoute(builder: (context) => JobPage(par:{'_id':getInt(cellModel.id,0)})));
+    Get.to(JobPage(par:{'_id':getInt(cellModel.id,0)}));
+    //Navigator.of(buildContext).push(MaterialPageRoute(builder: (context) => JobPage(par:{'_id':getInt(cellModel.id,0)})));
   }
 }

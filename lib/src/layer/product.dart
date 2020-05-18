@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../layer.dart';
 import '../page/product.dart';
 import '../convert/product.dart';
@@ -98,6 +99,7 @@ class _ProductViewState extends State<ProductView> {
   }
 
   gridClicked(CellProduct cellProduct) {
-    Navigator.of(buildContext).push(MaterialPageRoute(builder: (context) => ProductPage(par:{'_id':getInt(cellProduct.id,0)})));
+    Get.to(ProductPage(par:{'_id':getInt(cellProduct.id,0)}));
+    //Navigator.of(buildContext).push(MaterialPageRoute(builder: (context) => ProductPage(par:{'_id':getInt(cellProduct.id,0)})));
   }
 }

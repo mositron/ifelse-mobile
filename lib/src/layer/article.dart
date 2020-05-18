@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../layer.dart';
 import '../page/article.dart';
 import '../convert/article.dart';
@@ -35,15 +36,11 @@ class _ArticleViewState extends State<ArticleView> {
   BuildContext buildContext;
   dynamic _par;
   Function _func;
-  _ArticleViewState(this._map, this.buildContext, this._par, this._func) {
-    //Site.log.w(_map);
-
-  }
+  _ArticleViewState(this._map, this.buildContext, this._par, this._func);
 
   @override
   void initState() {
     super.initState();
-    //Site.log.w(' ---- state ---------------');
     loaded = false;
   }
  
@@ -106,6 +103,7 @@ class _ArticleViewState extends State<ArticleView> {
   
  
   gridClicked(CellModel cellModel) {
-    Navigator.of(buildContext).push(MaterialPageRoute(builder: (context) => ArticlePage(par:{'_id':getInt(cellModel.id,0)})));
+    Get.to(ArticlePage(par:{'_id':getInt(cellModel.id,0)}));
+    //Navigator.of(buildContext).push(MaterialPageRoute(builder: (context) => ArticlePage(par:{'_id':getInt(cellModel.id,0)})));
   }
 }

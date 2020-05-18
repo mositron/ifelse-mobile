@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:get/get.dart';
 import '../page/articles.dart';
 import '../page/products.dart';
 import '../page/jobs.dart';
@@ -37,15 +38,18 @@ void _launchLink(String url) async {
 
 void _launchArticles(BuildContext context, Map click) {
   Map<String, dynamic> request = {'category':click['articles']};
-  Navigator.of(context).push(MaterialPageRoute(builder: (context) => ArticlesPage(par:request)));
+  Get.to(ArticlesPage(par:request));
+  //Navigator.of(context).push(MaterialPageRoute(builder: (context) => ArticlesPage(par:request)));
 }
 
 void _launchProducts(BuildContext context, Map click) {
   Map<String, dynamic> request = {'category':click['products']};
-  Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProductsPage(par:request)));
+  Get.to(ProductsPage(par:request));
+  //Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProductsPage(par:request)));
 }
 
 void _launchJobs(BuildContext context, Map click) {
   Map<String, dynamic> request = {'category':click['jobs']};
-  Navigator.of(context).push(MaterialPageRoute(builder: (context) => JobsPage(par:request)));
+  Get.to(JobsPage(par:request));
+  //Navigator.of(context).push(MaterialPageRoute(builder: (context) => JobsPage(par:request)));
 }

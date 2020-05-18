@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:ifelse/src/layer/drawer.dart';
+import 'package:get/get.dart';
 import 'site.dart';
 import 'body.dart';
 import 'layer/appbar.dart';
@@ -165,7 +165,8 @@ class _PageWidgetState extends State<PageWidget> {
       _drawerKey.currentState.openDrawer();
     } else {
       //SystemNavigator.pop();
-      Navigator.of(_context).pop();
+      Get.back();
+      //Navigator.of(_context).pop();
     }
   }
 

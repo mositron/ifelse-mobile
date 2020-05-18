@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
+import 'package:get/get.dart';
 import 'dart:async';
 import 'dart:convert';
 import '../site.dart';
@@ -8,14 +9,28 @@ import '../page/home.dart';
 import '../convert/api.dart';
 import '../convert/dialog.dart';
 
-class SplashPage extends StatefulWidget {
+
+class SplashPage extends StatelessWidget {
+  SplashPage({Key key, this.par}) : super(key: key);
+  final Map<String, dynamic> par;
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: Site.name,
+      home: _SplashPage()
+    );
+  }
+}
+
+class _SplashPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     return SplashScreenState();
   }
 }
 
-class SplashScreenState extends State<SplashPage> {
+class SplashScreenState extends State<_SplashPage> {
   static final log = Logger();
   @override
   void initState() {
@@ -27,7 +42,8 @@ class SplashScreenState extends State<SplashPage> {
     String message = '';
     if(await Api.load()) {  
       return Timer(Duration(seconds: 1),() {
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()));
+        //Navigator.of(context).pushReplacementNamed('/home');
+        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => HomePage()));
       });
     } else {
       message = 'รหัส Token ไม่ถูกต้อง';
