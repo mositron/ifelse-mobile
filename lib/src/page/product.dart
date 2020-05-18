@@ -11,23 +11,24 @@ class ProductPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(title: Site.name, home: ProductPageWidget(par: par));
+    return MaterialApp(title: Site.name, home: ProductPageWidget(buildContext: context, par: par));
   }
 }
 
 class ProductPageWidget extends StatefulWidget {
   final Map<String, dynamic> par;
-  ProductPageWidget({Key key, this.par}) : super(key: key);
+  final BuildContext buildContext;
+  ProductPageWidget({Key key, this.buildContext, this.par}) : super(key: key);
   @override
-  _ProductPageWidgetState createState() => _ProductPageWidgetState(par);
+  _ProductPageWidgetState createState() => _ProductPageWidgetState(buildContext, par);
 }
 
-class _ProductPageWidgetState extends State<ProductPageWidget> with SingleTickerProviderStateMixin {
+class _ProductPageWidgetState extends State<ProductPageWidget> {
   bool loaded;
-  TabController controller;
+  BuildContext buildContext;
   Map<String, dynamic> par;
 
-  _ProductPageWidgetState(this.par);
+  _ProductPageWidgetState(this.buildContext, this.par);
   
   @override
   void initState() {
@@ -71,7 +72,7 @@ class _ProductPageWidgetState extends State<ProductPageWidget> with SingleTicker
 
   Widget getWidget(dynamic data) {
     if(data is Map) {
-      return Layer.buildContent('product',context, data);
+      return Layer.buildContent('product', buildContext, data);
     }
     return Container();
   }

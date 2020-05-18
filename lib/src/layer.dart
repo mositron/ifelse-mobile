@@ -84,7 +84,7 @@ class Layer {
     if(Site.template[file] is List) {
       List page = Site.template[file];
       if(page.length > 0) {
-        return PageWidget(file: file, par: par, func: func);
+        return PageWidget(buildContext: buildContext, file: file, par: par, func: func);
       }
     }
     return Center(
@@ -130,19 +130,10 @@ class Layer {
     );
   }
 
-  static void navClick(selectedIndex) {
-    Site.log.i(selectedIndex);
-  }
-
   static Widget buildFromMap(String file, Map<String, dynamic> map, BuildContext buildContext, [Map<String, dynamic> par, Function func]) {
     String widgetName = map['type'];
     var parser = _widgetPraseMap[widgetName];
     if (parser != null) {
-      if(file == 'login') {
-        Site.log.i(func);
-        Site.log.i(widgetName);
-      }
-
       return parser.parse(file, map, buildContext, par, func);
     }
     log.w("Not support - $widgetName");

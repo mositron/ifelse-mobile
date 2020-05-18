@@ -23,15 +23,16 @@ class ProductView extends StatefulWidget {
 
   @override
   _ProductViewState createState() {
-    return new _ProductViewState(map, par);
+    return new _ProductViewState(map, buildContext, par);
   }
 }
  
 class _ProductViewState extends State<ProductView> {
   bool loaded;
   dynamic _map;
+  BuildContext buildContext;
   dynamic _par;
-  _ProductViewState(this._map, this._par);
+  _ProductViewState(this._map, this.buildContext, this._par);
 
   @override
   void initState() {
@@ -95,8 +96,8 @@ class _ProductViewState extends State<ProductView> {
   fetch() {
     setLoading(true);
   }
-}
- 
-gridClicked(BuildContext context, CellProduct cellProduct) {
-  Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProductPage(par:{'_id':getInt(cellProduct.id,0)})));
+
+  gridClicked(CellProduct cellProduct) {
+    Navigator.of(buildContext).push(MaterialPageRoute(builder: (context) => ProductPage(par:{'_id':getInt(cellProduct.id,0)})));
+  }
 }

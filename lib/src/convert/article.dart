@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'api.dart';
@@ -10,7 +9,6 @@ import 'border.dart';
 import 'edge.dart';
 import 'shadow.dart';
 import 'util.dart';
-import '../site.dart';
  
 class Article {
   static Future<List<CellModel>> getList(dynamic map) async {
@@ -23,11 +21,7 @@ class Article {
         'limit': map['limit'].toString(),
       });
     if((response is Map) && (response['articles'] is List)) {
-
-      Site.log.w(response['articles']);
-      Site.log.w('0');
       final List<CellModel> list = parsePostsForGrid(response['articles']);
-      Site.log.w('1');
       return list;
     }
     return null;
@@ -119,7 +113,7 @@ class Article {
                 textColor,
                 textSize,
               ),
-              onTap: () => gridClicked(context, snapshot.data[index]),
+              onTap: () => gridClicked(snapshot.data[index]),
             );
           },
           staggeredTileBuilder: (int index) => StaggeredTile.fit(1),

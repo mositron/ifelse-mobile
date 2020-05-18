@@ -8,23 +8,24 @@ class ProductsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(title: Site.name, home: ProductsPageWidget(par: par));
+    return MaterialApp(title: Site.name, home: ProductsPageWidget(buildContext: context, par: par));
   }
 }
 
 class ProductsPageWidget extends StatefulWidget {
   final Map<String, dynamic> par;
-  ProductsPageWidget({Key key, this.par}) : super(key: key);
+  final BuildContext buildContext;
+  ProductsPageWidget({Key key, this.buildContext, this.par}) : super(key: key);
   @override
-  _ProductsPageWidgetState createState() => _ProductsPageWidgetState(par);
+  _ProductsPageWidgetState createState() => _ProductsPageWidgetState(buildContext, par);
 }
 
-class _ProductsPageWidgetState extends State<ProductsPageWidget> with SingleTickerProviderStateMixin {
+class _ProductsPageWidgetState extends State<ProductsPageWidget> {
   bool loaded;
-  TabController controller;
+  BuildContext buildContext;
   Map<String, dynamic> par;
 
-  _ProductsPageWidgetState(this.par);
+  _ProductsPageWidgetState(this.buildContext, this.par);
   
   @override
   void initState() {
@@ -55,6 +56,6 @@ class _ProductsPageWidgetState extends State<ProductsPageWidget> with SingleTick
     } else {
       request['text'] = 'สินค้าทั้งหมด';
     }
-    return Layer.buildContent('products',context, request);
+    return Layer.buildContent('products', buildContext, request);
   }
 }

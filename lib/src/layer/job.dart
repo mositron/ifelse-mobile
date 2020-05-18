@@ -24,15 +24,16 @@ class JobView extends StatefulWidget {
   @override
   _JobViewState createState() {
     //Site.log.w(_map);
-    return new _JobViewState(map, par);
+    return new _JobViewState(map, buildContext, par);
   }
 }
  
 class _JobViewState extends State<JobView> {
   bool loaded;
   dynamic _map;
+  BuildContext buildContext;
   dynamic _par;
-  _JobViewState(this._map, this._par) {
+  _JobViewState(this._map, this.buildContext, this._par) {
     //Site.log.w(_map);
 
   }
@@ -83,8 +84,8 @@ class _JobViewState extends State<JobView> {
   fetch() {
     setLoading(true);
   }
-}
- 
-gridClicked(BuildContext context, CellModel cellModel) {
-  Navigator.of(context).push(MaterialPageRoute(builder: (context) => JobPage(par:{'_id':getInt(cellModel.id,0)})));
+  
+  gridClicked(CellModel cellModel) {
+    Navigator.of(buildContext).push(MaterialPageRoute(builder: (context) => JobPage(par:{'_id':getInt(cellModel.id,0)})));
+  }
 }

@@ -25,16 +25,17 @@ class ArticleView extends StatefulWidget {
   @override
   _ArticleViewState createState() {
     //Site.log.w(_map);
-    return new _ArticleViewState(map, par, func);
+    return new _ArticleViewState(map, buildContext, par, func);
   }
 }
  
 class _ArticleViewState extends State<ArticleView> {
   bool loaded;
   dynamic _map;
+  BuildContext buildContext;
   dynamic _par;
   Function _func;
-  _ArticleViewState(this._map, this._par, this._func) {
+  _ArticleViewState(this._map, this.buildContext, this._par, this._func) {
     //Site.log.w(_map);
 
   }
@@ -102,8 +103,9 @@ class _ArticleViewState extends State<ArticleView> {
   fetch() {
     setLoading(true);
   }
-}
+  
  
-gridClicked(BuildContext context, CellModel cellModel) {
-  Navigator.of(context).push(MaterialPageRoute(builder: (context) => ArticlePage(par:{'_id':getInt(cellModel.id,0)})));
+  gridClicked(CellModel cellModel) {
+    Navigator.of(buildContext).push(MaterialPageRoute(builder: (context) => ArticlePage(par:{'_id':getInt(cellModel.id,0)})));
+  }
 }

@@ -34,7 +34,6 @@ AppBar getAppBar(dynamic obj, BuildContext buildContext,  Function appClick) {
       );
     }
     
-
     return AppBar(
       title: _title,
       centerTitle: getVal(logo,'align') == 'center',
@@ -47,28 +46,6 @@ AppBar getAppBar(dynamic obj, BuildContext buildContext,  Function appClick) {
           image: getImageBG(getVal(box,'bg')),          
         )
       ),
-      actions:
-          null, /*<Widget>[
-        IconButton(
-          icon: const Icon(Icons.arrow_forward),
-          tooltip: 'Next choice',
-          onPressed: () {},
-        ),
-      ],*/
-
-      /*
-      bottom: PreferredSize(
-        preferredSize: const Size.fromHeight(48.0),
-        child: Theme(
-          data: Theme.of(buildContext).copyWith(accentColor: Colors.white),
-          child: Container(
-            height: 48.0,
-            alignment: Alignment.center,
-            child: TabPageSelector(controller: null),
-          ),
-        ),
-      ),
-      */
     );
   }
   return null;

@@ -58,40 +58,37 @@ class _MyPagefulWidgetState extends State<MyPagefulWidget> {
         GoogleSignInAuthentication _googleAuth = await _googleUser.authentication;
         IfDialog().loading(context);
         bool logged = await Api.login({'type': 'google', 'idtoken': _googleAuth.idToken});
-
-      //if(_dialog != null) {
         Navigator.of(context, rootNavigator: true).pop('dialog');
-
         if(logged) {
           Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()));
+        } else {
+          IfDialog.show(context: context, text: 'บัญชีนี้ไม่สามารถล็อคอินได้');
         }
-        //}
     } catch (err){
-      //IfDialog.show(context: context, text: 'ไม่สามารถล็อคอินได้ ('+err+')');
-      Site.log.i(err);
+      IfDialog.show(context: context, text: 'ไม่สามารถล็อคอินได้ ('+err+')');
     }  
   }
 
   void _launchFacebook(BuildContext context) async {
     final facebookLogin = FacebookLogin();
     final result = await facebookLogin.logIn(['email']);
-
     switch (result.status) {
       case FacebookLoginStatus.loggedIn:
-        // logged
-        Site.log.i(result.accessToken.userId);
-        Site.log.i(result.accessToken.declinedPermissions);
-        Site.log.i(result.accessToken.token);
+        IfDialog().loading(context);
+        bool logged = await Api.login({'type': 'facebook', 'idtoken': result.accessToken.token});
+        Navigator.of(context, rootNavigator: true).pop('dialog');
+        if(logged) {
+          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()));
+        } else {
+          IfDialog.show(context: context, text: 'บัญชีนี้ไม่สามารถล็อคอินได้');
+        }
         break;
       case FacebookLoginStatus.cancelledByUser:
         Site.log.i('cancel');
-        Site.log.i(result.errorMessage);
         //cancel
         break;
       case FacebookLoginStatus.error:      
         Site.log.i('error');
-        Site.log.i(result.errorMessage);
-        //error
         break;
     }
   }

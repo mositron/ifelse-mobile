@@ -3,6 +3,7 @@ import 'package:ifelse/src/convert/gradient.dart';
 import 'package:ifelse/src/convert/icon.dart';
 import 'package:ifelse/src/convert/image.dart';
 import 'package:ifelse/src/page/login.dart';
+import 'package:ifelse/src/page/home.dart';
 import '../my.dart';
 import '../convert/util.dart';
 
@@ -23,14 +24,11 @@ class _Drawer extends State<GetDrawer> {
 
   @override
   Widget build(BuildContext context) {
-
-
     if ((map != null) && !(map is List)) {
       dynamic data = getVal(map,'data'),
         style = getVal(data,'nav.style');
         //data.nav.style
       if(style == 'action') {
-
         dynamic profile = getVal(data,'drawer.profile');
         Color profileColor = getColor(getVal(profile,'color'));
         Gradient profileBg = getGradient(getVal(profile,'bg'));
@@ -38,7 +36,6 @@ class _Drawer extends State<GetDrawer> {
         Color menuColor = getColor(getVal(menu,'color'));
         Color menuIcon = getColor(getVal(menu,'icon'));
         Gradient menuBg = getGradient(getVal(menu,'bg'));
-
         return Drawer(
           child: My.id > 0 ?
               _logged(context, profileColor, profileBg, menuIcon, menuColor, menuBg) :
@@ -52,20 +49,33 @@ class _Drawer extends State<GetDrawer> {
 
 Widget _logged(BuildContext context, Color profileColor, Gradient profileBg, Color menuIcon, Color menuColor, Gradient menuBg) {
   TextStyle _profile = TextStyle(color:profileColor, fontFamily: 'Kanit');
+  TextStyle _menu = TextStyle(color:menuColor, fontFamily: 'Kanit');
   return Column(
-    children: [
-      UserAccountsDrawerHeader(
+    children: <Widget>[
+      Container (
         decoration: BoxDecoration(
           gradient: profileBg
         ),
-        accountName: Text(My.name, style: _profile),
-        accountEmail: Text(My.email, style: _profile),
-        currentAccountPicture: getImageWidget(My.image),
+        padding: EdgeInsets.all(10),
+        margin: EdgeInsets.all(0),
+        child: UserAccountsDrawerHeader(
+          decoration: BoxDecoration(
+            gradient: profileBg
+          ),
+          accountName: Text(My.name, style: _profile),
+          accountEmail: Text(My.email, style: _profile),
+          currentAccountPicture: getImageWidget(My.image),
+        )
       ),
-      Container (
-        decoration: BoxDecoration(
-          gradient: menuBg
-        ),
+      ListTile(
+        leading: Icon(getIcon('logout'), color: menuIcon, size: 16),
+        title: Text('ออกจากระบบ', style: _menu),
+        onTap: () {
+          My.id = 0;
+          My.session = '';
+          Navigator.of(context).pop(context);
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) => HomePage()));
+        },
       )
     ]
   );
@@ -100,7 +110,7 @@ Widget _login(BuildContext context, Color profileColor, Gradient profileBg, Colo
         )
       ),
       ListTile(
-        leading: Icon(getIcon('sign-in'), color: menuIcon),
+        leading: Icon(getIcon('sign-in'), color: menuIcon, size: 16),
         title: Text('ล็อคอิน / สมัครสมาชิก', style: _menu),
         onTap: () {
           Navigator.of(context).pop(context);

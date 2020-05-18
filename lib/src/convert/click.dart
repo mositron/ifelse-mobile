@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:flutter_facebook_login/flutter_facebook_login.dart';
-import '../site.dart';
 import '../page/articles.dart';
 import '../page/products.dart';
 import '../page/jobs.dart';
-import '../convert/dialog.dart';
 
 void getClicked(BuildContext context,dynamic click) {
   if(click != null && click is Map) {

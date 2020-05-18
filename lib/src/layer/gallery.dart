@@ -22,9 +22,6 @@ class GalleryParser extends WidgetParser {
     String colDirect = getVal(col,'direct').toString();
     double colHeight  = getDouble(getVal(col,'height'),200),
       ratio = getRatio(getVal(data,'ratio'));
-      
-      Site.log.e(colDirect);
-
     EdgeInsets contentPadding = getEdgeInset(getVal(data,'box.padding'));
     if(par['gallery'] is List) {
       List<dynamic> gallery = par['gallery'];

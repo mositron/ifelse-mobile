@@ -111,7 +111,7 @@ class Job {
                 textColor,
                 textSize,
               ),
-              onTap: () => gridClicked(context, snapshot.data[index]),
+              onTap: () => gridClicked(snapshot.data[index]),
             );
           },
           staggeredTileBuilder: (int index) => StaggeredTile.fit(1),

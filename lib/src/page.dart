@@ -14,10 +14,11 @@ class PageWidget extends StatefulWidget {
   final String file;
   final Map<String, dynamic> par;
   final Function func;
-  PageWidget({Key key, this.file, this.par, this.func}) : super(key: key);
+  final BuildContext buildContext;
+  PageWidget({Key key, this.buildContext, this.file, this.par, this.func}) : super(key: key);
 
   @override
-  _PageWidgetState createState() => _PageWidgetState(file, par, func);
+  _PageWidgetState createState() => _PageWidgetState(buildContext, file, par, func);
 }
 
 class _PageWidgetState extends State<PageWidget> {
@@ -36,9 +37,10 @@ class _PageWidgetState extends State<PageWidget> {
   double _offsetTop = 0;
   double _offsetBottom = 0;
   List<Widget> _pages = <Widget>[];
+  BuildContext buildContext, _context;
   GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
 
-  _PageWidgetState(this.file, this.par, this.func);
+  _PageWidgetState(this.buildContext, this.file, this.par, this.func);
 
   @override
   void initState() {
@@ -83,8 +85,7 @@ class _PageWidgetState extends State<PageWidget> {
   }
 
   @override
-  Widget build(BuildContext context) {    
-
+  Widget build(BuildContext context) {
     if(Site.template[file] is List) {
       dynamic json = Site.template[file];
       // เทมเพลทที่มีได้หลายแบบ ให้ใช้แบบแรกไปก่อน
@@ -113,6 +114,7 @@ class _PageWidgetState extends State<PageWidget> {
         _drawer = (_showAppbar > 0 ? GetDrawer(getVal(child,'appbar'), context) : null);
         //data.nav.style
         getPage(true);
+        _context = context;
         return Container(        
           decoration: BoxDecoration(
             gradient: getGradient(getVal(_box,'bg.color')),
@@ -162,7 +164,8 @@ class _PageWidgetState extends State<PageWidget> {
     if(file == 'home') {
       _drawerKey.currentState.openDrawer();
     } else {
-      Navigator.of(context).pop();
+      //SystemNavigator.pop();
+      Navigator.of(_context).pop();
     }
   }
 

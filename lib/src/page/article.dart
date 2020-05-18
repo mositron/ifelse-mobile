@@ -11,23 +11,24 @@ class ArticlePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(title: Site.name, home: ArticlePageWidget(par: par));
+    return MaterialApp(title: Site.name, home: ArticlePageWidget(buildContext: context, par: par));
   }
 }
 
 class ArticlePageWidget extends StatefulWidget {
   final Map<String, dynamic> par;
-  ArticlePageWidget({Key key, this.par}) : super(key: key);
+  final BuildContext buildContext;
+  ArticlePageWidget({Key key, this.buildContext, this.par}) : super(key: key);
   @override
-  _ArticlePageWidgetState createState() => _ArticlePageWidgetState(par);
+  _ArticlePageWidgetState createState() => _ArticlePageWidgetState(buildContext, par);
 }
 
-class _ArticlePageWidgetState extends State<ArticlePageWidget> with SingleTickerProviderStateMixin {
+class _ArticlePageWidgetState extends State<ArticlePageWidget> {
   bool loaded;
-  TabController controller;
+  BuildContext buildContext;
   Map<String, dynamic> par;
 
-  _ArticlePageWidgetState(this.par);
+  _ArticlePageWidgetState(this.buildContext, this.par);
   
   @override
   void initState() {
@@ -71,7 +72,7 @@ class _ArticlePageWidgetState extends State<ArticlePageWidget> with SingleTicker
 
   Widget getWidget(dynamic data) {
     if(data is Map) {
-      return Layer.buildContent('article',context, data);
+      return Layer.buildContent('article', buildContext, data);
     }
     return Container();
   }

@@ -26,7 +26,12 @@ class Api {
         getMy(resp, true);
         return resp;
       } else if (response.statusCode == 401) {
-        Site.log.i(response.statusCode);
+        return null;
+      } else if (response.statusCode == 402) {
+        return null;
+      } else if (response.statusCode == 403) {
+        return null;
+      } else if (response.statusCode == 404) {
         return null;
       } else {
         Site.log.w(request);
@@ -63,7 +68,9 @@ class Api {
       if(session.length > 0) {
         List<String> split = session.split('.');
         if(split.length == 2) {
-          final data = json.decode(utf8.decode(base64.decode(split[1])));
+          String token = split[0].toString();
+          token = token.replaceAll('-', '+').replaceAll('_', '/');
+          final data = json.decode(utf8.decode(base64.decode(token)));
           if((data != null) && (data is Map)) {
             My.id = getInt(data['id']);
             if(My.id > 0) {

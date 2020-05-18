@@ -129,7 +129,7 @@ class Product {
                 overColor,
                 overSize,
               ),
-              onTap: () => gridClicked(context, snapshot.data[index]),
+              onTap: () => gridClicked(snapshot.data[index]),
             );
           },
           staggeredTileBuilder: (int index) => (colDirect == 'horizon' ? StaggeredTile.extent(1,150) : StaggeredTile.fit(1)),

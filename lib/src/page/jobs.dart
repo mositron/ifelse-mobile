@@ -8,23 +8,24 @@ class JobsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(title: Site.name, home: JobsPageWidget(par: par));
+    return MaterialApp(title: Site.name, home: JobsPageWidget(buildContext: context, par: par));
   }
 }
 
 class JobsPageWidget extends StatefulWidget {
   final Map<String, dynamic> par;
-  JobsPageWidget({Key key, this.par}) : super(key: key);
+  final BuildContext buildContext;
+  JobsPageWidget({Key key, this.buildContext, this.par}) : super(key: key);
   @override
-  _JobsPageWidgetState createState() => _JobsPageWidgetState(par);
+  _JobsPageWidgetState createState() => _JobsPageWidgetState(buildContext, par);
 }
 
-class _JobsPageWidgetState extends State<JobsPageWidget> with SingleTickerProviderStateMixin {
+class _JobsPageWidgetState extends State<JobsPageWidget> {
   bool loaded;
-  TabController controller;
+  BuildContext buildContext;
   Map<String, dynamic> par;
 
-  _JobsPageWidgetState(this.par);
+  _JobsPageWidgetState(this.buildContext, this.par);
   
   @override
   void initState() {
@@ -39,6 +40,6 @@ class _JobsPageWidgetState extends State<JobsPageWidget> with SingleTickerProvid
       'skip': '0'
     };
     request['text'] = 'ตำแหน่งงาน';
-    return Layer.buildContent('jobs',context, request);
+    return Layer.buildContent('jobs', buildContext, request);
   }
 }
