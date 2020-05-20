@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:ifelse/src/convert/gradient.dart';
-import 'package:ifelse/src/convert/icon.dart';
-import 'package:ifelse/src/convert/image.dart';
-import 'package:ifelse/src/page/login.dart';
-import 'package:ifelse/src/page/home.dart';
 import '../my.dart';
 import '../convert/util.dart';
+import '../convert/gradient.dart';
+import '../convert/icon.dart';
+import '../convert/image.dart';
+import '../convert/session.dart';
+import '../page/login.dart';
+import '../page/home.dart';
 
 class GetDrawer extends StatefulWidget {
   final dynamic map;
@@ -71,8 +72,7 @@ Widget _logged(BuildContext context, Color profileColor, Gradient profileBg, Col
         leading: Icon(getIcon('logout'), color: menuIcon, size: 16),
         title: Text('ออกจากระบบ', style: _menu),
         onTap: () {
-          My.id = 0;
-          My.session = '';
+          sessionDelete();
           Navigator.of(context).pop(context);
           Navigator.of(context).push(MaterialPageRoute(builder: (context) => HomePage()));
         },

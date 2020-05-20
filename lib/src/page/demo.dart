@@ -1,15 +1,12 @@
 import 'dart:async';
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
-import 'package:get/get.dart';
 import '../site.dart';
 import '../page/home.dart';
 import '../convert/util.dart';
 import '../convert/dialog.dart';
 import '../convert/icon.dart';
-import '../convert/dialog.dart';
+import '../convert/session.dart';
 import '../convert/gradient.dart';
 import '../convert/api.dart';
 
@@ -37,7 +34,7 @@ class _DemoPageState extends State<DemoPage> with SingleTickerProviderStateMixin
     )..addListener(() {
         setState(() {});
       });
-    
+    sessionLoad();
     super.initState();
   }
 

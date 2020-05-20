@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
-import 'package:get/get.dart';
 import 'dart:async';
-import 'dart:convert';
 import '../site.dart';
 import '../page/home.dart';
 import '../convert/api.dart';
 import '../convert/dialog.dart';
-
+import '../convert/session.dart';
 
 class SplashPage extends StatelessWidget {
   SplashPage({Key key, this.par}) : super(key: key);
@@ -35,6 +32,8 @@ class SplashScreenState extends State<_SplashPage> {
   @override
   void initState() {
     super.initState();
+    
+    sessionLoad();
     loadData();
   }
 

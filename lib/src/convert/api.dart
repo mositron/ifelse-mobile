@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../site.dart';
 import '../my.dart';
-import '../convert/util.dart';
+import 'util.dart';
+import 'session.dart';
 
 class Api {
   static Future<Map> call(String method, [Map<String,String> map]) async {
@@ -62,7 +64,7 @@ class Api {
     }
   }
 
-  static void getMy(Map<String, dynamic> resp, [bool login]) {
+  static void getMy(Map<String, dynamic> resp, [bool login]) async {
     if((resp['session'] != null) && (resp['session'] is String)) {
       String session = resp['session'].toString();
       if(session.length > 0) {
@@ -72,8 +74,12 @@ class Api {
           token = token.replaceAll('-', '+').replaceAll('_', '/');
           final data = json.decode(utf8.decode(base64.decode(token)));
           if((data != null) && (data is Map)) {
-            My.id = getInt(data['id']);
-            if(My.id > 0) {
+            int id = getInt(data['id']);
+            if(id > 0) {
+              if(id != My.id) {
+                sessionWrite(session);
+              }
+              My.id = id;
               My.name = data['name'].toString();
               My.email = data['email'].toString();
               My.image = data['image'].toString();
