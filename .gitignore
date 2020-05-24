@@ -39,3 +39,4 @@ lib/generated_plugin_registrant.dart
 
 .vscode/
 /android/app/google-services.json
+/ios/Runner/GoogleService-Info.plist
