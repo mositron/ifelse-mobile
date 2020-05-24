@@ -1,7 +1,7 @@
 import 'dart:async';
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import '../site.dart';
 import 'api.dart';
 import 'align.dart';
 import 'image.dart';
@@ -64,7 +64,7 @@ class Job {
     List<BoxShadow> boxShadow = getBoxShadow(getVal(dataBox,'shadow'));
     Gradient gradient  = getGradient(getVal(dataBox,'bg.color'));
     Color textColor  = getColor(getVal(data,'color'),'000');
-    double textSize  = getDouble(getVal(data,'fsize'),16);    
+    double textSize  = getDouble(getVal(data,'fsize'),Site.fontSize);    
     String colDirect = getVal(data,'col.direct').toString();
     double colHeight  = getDouble(getVal(data,'col.height'),200);
     if(width < 50) {
@@ -201,7 +201,7 @@ class Cell extends StatelessWidget {
         textAlign: contentAlign,
         overflow: TextOverflow.ellipsis,
         maxLines: contentLine > 0 ? contentLine : 5,
-        style: TextStyle(color: textColor, fontSize: textSize, fontFamily:'Kanit', height: 1.5),
+        style: TextStyle(color: textColor, fontSize: textSize, fontFamily:Site.font, height: 1.5),
       ),
     );
 

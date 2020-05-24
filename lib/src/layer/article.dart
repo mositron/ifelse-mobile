@@ -26,7 +26,7 @@ class ArticleView extends StatefulWidget {
   @override
   _ArticleViewState createState() {
     //Site.log.w(_map);
-    return new _ArticleViewState(map, buildContext, par, func);
+    return new _ArticleViewState(map, buildContext, par);
   }
 }
  
@@ -35,8 +35,7 @@ class _ArticleViewState extends State<ArticleView> {
   dynamic _map;
   BuildContext buildContext;
   dynamic _par;
-  Function _func;
-  _ArticleViewState(this._map, this.buildContext, this._par, this._func);
+  _ArticleViewState(this._map, this.buildContext, this._par);
 
   @override
   void initState() {

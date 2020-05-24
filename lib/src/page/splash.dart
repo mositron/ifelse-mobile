@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
+import 'package:get/get.dart';
 import 'dart:async';
 import '../site.dart';
+import '../layer.dart';
 import '../page/home.dart';
 import '../convert/api.dart';
 import '../convert/dialog.dart';
 import '../convert/session.dart';
+import '../convert/cache.dart';
 
 class SplashPage extends StatelessWidget {
   SplashPage({Key key, this.par}) : super(key: key);
@@ -31,18 +34,24 @@ class SplashScreenState extends State<_SplashPage> {
   static final log = Logger();
   @override
   void initState() {
-    super.initState();
-    
     sessionLoad();
-    loadData();
+    //loadData();
+    super.initState();    
+  }
+
+  Future<Widget> loadSplash() async {
+    List<dynamic> template = await cacheGetTemplate('splash');
+    if((template != null) && (template is List) && (template.length > 0)) {
+      Site.template['splash'] = template;
+    }
+    return Layer.buildContent('splash', context, null, null);
   }
 
   loadData() async {
     String message = '';
     if(await Api.load()) {  
       return Timer(Duration(seconds: 1),() {
-        //Navigator.of(context).pushReplacementNamed('/home');
-        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => HomePage()));
+        Get.offAll(HomePage());
       });
     } else {
       message = 'รหัส Token ไม่ถูกต้อง';
@@ -52,27 +61,17 @@ class SplashScreenState extends State<_SplashPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(      
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [Color(0xFFFFFFFF),Color(0xFFDDDDDD),]
-        )
-      ),    
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          Image.asset('assets/splash-logo.png'),
-          SizedBox(
-            height: 50.0,
-          ),
-          CircularProgressIndicator(
-            valueColor: AlwaysStoppedAnimation<Color>(Colors.redAccent),
-          ),
-        ]
-      )
+    return FutureBuilder<Widget>(
+      future: loadSplash(),
+      builder: (BuildContext context, AsyncSnapshot<Widget> snapshot) {
+        if (snapshot.hasData) {
+          loadData();
+          return snapshot.data;
+        } else {
+          return IfDialog.getLoading();
+        }
+      },
     );
+    //Layer.buildContent('splash', context, null, null);
   }
 }

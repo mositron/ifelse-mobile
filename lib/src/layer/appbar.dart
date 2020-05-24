@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../site.dart';
 import '../convert/icon.dart';
 import '../convert/image.dart';
 import '../convert/gradient.dart';
@@ -16,7 +17,7 @@ AppBar getAppBar(dynamic obj, BuildContext buildContext,  Function appClick) {
     if(logoStyle == 'text') {
       _title = Text(
         getVal(logo, 'text') ?? '',
-        style: TextStyle(fontFamily: 'Kanit',fontSize: getDouble(getVal(logo,'size'), 16),color: getColor(getVal(logo,'color'),'fff'))
+        style: TextStyle(fontFamily: Site.font,fontSize: getDouble(getVal(logo,'size'), Site.fontSize),color: getColor(getVal(logo,'color'),'fff'))
       );
     } else if(logoStyle == 'image') {
       _title = Image.network(getImage(getVal(data,'image'),'s'));
@@ -26,7 +27,7 @@ AppBar getAppBar(dynamic obj, BuildContext buildContext,  Function appClick) {
         icon: Icon(
           getIcon(getVal(nav,'icon')),
           color: getColor(getVal(nav,'color'),'000'),
-          size: getDouble(getVal(nav,'size'),16),
+          size: getDouble(getVal(nav,'size'),Site.fontSize),
         ),      
         onPressed: () {
           appClick();

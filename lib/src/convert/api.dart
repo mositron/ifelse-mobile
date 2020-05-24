@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../site.dart';
 import '../my.dart';
 import 'util.dart';
@@ -80,7 +79,9 @@ class Api {
                 sessionWrite(session);
               }
               My.id = id;
-              My.name = data['name'].toString();
+              My.firstName = data['firstname'].toString();
+              My.lastName = data['lastname'].toString();
+              My.name = My.firstName + ' ' + My.lastName;
               My.email = data['email'].toString();
               My.image = data['image'].toString();
               My.session = session;

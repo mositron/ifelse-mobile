@@ -4,7 +4,7 @@ import 'gradient.dart';
 
 class IfDialog {
   bool _barrierDismissible = true;
-  BuildContext _context, _dismissingContext;
+  BuildContext _dismissingContext;
   bool _isShowing = false;
 
   static Widget getLoading() {
@@ -99,7 +99,7 @@ class IfDialog {
                       height: 10,
                     ),
                     text != null ?
-                      Text(text, style:TextStyle(fontFamily: 'Kanit')) :
+                      Text(text, style:TextStyle(fontFamily: Site.font)) :
                       widget
                   ],
                 ),
@@ -109,7 +109,7 @@ class IfDialog {
                       borderRadius: BorderRadius.circular(40),
                     ),
                     color: Colors.white,
-                    child: Text('ปิด', style:TextStyle(fontFamily: 'Kanit')),
+                    child: Text('ปิด', style:TextStyle(fontFamily: Site.font)),
                     onPressed: () {
                       Navigator.of(context).pop();
                     },

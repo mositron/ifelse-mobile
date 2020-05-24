@@ -4,6 +4,8 @@ import 'package:flutter/cupertino.dart';
 class My {
   static int id = 0;
   static String name = '',
+    firstName = '',
+    lastName = '',
     image = '',
     email = '',
     session = '';

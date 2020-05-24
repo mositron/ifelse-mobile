@@ -91,7 +91,6 @@ Widget getImageRatio(dynamic obj, String size, double ratio) {
     dynamic img =  getImageObj(obj, size);
     if(img != null) {
       if(ratio > 0) {
-        //Site.log.i(img);
         return AspectRatio(
           aspectRatio: ratio,
             child: ClipRect(

@@ -1,6 +1,7 @@
 
 import 'package:flutter/widgets.dart';
 import '../layer.dart';
+import '../site.dart';
 import '../convert/gradient.dart';
 import '../convert/shadow.dart';
 import '../convert/border.dart';
@@ -14,7 +15,7 @@ class PriceParser extends WidgetParser {
     dynamic data = getVal(map,'data');
     dynamic normal = getVal(data,'price.normal');
     Color normalColor  = getColor(getVal(normal,'color'),'000');
-    double normalSize  = getDouble(getVal(normal,'size'),16);    
+    double normalSize  = getDouble(getVal(normal,'size'),Site.fontSize);    
     dynamic over = getVal(data,'price.over');
     Color overColor  = getColor(getVal(over,'color'),'000');
     double overSize  = getDouble(getVal(over,'size'),14);
@@ -83,7 +84,7 @@ class PriceParser extends WidgetParser {
           child: Text.rich(
             TextSpan(
               text: '฿'+getCurrency(_price[1]),
-              style: TextStyle(color: Color(0xffffffff),fontSize: 16),
+              style: TextStyle(color: Color(0xffffffff),fontSize: Site.fontSize),
             )
           )
         );

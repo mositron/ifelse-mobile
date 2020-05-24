@@ -2,7 +2,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import '../layer.dart';
-import '../site.dart';
 import '../convert/image.dart';
 import '../convert/gradient.dart';
 import '../convert/shadow.dart';

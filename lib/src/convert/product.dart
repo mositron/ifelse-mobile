@@ -1,7 +1,7 @@
 import 'dart:async';
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import '../site.dart';
 import 'api.dart';
 import 'align.dart';
 import 'image.dart';
@@ -67,12 +67,12 @@ class Product {
     List<BoxShadow> boxShadow = getBoxShadow(getVal(dataBox,'shadow'));
     Gradient gradient  = getGradient(getVal(dataBox,'bg.color'));
     Color textColor  = getColor(getVal(data,'color'),'000');
-    double textSize  = getDouble(getVal(data,'fsize'),16);    
+    double textSize  = getDouble(getVal(data,'fsize'),Site.fontSize);    
     String colDirect = getVal(data,'col.direct').toString();
     double colHeight  = getDouble(getVal(data,'col.height'),200);
     dynamic normal = getVal(data,'price.normal');
     Color normalColor  = getColor(getVal(normal,'color'),'000');
-    double normalSize  = getDouble(getVal(normal,'size'),16);    
+    double normalSize  = getDouble(getVal(normal,'size'),Site.fontSize);    
     dynamic over = getVal(data,'price.over');
     Color overColor  = getColor(getVal(over,'color'),'000');
     double overSize  = getDouble(getVal(over,'size'),14);    
@@ -235,7 +235,7 @@ class Cell extends StatelessWidget {
                   textAlign: contentAlign,
                   overflow: TextOverflow.ellipsis,
                   maxLines: contentLine > 0 ? contentLine : 5,
-                  style: TextStyle(color: textColor, fontSize: textSize, fontFamily:'Kanit', height: 1.5),
+                  style: TextStyle(color: textColor, fontSize: textSize, fontFamily:Site.font, height: 1.5),
             )
           ), 
       ];
@@ -312,7 +312,7 @@ class Cell extends StatelessWidget {
             child: Text.rich(
               TextSpan(
                 text: '฿' + getCurrency(cellProduct.price[1]),
-                style: TextStyle(color: Color(0xffffffff),fontSize: 16),
+                style: TextStyle(color: Color(0xffffffff),fontSize: Site.fontSize),
               ),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,

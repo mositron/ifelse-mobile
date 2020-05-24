@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:get/get.dart';
 import '../site.dart';
 import '../page/home.dart';
 import '../convert/util.dart';
@@ -77,12 +78,12 @@ class _DemoPageState extends State<DemoPage> with SingleTickerProviderStateMixin
         ),
         SizedBox(height: 30.0,),
         DelayedAnimation(
-          child: Text('นี่คือแอพทดสอบ',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 22,color: Colors.white,fontFamily: 'Kanit'),),
+          child: Text('นี่คือแอพทดสอบ',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 22,color: Colors.white,fontFamily: Site.font),),
           delay: delayedAmount + 1000,
         ),
         SizedBox(height: 5.0,),
         DelayedAnimation(
-          child: Text('หากกำหนดค่า Token ในโค๊ดจะไม่เห็นหน้าต่างนี้',style: TextStyle(fontSize: 16,color: Colors.white,fontFamily: 'Kanit'),),
+          child: Text('หากกำหนดค่า Token ในโค๊ดจะไม่เห็นหน้าต่างนี้',style: TextStyle(fontSize: Site.fontSize,color: Colors.white,fontFamily: Site.font),),
           delay: delayedAmount + 1500,
         ),
         DelayedAnimation(
@@ -99,11 +100,11 @@ class _DemoPageState extends State<DemoPage> with SingleTickerProviderStateMixin
           delay: delayedAmount + 2250,
         ),
         DelayedAnimation(
-          child: Text('กรุณาใส่รหัส Token',style: TextStyle(fontSize: 16.0, color: Colors.white,fontFamily: 'Kanit'),),
+          child: Text('กรุณาใส่รหัส Token',style: TextStyle(fontSize: Site.fontSize, color: Colors.white,fontFamily: Site.font),),
           delay: delayedAmount + 2500,
         ),
         DelayedAnimation(
-          child: Text('ที่ได้รับจากระบบจัดการแอพของคุณ', style: TextStyle(fontSize: 16.0, color: Colors.white, fontFamily: 'Kanit'),),
+          child: Text('ที่ได้รับจากระบบจัดการแอพของคุณ', style: TextStyle(fontSize: Site.fontSize, color: Colors.white, fontFamily: Site.font),),
           delay: delayedAmount + 2750,
         ),
         SizedBox(height: 20.0,),
@@ -115,7 +116,7 @@ class _DemoPageState extends State<DemoPage> with SingleTickerProviderStateMixin
               controller: tokenControler,
               obscureText: false,
               textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.white, decorationColor: Colors.white, fontFamily: 'Kanit',),
+              style: TextStyle(color: Colors.white, decorationColor: Colors.white, fontFamily: Site.font,),
               decoration: InputDecoration(
                 hintText: 'กรอกรหัส 10 ตัวอักษร',                                    
                 //fillColor: Color(0xffff5717),
@@ -151,7 +152,7 @@ class _DemoPageState extends State<DemoPage> with SingleTickerProviderStateMixin
         ),       
       SizedBox(height: 15.0,),
         DelayedAnimation(
-          child: Text('หรือทดสอบค่าเริ่มต้นของแอพ', style: TextStyle(fontSize: 16.0, color: Colors.white, fontFamily: 'Kanit'),),
+          child: Text('หรือทดสอบค่าเริ่มต้นของแอพ', style: TextStyle(fontSize: Site.fontSize, color: Colors.white, fontFamily: Site.font),),
           delay: delayedAmount + 3500,
         ),
       SizedBox(height: 10.0,),
@@ -189,9 +190,9 @@ class _DemoPageState extends State<DemoPage> with SingleTickerProviderStateMixin
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(getIcon('info'), color: Colors.white, size: 16,),
+                Icon(getIcon('info'), color: Colors.white, size: Site.fontSize),
                 SizedBox(width: 8),
-                Text('คู่มือการใช้งานเพิ่มเติม คลิกที่นี่', style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold, color: Colors.white, fontFamily: 'Kanit'),)
+                Text('คู่มือการใช้งานเพิ่มเติม คลิกที่นี่', style: TextStyle(fontSize: Site.fontSize, fontWeight: FontWeight.bold, color: Colors.white, fontFamily: Site.font),)
               ]
             )
           ),
@@ -214,7 +215,7 @@ class _DemoPageState extends State<DemoPage> with SingleTickerProviderStateMixin
             children: [
               Icon(getIcon('arrow-right'), color: Color(0xFFFF5717), size: 20,),
               SizedBox(width: 8),
-              Text('เริ่มทดสอบ !', style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold, color: Color(0xFFFF5717), fontFamily: 'Kanit'),)
+              Text('เริ่มทดสอบ !', style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold, color: Color(0xFFFF5717), fontFamily: Site.font),)
             ]
           )
         ),
@@ -233,7 +234,7 @@ class _DemoPageState extends State<DemoPage> with SingleTickerProviderStateMixin
             children: [
               Icon(getIcon('badge'), color: Colors.white, size: 20,),
               SizedBox(width: 8),
-              Text('ดูตัวอย่าง (ค่าเริ่มต้น)', style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold, color: Colors.white, fontFamily: 'Kanit'),)
+              Text('ดูตัวอย่าง (ค่าเริ่มต้น)', style: TextStyle(fontSize: Site.fontSize, fontWeight: FontWeight.bold, color: Colors.white, fontFamily: Site.font),)
             ]
           )
         ),
@@ -263,7 +264,8 @@ class _DemoPageState extends State<DemoPage> with SingleTickerProviderStateMixin
     String message = '';
     if(await Api.load()) {  
       return Timer(Duration(seconds: 1),() {
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()));
+        Get.offAll(HomePage());
+        //Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()));
       });
     } else {
       message = 'รหัส Token ไม่ถูกต้อง';
@@ -297,14 +299,9 @@ class _DelayedAnimationState extends State<DelayedAnimation>
   void initState() {
     super.initState();
 
-    _controller =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 800));
-    final curve =
-        CurvedAnimation(curve: Curves.decelerate, parent: _controller);
-    _animOffset =
-        Tween<Offset>(begin: const Offset(0.0, 0.35), end: Offset.zero)
-            .animate(curve);
-
+    _controller = AnimationController(vsync: this, duration: Duration(milliseconds: 800));
+    final curve =  CurvedAnimation(curve: Curves.decelerate, parent: _controller);
+    _animOffset = Tween<Offset>(begin: const Offset(0.0, 0.35), end: Offset.zero).animate(curve);
     if (widget.delay == null) {
       _controller.forward();
     } else {

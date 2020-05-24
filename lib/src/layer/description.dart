@@ -1,6 +1,7 @@
 
 import 'package:flutter/widgets.dart';
 import '../layer.dart';
+import '../site.dart';
 import '../convert/gradient.dart';
 import '../convert/shadow.dart';
 import '../convert/border.dart';
@@ -14,7 +15,7 @@ class DescriptionParser extends WidgetParser {
     dynamic box = getVal(map,'box'),
       data = getVal(map,'data');
     String text = getVal(par,'detail') ?? '';
-    double fsize = getDouble(getVal(data,'size'), 16);
+    double fsize = getDouble(getVal(data,'size'), Site.fontSize);
     Color color = getColor(getVal(data,'color'));
     TextAlign align = getAlignText(getVal(data,'align'));    
     List<Widget> list = [];
@@ -27,7 +28,7 @@ class DescriptionParser extends WidgetParser {
             alignment: Alignment.centerLeft,
             child: Text(
               '• ' + line[i],
-              style: TextStyle(fontFamily: 'Kanit',fontSize: fsize, color: color),
+              style: TextStyle(fontFamily: Site.font,fontSize: fsize, color: color),
               textAlign: align,
             )
           )

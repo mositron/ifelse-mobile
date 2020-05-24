@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../my.dart';
+import '../site.dart';
 import '../convert/util.dart';
 import '../convert/gradient.dart';
 import '../convert/icon.dart';
@@ -7,6 +9,7 @@ import '../convert/image.dart';
 import '../convert/session.dart';
 import '../page/login.dart';
 import '../page/home.dart';
+import '../page/profile.dart';
 
 class GetDrawer extends StatefulWidget {
   final dynamic map;
@@ -49,8 +52,8 @@ class _Drawer extends State<GetDrawer> {
 }
 
 Widget _logged(BuildContext context, Color profileColor, Gradient profileBg, Color menuIcon, Color menuColor, Gradient menuBg) {
-  TextStyle _profile = TextStyle(color:profileColor, fontFamily: 'Kanit');
-  TextStyle _menu = TextStyle(color:menuColor, fontFamily: 'Kanit');
+  TextStyle _profile = TextStyle(color:profileColor, fontFamily: Site.font);
+  TextStyle _menu = TextStyle(color:menuColor, fontFamily: Site.font);
   return Column(
     children: <Widget>[
       Container (
@@ -69,23 +72,30 @@ Widget _logged(BuildContext context, Color profileColor, Gradient profileBg, Col
         )
       ),
       ListTile(
-        leading: Icon(getIcon('logout'), color: menuIcon, size: 16),
+        leading: Icon(getIcon('id-card'), color: menuIcon, size: Site.fontSize),
+        title: Text('ข้อมูลส่วนตัว', style: _menu),
+        onTap: () {
+          Navigator.of(context).pop(context);
+          Get.to(ProfilePage());
+        },
+      ),
+      ListTile(
+        leading: Icon(getIcon('logout'), color: menuIcon, size: Site.fontSize),
         title: Text('ออกจากระบบ', style: _menu),
         onTap: () {
           sessionDelete();
-          Navigator.of(context).pop(context);
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) => HomePage()));
+          Get.offAll(HomePage());
+          //Navigator.of(context).pop(context);
+          //Navigator.of(context).push(MaterialPageRoute(builder: (context) => HomePage()));
         },
       )
     ]
   );
 }
 Widget _login(BuildContext context, Color profileColor, Gradient profileBg, Color menuIcon, Color menuColor, Gradient menuBg) {
-  TextStyle _profile = TextStyle(color:profileColor, fontFamily: 'Kanit');
-  TextStyle _menu = TextStyle(color:menuColor, fontFamily: 'Kanit');
-
+  TextStyle _profile = TextStyle(color:profileColor, fontFamily: Site.font);
+  TextStyle _menu = TextStyle(color:menuColor, fontFamily: Site.font);
   return ListView(
-    // Important: Remove any padding from the ListView.
     padding: EdgeInsets.zero,
     children: <Widget>[
       Container (
@@ -110,11 +120,13 @@ Widget _login(BuildContext context, Color profileColor, Gradient profileBg, Colo
         )
       ),
       ListTile(
-        leading: Icon(getIcon('sign-in'), color: menuIcon, size: 16),
+        leading: Icon(getIcon('sign-in'), color: menuIcon, size: Site.fontSize),
         title: Text('ล็อคอิน / สมัครสมาชิก', style: _menu),
         onTap: () {
+          //Get.to(LoginPage());
           Navigator.of(context).pop(context);
-          Navigator.of(context).push(MaterialPageRoute(builder: (context) => LoginPage()));
+          Get.to(LoginPage());
+          //Navigator.of(context).push(MaterialPageRoute(builder: (context) => LoginPage()));
         },
       )
     ]

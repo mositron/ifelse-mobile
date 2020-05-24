@@ -1,6 +1,7 @@
 
 import 'package:flutter/widgets.dart';
 import '../layer.dart';
+import '../site.dart';
 import '../convert/gradient.dart';
 import '../convert/shadow.dart';
 import '../convert/border.dart';
@@ -37,7 +38,7 @@ class HeadingParser extends WidgetParser {
         width: double.infinity,
         child: Text(
           text,
-          style: TextStyle(fontFamily: 'Kanit',fontSize: getDouble(getVal(data,'size'), 16),color: getColor(getVal(data,'color'))),
+          style: TextStyle(fontFamily: Site.font,fontSize: getDouble(getVal(data,'size'), Site.fontSize),color: getColor(getVal(data,'color'))),
           textAlign: getAlignText(getVal(data,'align')),
         )
       )

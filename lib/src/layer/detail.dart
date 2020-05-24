@@ -1,6 +1,7 @@
 
 import 'package:flutter/widgets.dart';
 import '../layer.dart';
+import '../site.dart';
 import '../convert/gradient.dart';
 import '../convert/shadow.dart';
 import '../convert/border.dart';
@@ -14,7 +15,7 @@ class DetailParser extends WidgetParser {
     dynamic box = getVal(map,'box'),
       data = getVal(map,'data');
     Color _color = getColor(getVal(data,'color'), '000');
-    double _fSize = getDouble(getVal(data,'size') ?? 16);
+    double _fSize = getDouble(getVal(data,'size') ?? Site.fontSize);
     return Container(
       decoration: BoxDecoration(
         gradient: getGradient(getVal(box,'bg.color')),

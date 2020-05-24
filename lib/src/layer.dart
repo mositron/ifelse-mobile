@@ -81,22 +81,47 @@ class Layer {
 
   static Widget buildContent(String file, BuildContext buildContext, [Map<String, dynamic> par, Function func]) {
     init();
-    if(Site.template[file] is List) {
+    if((Site.template[file] != null) && (Site.template[file] is List)) {
       List page = Site.template[file];
       if(page.length > 0) {
         return PageWidget(buildContext: buildContext, file: file, par: par, func: func);
       }
     }
-    return Center(
-      child: Container(
-        color: getColor('f5f5f5'),
-        alignment: Alignment.center,
-        child: Text('ยังไม่ได้สร้างเทมเพลทสำหรับหน้า 2 - '+file, 
-          textAlign: TextAlign.center,
-          style: TextStyle(color: getColor('c00'),fontFamily: 'Kanit', fontSize: 30),
+    if(file == 'splash') {
+      return Container(      
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [Color(0xFFFFFFFF),Color(0xFFDDDDDD),]
+          )
+        ),    
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Image.asset('assets/splash-logo.png'),
+            SizedBox(
+              height: 50.0,
+            ),
+            CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.redAccent),
+            ),
+          ]
         )
-      )    
-    );
+      );
+    } else {
+      return Center(
+        child: Container(
+          color: getColor('f5f5f5'),
+          alignment: Alignment.center,
+          child: Text('ยังไม่ได้สร้างเทมเพลทสำหรับหน้า 2 - '+file, 
+            textAlign: TextAlign.center,
+            style: TextStyle(color: getColor('c00'),fontFamily: Site.font, fontSize: 30),
+          )
+        )    
+      );
+    }
   }
 
   static Widget buildBody(String file, BuildContext buildContext, [Map<String, dynamic> par, Function func]) {
@@ -124,7 +149,7 @@ class Layer {
         alignment: Alignment.center,
         child: Text('ยังไม่ได้สร้างเทมเพลทสำหรับหน้า 4 - '+file, 
           textAlign: TextAlign.center,
-          style: TextStyle(color: getColor('c00'),fontFamily: 'Kanit', fontSize: 30),
+          style: TextStyle(color: getColor('c00'),fontFamily: Site.font, fontSize: 30),
         )
       )    
     );

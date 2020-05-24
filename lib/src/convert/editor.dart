@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:html/dom.dart' as dom;
+import '../site.dart';
 import 'util.dart';
-import '../convert/image.dart';
+import 'image.dart';
 
 List<Widget> getEditor(dynamic data, Color color, double size) {
   List<Widget> widget = [];
@@ -38,7 +39,7 @@ Widget _parse(String html,Color color, double fontSize) {
   return Html(
     data: html,
     customTextStyle: (dom.Node node, TextStyle baseStyle) {
-      return baseStyle.merge(TextStyle(fontSize: fontSize, fontFamily:'Kanit', color: color));
+      return baseStyle.merge(TextStyle(fontSize: fontSize, fontFamily:Site.font, color: color));
     },
     linkStyle: TextStyle(
       decoration: TextDecoration.underline,

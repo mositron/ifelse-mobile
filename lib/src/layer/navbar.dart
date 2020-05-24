@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../site.dart';
 import '../convert/icon.dart';
 import '../convert/gradient.dart';
 import '../convert/shadow.dart';
@@ -38,13 +39,13 @@ class _NavBar extends State<NavBar> {
         items = getVal(data,'items');
       List<BottomNavigationBarItem> _item = [];
       Color dataTextColor = getColor(getVal(data,'text.color'),'000');
-      double dataTextSize = getDouble(getVal(data,'text.size'),16);
+      double dataTextSize = getDouble(getVal(data,'text.size'),Site.fontSize);
       Color dataIconColor = getColor(getVal(data,'icon.color'),'000');
-      double dataIconSize = getDouble(getVal(data,'icon.size'),16);
+      double dataIconSize = getDouble(getVal(data,'icon.size'),Site.fontSize);
       Color hoverTextColor = getColor(getVal(hover,'text.color'),'000');
-      double hoverTextSize = getDouble(getVal(hover,'text.size'),16);
+      double hoverTextSize = getDouble(getVal(hover,'text.size'),Site.fontSize);
       Color hoverIconColor = getColor(getVal(hover,'icon.color'),'000');
-      double hoverIconSize = getDouble(getVal(hover,'icon.size'),16);
+      double hoverIconSize = getDouble(getVal(hover,'icon.size'),Site.fontSize);
       if((items != null) && (items is List)) {
         for(int i=0; i<items.length; i++) {
           Map v = items[i];
@@ -68,11 +69,11 @@ class _NavBar extends State<NavBar> {
             backgroundColor: Colors.transparent,
             selectedItemColor: hoverIconColor,
             selectedFontSize: hoverTextSize,
-            selectedLabelStyle: TextStyle(fontSize: hoverTextSize, color: hoverTextColor, fontFamily: 'Kanit'),
+            selectedLabelStyle: TextStyle(fontSize: hoverTextSize, color: hoverTextColor, fontFamily: Site.font),
             selectedIconTheme: IconThemeData(size: hoverIconSize, color: hoverIconColor),
             unselectedItemColor: dataTextColor,
             unselectedFontSize: dataTextSize,
-            unselectedLabelStyle: TextStyle(fontSize: dataTextSize, color: dataTextColor, fontFamily: 'Kanit'),
+            unselectedLabelStyle: TextStyle(fontSize: dataTextSize, color: dataTextColor, fontFamily: Site.font),
             unselectedIconTheme: IconThemeData(size: dataIconSize, color: dataIconColor),
             elevation: 0,
             currentIndex: selectedIndex,

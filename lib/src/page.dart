@@ -37,7 +37,7 @@ class _PageWidgetState extends State<PageWidget> {
   double _offsetTop = 0;
   double _offsetBottom = 0;
   List<Widget> _pages = <Widget>[];
-  BuildContext buildContext, _context;
+  BuildContext buildContext;
   GlobalKey<ScaffoldState> _drawerKey = GlobalKey();
 
   _PageWidgetState(this.buildContext, this.file, this.par, this.func);
@@ -114,7 +114,6 @@ class _PageWidgetState extends State<PageWidget> {
         _drawer = (_showAppbar > 0 ? GetDrawer(getVal(child,'appbar'), context) : null);
         //data.nav.style
         getPage(true);
-        _context = context;
         return Container(        
           decoration: BoxDecoration(
             gradient: getGradient(getVal(_box,'bg.color')),
@@ -154,7 +153,7 @@ class _PageWidgetState extends State<PageWidget> {
         alignment: Alignment.center,
         child: Text('ยังไม่ได้สร้างเทมเพลทสำหรับหน้า 1 - '+file, 
           textAlign: TextAlign.center,
-          style: TextStyle(color: getColor('c00'),fontFamily: 'Kanit', fontSize: 24),
+          style: TextStyle(color: getColor('c00'),fontFamily: Site.font, fontSize: 24),
         )
       )    
     );
@@ -164,9 +163,7 @@ class _PageWidgetState extends State<PageWidget> {
     if(file == 'home') {
       _drawerKey.currentState.openDrawer();
     } else {
-      //SystemNavigator.pop();
       Get.back();
-      //Navigator.of(_context).pop();
     }
   }
 

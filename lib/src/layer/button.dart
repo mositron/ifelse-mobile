@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:logger/logger.dart';
 import '../layer.dart';
+import '../site.dart';
 import '../convert/util.dart';
 import '../convert/align.dart';
 import '../convert/gradient.dart';
@@ -25,12 +26,12 @@ class ButtonParser extends WidgetParser {
       ipos = getVal(data,'ipos').toString(),
       spec = getVal(map,'spec');
     Color _color = getColor(getVal(data,'color'));
-    double _fSize = getDouble(getVal(data,'size') ?? 16);
+    double _fSize = getDouble(getVal(data,'size') ?? Site.fontSize);
     List<Widget> widget = [];
     IconData icon = getIcon(getVal(data,'icon'));
     String text = getVal(data,'text').toString();
     Icon _icon = Icon(icon, color: _color, size: _fSize,);
-    Text _text = Text(text, style: TextStyle(color:_color,fontFamily: 'Kanit', fontSize: _fSize));
+    Text _text = Text(text, style: TextStyle(color:_color,fontFamily: Site.font, fontSize: _fSize));
     
     if(tmp is Map) {
       click = tmp;

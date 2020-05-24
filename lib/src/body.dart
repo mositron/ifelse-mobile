@@ -30,7 +30,7 @@ class _BodyWidgetState extends State<BodyWidget> {
         alignment: Alignment.center,
         child: Text('ยังไม่ได้สร้างเทมเพลทสำหรับหน้า 3 - '+file, 
           textAlign: TextAlign.center,
-          style: TextStyle(color: getColor('c00'),fontFamily: 'Kanit', fontSize: 24),
+          style: TextStyle(color: getColor('c00'),fontFamily: Site.font, fontSize: 24),
         )
       )    
     );
