@@ -1,9 +1,13 @@
 import 'dart:io';
+import 'dart:convert';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:get/get.dart';
 import '../site.dart';
 import '../my.dart';
+import '../convert/api.dart';
+import '../convert/dialog.dart';
 
 class ProfilePage extends StatelessWidget {
   ProfilePage({Key key, this.par}) : super(key: key);
@@ -32,44 +36,63 @@ class ProfileScreenState extends State<_ProfilePage> with SingleTickerProviderSt
   final FocusNode myFocusNode = FocusNode();
   TextEditingController controllerFirstName;
   TextEditingController controllerLastName;
-  
-  final TextEditingController maxWidthController = TextEditingController();
-  final TextEditingController maxHeightController = TextEditingController();
-  final TextEditingController qualityController = TextEditingController();
   File _imageFile;
-  dynamic _pickImageError;
 
   @override
   void initState() {
     super.initState();
-    controllerFirstName = new TextEditingController(text: My.firstName);
-    controllerLastName = new TextEditingController(text: My.lastName);
+    controllerFirstName = TextEditingController(text: My.firstName);
+    controllerLastName = TextEditingController(text: My.lastName);
   }
 
-  void _onImageButtonPressed(ImageSource source, {BuildContext context}) async {
+  void _uploadProfile(ImageSource source, {BuildContext context}) async {
     try {
       _imageFile = await ImagePicker.pickImage(
           source: source,
           maxWidth: 300,
           maxHeight: 300,
           imageQuality: 80);
-      setState(() {
-
-        Site.log.i(_imageFile.path);
-
+      IfDialog().loading(context);
+      final response = await Api.call('upload', {
+        'type': 'profile',
+        'image': base64Encode(_imageFile.readAsBytesSync())
       });
+      Site.log.i(response);
+      if((response != null) && (response is Map)) {
+        setState(() {
+          My.image += '?' + Random.secure().nextInt(9999999).toString();
+        });
+      }
     } catch (e) {
-      _pickImageError = e;
+      
     }
+    Navigator.of(context, rootNavigator: true).pop('dialog');
   }
 
+  void _saveProfile() async {
+    try {
+      IfDialog().loading(context);
+      await Api.call('profile', {
+        'type': 'save',
+        'firstname': controllerFirstName.text,
+        'lastname': controllerLastName.text,
+      });
+      setState(() {
+        controllerFirstName.text = My.firstName;
+        controllerLastName.text = My.lastName;
+      });
+    } catch (e) {
+      
+    }
+    Navigator.of(context, rootNavigator: true).pop('dialog');
+  }
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-        body: new Container(
+    return Scaffold(
+        body: Container(
       color: Colors.white,
-      child: new ListView(
+      child: ListView(
         children: <Widget>[
           Column(
             children: <Widget>[
@@ -112,15 +135,16 @@ class ProfileScreenState extends State<_ProfilePage> with SingleTickerProviderSt
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             Container(
-                                width: 140.0,
-                                height: 140.0,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  image: DecorationImage(
-                                    image:  Image.network(My.image).image,
-                                    fit: BoxFit.cover,
-                                  ),
-                                )),
+                              width: 150.0,
+                              height: 150.0,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: DecorationImage(
+                                  image: Image.network(My.image).image,
+                                  fit: BoxFit.cover,
+                                ),
+                              )
+                            ),
                           ],
                         ),
                         Padding(
@@ -130,7 +154,7 @@ class ProfileScreenState extends State<_ProfilePage> with SingleTickerProviderSt
                               children: <Widget>[
                                 GestureDetector(
                                   onTap: () {
-                                    _onImageButtonPressed(ImageSource.gallery, context: context);
+                                    _uploadProfile(ImageSource.gallery, context: context);
                                   },
                                   child: CircleAvatar(
                                     backgroundColor: Colors.red,
@@ -157,37 +181,29 @@ class ProfileScreenState extends State<_ProfilePage> with SingleTickerProviderSt
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
                       Padding(
-                          padding: EdgeInsets.only(
-                              left: 25.0, right: 25.0, top: 25.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            mainAxisSize: MainAxisSize.max,
-                            children: <Widget>[
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                mainAxisSize: MainAxisSize.min,
-                                children: <Widget>[
-                                  Text(
-                                    'ข้อมูลส่วนตัว',
-                                    style: TextStyle(
-                                        fontSize: 18.0,
-                                        fontFamily: Site.font,
-                                        fontWeight: FontWeight.bold),
-                                  ),
-                                ],
-                              ),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                mainAxisSize: MainAxisSize.min,
-                                children: <Widget>[
-                                  _status ? _getEditIcon() : Container(),
-                                ],
-                              )
-                            ],
-                          )),
+                        padding: EdgeInsets.only(left: 25.0, right: 25.0, top: 25.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisSize: MainAxisSize.max,
+                          children: <Widget>[
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                Text('ข้อมูลส่วนตัว', style: TextStyle(fontSize: 18.0,fontFamily: Site.font,fontWeight: FontWeight.bold)),
+                              ],
+                            ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                _status ? _getEditIcon() : Container(),
+                              ],
+                            )
+                          ],
+                        )),
                       Padding(
-                          padding: EdgeInsets.only(
-                              left: 25.0, right: 25.0, top: 25.0),
+                          padding: EdgeInsets.only(left: 25.0, right: 25.0, top: 25.0),
                           child: Row(
                             mainAxisSize: MainAxisSize.max,
                             children: <Widget>[
@@ -201,8 +217,7 @@ class ProfileScreenState extends State<_ProfilePage> with SingleTickerProviderSt
                             ],
                           )),
                       Padding(
-                          padding: EdgeInsets.only(
-                              left: 25.0, right: 25.0, top: 2.0),
+                          padding: EdgeInsets.only(left: 25.0, right: 25.0, top: 2.0),
                           child: Row(
                             mainAxisSize: MainAxisSize.max,
                             children: <Widget>[
@@ -213,14 +228,12 @@ class ProfileScreenState extends State<_ProfilePage> with SingleTickerProviderSt
                                   decoration: InputDecoration(hintText: 'ชื่อจริง',),
                                   enabled: !_status,
                                   autofocus: !_status,
-                                  
                                 ),
                               ),
                             ],
                           )),
                       Padding(
-                          padding: EdgeInsets.only(
-                              left: 25.0, right: 25.0, top: 25.0),
+                          padding: EdgeInsets.only(left: 25.0, right: 25.0, top: 25.0),
                           child: Row(
                             mainAxisSize: MainAxisSize.max,
                             children: <Widget>[
@@ -228,20 +241,13 @@ class ProfileScreenState extends State<_ProfilePage> with SingleTickerProviderSt
                                 mainAxisAlignment: MainAxisAlignment.start,
                                 mainAxisSize: MainAxisSize.min,
                                 children: <Widget>[
-                                  Text(
-                                    'นามสกุล',
-                                    style: TextStyle(
-                                        fontSize: Site.fontSize,
-                                        fontFamily: Site.font,
-                                        fontWeight: FontWeight.bold),
-                                  ),
+                                  Text('นามสกุล', style: TextStyle(fontSize: Site.fontSize, fontFamily: Site.font, fontWeight: FontWeight.bold)),
                                 ],
                               ),
                             ],
                           )),
                       Padding(
-                          padding: EdgeInsets.only(
-                              left: 25.0, right: 25.0, top: 2.0),
+                          padding: EdgeInsets.only(left: 25.0, right: 25.0, top: 2.0),
                           child: Row(
                             mainAxisSize: MainAxisSize.max,
                             children: <Widget>[
@@ -270,15 +276,16 @@ class ProfileScreenState extends State<_ProfilePage> with SingleTickerProviderSt
 
   @override
   void dispose() {
-    // Clean up the controller when the Widget is disposed
     myFocusNode.dispose();
+    controllerFirstName.dispose();
+    controllerLastName.dispose();
     super.dispose();
   }
 
   Widget _getActionButtons() {
     return Padding(
       padding: EdgeInsets.only(left: 25.0, right: 25.0, top: 45.0),
-      child: new Row(
+      child: Row(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
@@ -286,18 +293,18 @@ class ProfileScreenState extends State<_ProfilePage> with SingleTickerProviderSt
             child: Padding(
               padding: EdgeInsets.only(right: 10.0),
               child: Container(
-                  child: new RaisedButton(
-                child: new Text("Save"),
+                  child: RaisedButton(
+                child: Text(' บันทึก '),
                 textColor: Colors.white,
-                color: Colors.green,
+                color: Color(0xffff5717),
                 onPressed: () {
                   setState(() {
                     _status = true;
-                    FocusScope.of(context).requestFocus(new FocusNode());
+                    FocusScope.of(context).requestFocus(FocusNode());
+                    _saveProfile();
                   });
                 },
-                shape: new RoundedRectangleBorder(
-                    borderRadius: new BorderRadius.circular(20.0)),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
               )),
             ),
             flex: 2,
@@ -306,18 +313,17 @@ class ProfileScreenState extends State<_ProfilePage> with SingleTickerProviderSt
             child: Padding(
               padding: EdgeInsets.only(left: 10.0),
               child: Container(
-                  child: new RaisedButton(
-                child: new Text("Cancel"),
-                textColor: Colors.white,
-                color: Colors.red,
+                  child: RaisedButton(
+                child: Text(' ยกเลิก '),
+                textColor: Colors.black,
+                color: Color(0xffcccccc),
                 onPressed: () {
                   setState(() {
                     _status = true;
-                    FocusScope.of(context).requestFocus(new FocusNode());
+                    FocusScope.of(context).requestFocus(FocusNode());
                   });
                 },
-                shape: new RoundedRectangleBorder(
-                    borderRadius: new BorderRadius.circular(20.0)),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
               )),
             ),
             flex: 2,
@@ -328,11 +334,11 @@ class ProfileScreenState extends State<_ProfilePage> with SingleTickerProviderSt
   }
 
   Widget _getEditIcon() {
-    return new GestureDetector(
-      child: new CircleAvatar(
+    return GestureDetector(
+      child: CircleAvatar(
         backgroundColor: Colors.red,
         radius: 14.0,
-        child: new Icon(
+        child: Icon(
           Icons.edit,
           color: Colors.white,
           size: 16.0,

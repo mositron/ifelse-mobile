@@ -58,7 +58,7 @@ Widget _logged(BuildContext context, Color profileColor, Gradient profileBg, Col
     children: <Widget>[
       Container (
         decoration: BoxDecoration(
-          gradient: profileBg
+          gradient: profileBg,
         ),
         padding: EdgeInsets.all(10),
         margin: EdgeInsets.all(0),
@@ -68,7 +68,17 @@ Widget _logged(BuildContext context, Color profileColor, Gradient profileBg, Col
           ),
           accountName: Text(My.name, style: _profile),
           accountEmail: Text(My.email, style: _profile),
-          currentAccountPicture: getImageWidget(My.image),
+          currentAccountPicture: Container(
+            width: 150.0,
+            height: 150.0,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              image: DecorationImage(
+                image: Image.network(My.image).image,
+                fit: BoxFit.cover,
+              ),
+            )
+          ),
         )
       ),
       ListTile(

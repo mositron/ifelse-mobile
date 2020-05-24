@@ -13,6 +13,7 @@ class Api {
         'token': Site.token,
         'session': My.session,
       };
+    
     if(map != null) {
       request.addAll(map);
     }
@@ -21,10 +22,13 @@ class Api {
       headers: {'user-agent': 'ifelse.co-' + Site.version},
       body: request
     );
+
+    print(response.body);
+    print(response.statusCode);
     try {
       if (response.statusCode == 200) {
         Map<String, dynamic> resp = json.decode(response.body);
-        getMy(resp, true);
+        getMy(resp, method);
         return resp;
       } else if (response.statusCode == 401) {
         return null;
@@ -40,6 +44,7 @@ class Api {
       }
     } catch (e) {
       Site.log.w(e);
+      Site.log.w(response.body);
       return null;
     }
   }
@@ -63,7 +68,7 @@ class Api {
     }
   }
 
-  static void getMy(Map<String, dynamic> resp, [bool login]) async {
+  static void getMy(Map<String, dynamic> resp, String method) async {
     if((resp['session'] != null) && (resp['session'] is String)) {
       String session = resp['session'].toString();
       if(session.length > 0) {
@@ -75,7 +80,7 @@ class Api {
           if((data != null) && (data is Map)) {
             int id = getInt(data['id']);
             if(id > 0) {
-              if(id != My.id) {
+              if((id != My.id) || (method == 'profile')) {
                 sessionWrite(session);
               }
               My.id = id;
