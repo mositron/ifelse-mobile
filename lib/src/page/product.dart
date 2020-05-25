@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../site.dart';
 import '../layer.dart';
 import '../convert/product.dart';
 import '../convert/dialog.dart';
 import '../convert/util.dart';
+import '../bloc/cart.dart';
 
 class ProductPage extends StatelessWidget {
   ProductPage({Key key, this.par}) : super(key: key);
@@ -11,7 +13,7 @@ class ProductPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(title: Site.name, home: ProductPageWidget(buildContext: context, par: par));
+    return MaterialApp(title: Site.name, home: ProductPageWidget(buildContext: context, par: par), debugShowCheckedModeBanner:false);
   }
 }
 
@@ -24,38 +26,44 @@ class ProductPageWidget extends StatefulWidget {
 }
 
 class _ProductPageWidgetState extends State<ProductPageWidget> {
+  Widget render;
   bool loaded;
   BuildContext buildContext;
   Map<String, dynamic> par;
+  int eachStyle1 = 0,
+    eachStyle2 = 0;
+
 
   _ProductPageWidgetState(this.buildContext, this.par);
   
   @override
   void initState() {
-    super.initState();
+    Site.productEachStyle = 0;
+    Site.productEachStyle1 = -1;
+    Site.productEachStyle2 = -1;
+    Site.productAmount = 1;
     loaded = false;
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    //Site.log.e('get product - ' + getVal(par, '_id').toString());
     int id = getInt(getVal(par, '_id'));
     if(id > 0) {
       return Container(
-        color: Color(0xfff0f0f0),
-        child: FutureBuilder<Map>(
-          future: Product.getProduct(id),
-          builder: (context, snapshot) {
-            return snapshot.connectionState == ConnectionState.done
-                ? snapshot.hasData
-                    ? getWidget(snapshot.data)
-                    : Product.retryButton(fetch)
-                : IfDialog.getLoading();
-          }
-        )
+          color: Color(0xfff0f0f0),
+          child: FutureBuilder<Map>(
+            future: Product.getProduct(id),
+            builder: (context, snapshot) {
+              return snapshot.connectionState == ConnectionState.done
+                  ? snapshot.hasData
+                      ? getWidget(snapshot.data)
+                      : Product.retryButton(fetch)
+                  : IfDialog.getLoading();
+            }
+          )
       );
     } else {
-      //throw Exception("Invalid ID.\nPlease Retry");
       return Container();
     }
   }
@@ -72,8 +80,15 @@ class _ProductPageWidgetState extends State<ProductPageWidget> {
 
   Widget getWidget(dynamic data) {
     if(data is Map) {
-      return Layer.buildContent('product', buildContext, data);
+      return Layer.buildContent('product', buildContext, data, _click);
     }
     return Container();
+  }
+
+
+  void _click(String type) {
+    if(type == 'cart') {
+      
+    }
   }
 }

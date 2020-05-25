@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'site.dart';
 import 'body.dart';
@@ -9,6 +10,7 @@ import 'layer/drawer.dart';
 import 'convert/align.dart';
 import 'convert/gradient.dart';
 import 'convert/util.dart';
+import 'bloc/cart.dart';
 
 class PageWidget extends StatefulWidget {
   final String file;
@@ -114,6 +116,7 @@ class _PageWidgetState extends State<PageWidget> {
         _drawer = (_showAppbar > 0 ? GetDrawer(getVal(child,'appbar'), context) : null);
         //data.nav.style
         getPage(true);
+        
         return Container(        
           decoration: BoxDecoration(
             gradient: getGradient(getVal(_box,'bg.color')),

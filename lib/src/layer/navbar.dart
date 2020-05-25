@@ -7,8 +7,6 @@ import '../convert/border.dart';
 import '../convert/edge.dart';
 import '../convert/util.dart';
 
-
-
 class NavBar extends StatefulWidget {
   final dynamic map;
   final Function func;
@@ -87,7 +85,7 @@ class _NavBar extends State<NavBar> {
         );
       }
     }
-    return null;
+    return Container();
   }
 }
 

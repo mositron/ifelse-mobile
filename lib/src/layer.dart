@@ -23,6 +23,7 @@ import 'layer/picture.dart';
 import 'layer/price.dart';
 import 'layer/request.dart';
 import 'layer/description.dart';
+import 'layer/spec.dart';
 import 'convert/util.dart';
 
 class Layer {
@@ -48,6 +49,7 @@ class Layer {
     PictureParser(),
     RequestParser(),
     DescriptionParser(),
+    SpecParser(),
   ];
   static final _widgetPraseMap = <String, WidgetParser>{};
   static bool _parseInit = false;

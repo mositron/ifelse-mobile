@@ -13,8 +13,7 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(title: Site.name, home: MyPagefulWidget(),
-    );
+    return MaterialApp(title: Site.name, home: MyPagefulWidget(), debugShowCheckedModeBanner:false);
   }
 }
 

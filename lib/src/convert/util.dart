@@ -1,5 +1,17 @@
 
 import 'package:flutter/material.dart';
+import 'package:html_unescape/html_unescape_small.dart';
+
+String getString(dynamic val, [String def]) {
+  //final log = Logger();
+  String to = '';
+  if ((val == null) || (val.toString().isEmpty)) {
+    to = def ?? '';
+  } else {
+    to = val.toString();
+  }
+  return HtmlUnescape().convert(to);
+}
 
 int getInt(dynamic val, [int def]) {
   //final log = Logger();

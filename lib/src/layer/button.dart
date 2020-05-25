@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:logger/logger.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../layer.dart';
 import '../site.dart';
 import '../convert/util.dart';
@@ -12,19 +12,54 @@ import '../convert/icon.dart';
 import '../convert/shadow.dart';
 import '../convert/image.dart';
 import '../convert/click.dart';
+import '../convert/toast.dart';
+import '../bloc/cart.dart';
 
 class ButtonParser extends WidgetParser {
-  static final log = Logger();
+  Widget parse(String file, Map<String, dynamic> map, BuildContext buildContext, [Map<String, dynamic> par, Function func]) {
+    return new ButtonView(key: UniqueKey(), file: file, map: map, buildContext: buildContext, par: par);    
+  }
+  
+  @override
+  String get widgetName => 'button';
+}
+
+class ButtonView extends StatefulWidget {
+  final dynamic map;
+  final BuildContext buildContext;
+  final String file;
+  final dynamic par;
+  final Function func;
+  ButtonView({Key key, this.file, this.map, this.buildContext, this.par, this.func}) : super(key: key);
 
   @override
-  Widget parse(String file, Map<String, dynamic> map, BuildContext buildContext, [Map<String, dynamic> par, Function func]) {
-    dynamic box = getVal(map,'box'),
-      data = getVal(map,'data'),
+  _ButtonViewState createState() {
+    //Site.log.w(_map);
+    return new _ButtonViewState(file, map, buildContext, par, func);
+  }
+}
+ 
+class _ButtonViewState extends State<ButtonView> {
+  bool loaded;
+  dynamic _map;
+  String _file;
+  BuildContext buildContext;
+  dynamic _par;
+  Function _func;
+  _ButtonViewState(this._file, this._map, this.buildContext, this._par, this._func);
+
+
+
+
+  @override
+  Widget build(BuildContext context) {
+    dynamic box = getVal(_map,'box'),
+      data = getVal(_map,'data'),
       tmp = getVal(data,'click');
     Map<String, dynamic> click;
     String align = getVal(data,'align').toString(),
       ipos = getVal(data,'ipos').toString(),
-      spec = getVal(map,'spec');
+      spec = getVal(_map,'spec');
     Color _color = getColor(getVal(data,'color'));
     double _fSize = getDouble(getVal(data,'size') ?? Site.fontSize);
     List<Widget> widget = [];
@@ -50,25 +85,51 @@ class ButtonParser extends WidgetParser {
     } else if(icon != null) {
       widget = [_icon];
     }
-    return Center(      
+    return Align(
+      alignment: getAlignBox(align),
       child: Container(
+        width: align == 'full' ? double.infinity : null,
         margin: getEdgeInset(getVal(box,'margin')),
         padding: EdgeInsets.all(0),
-        alignment: getAlignBox(align),
+        //alignment: getAlignBox(align),
         decoration: BoxDecoration(
           borderRadius: getBorderRadius(getVal(box,'border')),
           boxShadow: getBoxShadow(getVal(box,'shadow')),
-        ),      
+        ),
         child: RawMaterialButton(
           onPressed: () {
-            if(file == 'login') {
-                print(0);
+            if(_file == 'login') {
               if((spec == 'google') || (spec == 'facebook')) {
                 click = {'type':spec};
-                print(func);
-                if(func is Function) {
-                  print(2);
-                  func(spec);
+                if(_func is Function) {
+                  _func(spec);
+                }
+              }
+            } else if(_file == 'product') {
+              if(spec == 'cart') {
+                click = {'type':spec};
+                if(_func is Function) {
+                  _func(spec);
+                }
+                if(Site.productEachStyle == 0) {
+                    Site.cartAmount += Site.productAmount;
+                    Site.productAmount = 1;
+                    Site.productEachStyle1 = -1;
+                    Site.productEachStyle2 = -1;
+                    Site.cartBloc.add('amount');
+                } else {
+                  if(Site.productEachStyle1 == -1) {
+                    Toast.show('กรุณาเลือก '+Site.productEachName1, context, duration: Toast.lengthShort, gravity:  Toast.bottom);
+                  } else if((Site.productEachStyle == 2) && (Site.productEachStyle2 == -1)) {
+                    Toast.show('กรุณาเลือก '+Site.productEachName2, context, duration: Toast.lengthShort, gravity:  Toast.bottom);
+                  } else {
+                    Site.cartAmount += Site.productAmount;
+                    Site.productAmount = 1;
+                    Site.productEachStyle1 = -1;
+                    Site.productEachStyle2 = -1;
+                    Site.cartBloc.add('amount');
+                    //context.bloc<CartBloc>().add('amount');
+                  }
                 }
               }
             }
@@ -83,7 +144,6 @@ class ButtonParser extends WidgetParser {
               borderRadius: getBorderRadius(getVal(box,'border')),
               border: getBorder(getVal(box,'border')),
               image: getImageBG(getVal(box,'bg')),
-              boxShadow: getBoxShadow(getVal(box,'shadow')),
             ),
             padding: getEdgeInset(getVal(box,'padding')),
             child: ipos == 'up' ?
@@ -103,7 +163,4 @@ class ButtonParser extends WidgetParser {
       )
     );
   }
-
-  @override
-  String get widgetName => 'button';
 }

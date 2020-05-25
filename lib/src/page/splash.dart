@@ -18,7 +18,7 @@ class SplashPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: Site.name,
-      home: _SplashPage()
+      home: _SplashPage(), debugShowCheckedModeBanner:false
     );
   }
 }

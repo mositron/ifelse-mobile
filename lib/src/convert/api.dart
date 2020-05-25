@@ -13,7 +13,6 @@ class Api {
         'token': Site.token,
         'session': My.session,
       };
-    
     if(map != null) {
       request.addAll(map);
     }
@@ -22,9 +21,6 @@ class Api {
       headers: {'user-agent': 'ifelse.co-' + Site.version},
       body: request
     );
-
-    print(response.body);
-    print(response.statusCode);
     try {
       if (response.statusCode == 200) {
         Map<String, dynamic> resp = json.decode(response.body);

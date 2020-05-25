@@ -8,7 +8,7 @@ class ArticlesPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(title: Site.name, home: ArticlesPageWidget(buildContext: context, par: par));
+    return MaterialApp(title: Site.name, home: ArticlesPageWidget(buildContext: context, par: par), debugShowCheckedModeBanner:false);
   }
 }
 

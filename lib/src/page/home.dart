@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../site.dart';
 import '../layer.dart';
+import '../bloc/cart.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(title: Site.name, home: HomePageWidget());
+    return MaterialApp(title: Site.name, home: HomePageWidget(), debugShowCheckedModeBanner:false);
   }
 }
 
@@ -21,8 +23,8 @@ class _HomePageWidgetState extends State<HomePageWidget> {
   Widget render;
   @override
   void initState() {
-    super.initState();
     render = null;
+    super.initState();
   }
   @override
   void dispose() {
@@ -31,8 +33,12 @@ class _HomePageWidgetState extends State<HomePageWidget> {
   }
   @override
   Widget build(BuildContext context) {
+    Site.cartBloc = CartBloc();
     if(render == null) {
-      render = Layer.buildContent('home',context);
+      render = BlocProvider<CartBloc>(
+        create: (context) => Site.cartBloc,
+        child: Layer.buildContent('home',context)
+      );
     }
     return render;
   }

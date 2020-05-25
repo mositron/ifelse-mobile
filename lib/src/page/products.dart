@@ -8,7 +8,7 @@ class ProductsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(title: Site.name, home: ProductsPageWidget(buildContext: context, par: par));
+    return MaterialApp(title: Site.name, home: ProductsPageWidget(buildContext: context, par: par), debugShowCheckedModeBanner:false);
   }
 }
 

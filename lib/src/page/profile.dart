@@ -15,10 +15,7 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: Site.name,
-      home: _ProfilePage()
-    );
+    return MaterialApp(title: Site.name, home: _ProfilePage(), debugShowCheckedModeBanner:false);
   }
 }
 
