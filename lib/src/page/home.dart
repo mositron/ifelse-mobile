@@ -33,7 +33,9 @@ class _HomePageWidgetState extends State<HomePageWidget> {
   }
   @override
   Widget build(BuildContext context) {
-    Site.cartBloc = CartBloc();
+    if(Site.cartBloc == null) {
+      Site.cartBloc = CartBloc();
+    }
     if(render == null) {
       render = BlocProvider<CartBloc>(
         create: (context) => Site.cartBloc,

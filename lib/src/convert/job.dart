@@ -12,14 +12,14 @@ import 'shadow.dart';
 import 'util.dart';
  
 class Job {
-  static Future<List<CellModel>> getList(dynamic map) async {
+  static Future<List<JobModel>> getList(dynamic map) async {
     final Map response = await Api.call('jobs', {
         'order': map['order'].toString(),
         'skip': map['skip'].toString(),
         'limit': map['limit'].toString(),
       });
     if((response is Map) && (response['jobs'] is List)) {
-      final List<CellModel> list = parsePostsForGrid(response['jobs']);
+      final List<JobModel> list = parsePostsForGrid(response['jobs']);
       return list;
     }
     return null;
@@ -35,10 +35,10 @@ class Job {
     return null;
   }
 
-  static List<CellModel> parsePostsForGrid(List body) {
+  static List<JobModel> parsePostsForGrid(List body) {
     try {
       if((body != null) && (body != null)) {
-        return body.map<CellModel>((json) => CellModel.fromJson(json)).toList();
+        return body.map<JobModel>((json) => JobModel.fromJson(json)).toList();
       }
     } catch (e) {
       throw Exception(e.toString());
@@ -46,7 +46,7 @@ class Job {
     return null;
   }
   
-  static Widget getGrid(AsyncSnapshot<List<CellModel>> snapshot, dynamic map, Function gridClicked) {
+  static Widget getGrid(AsyncSnapshot<List<JobModel>> snapshot, dynamic map, Function gridClicked) {
     dynamic box = getVal(map,'box'),
       data = getVal(map,'data'),
       dataBox = getVal(data,'box');
@@ -94,7 +94,7 @@ class Job {
           padding: EdgeInsets.all(0),
           itemBuilder: (BuildContext context, int index) {
             return GestureDetector(
-              child: Cell(
+              child: JobCell(
                 snapshot.data[index],
                 padding,
                 margin,
@@ -146,15 +146,15 @@ class Job {
   }
 }
 
-class CellModel {
+class JobModel {
   String id;
   String title;
   String url;
   Map image; 
-  CellModel({this.id, this.title, this.url, this.image}); 
-  factory CellModel.fromJson(Map<String, dynamic> json) {
+  JobModel({this.id, this.title, this.url, this.image}); 
+  factory JobModel.fromJson(Map<String, dynamic> json) {
     try {
-      return new CellModel(
+      return new JobModel(
         id: json['_id'].toString(),
         title: json['title'].toString(),
         url: json['link'].toString(),
@@ -166,14 +166,14 @@ class CellModel {
   }
 }
 
-class Cell extends StatelessWidget {
-  const Cell(
+class JobCell extends StatelessWidget {
+  const JobCell(
     this.cellModel,this.padding,this.margin,this.border,this.radius,this.shadow,this.gradient,  
     this.align,this.width,this.ratio,this.contentAlign,this.contentPadding,this.contentLine,
     this.textColor,this.textSize
   );
   @required
-  final CellModel cellModel;
+  final JobModel cellModel;
   final EdgeInsets padding;
   final EdgeInsets margin;
   final Border border;

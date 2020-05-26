@@ -12,7 +12,7 @@ import 'shadow.dart';
 import 'util.dart';
  
 class Article {
-  static Future<List<CellModel>> getList(dynamic map) async {
+  static Future<List<ArticleModel>> getList(dynamic map) async {
     final Map response = await Api.call('articles', {
         'category': map['category'].toString(),
         'status': map['status'].toString(),
@@ -22,7 +22,7 @@ class Article {
         'limit': map['limit'].toString(),
       });
     if((response is Map) && (response['articles'] is List)) {
-      final List<CellModel> list = parsePostsForGrid(response['articles']);
+      final List<ArticleModel> list = parsePostsForGrid(response['articles']);
       return list;
     }
     return null;
@@ -38,10 +38,10 @@ class Article {
     return null;
   }
 
-  static List<CellModel> parsePostsForGrid(List body) {
+  static List<ArticleModel> parsePostsForGrid(List body) {
     try {
       if((body != null) && (body != null)) {
-        return body.map<CellModel>((json) => CellModel.fromJson(json)).toList();
+        return body.map<ArticleModel>((json) => ArticleModel.fromJson(json)).toList();
       }
     } catch (e) {
       throw Exception(e.toString());
@@ -49,7 +49,7 @@ class Article {
     return null;
   }
   
-  static Widget getGrid(AsyncSnapshot<List<CellModel>> snapshot, dynamic map, Function gridClicked) {
+  static Widget getGrid(AsyncSnapshot<List<ArticleModel>> snapshot, dynamic map, Function gridClicked) {
     dynamic box = getVal(map,'box'),
       data = getVal(map,'data'),
       dataBox = getVal(data,'box');
@@ -97,7 +97,7 @@ class Article {
           padding: EdgeInsets.all(0),
           itemBuilder: (BuildContext context, int index) {
             return GestureDetector(
-              child: Cell(
+              child: ArticleCell(
                 snapshot.data[index],
                 padding,
                 margin,
@@ -149,15 +149,15 @@ class Article {
   }
 }
 
-class CellModel {
+class ArticleModel {
   String id;
   String title;
   String url;
   Map image; 
-  CellModel({this.id, this.title, this.url, this.image}); 
-  factory CellModel.fromJson(Map<String, dynamic> json) {
+  ArticleModel({this.id, this.title, this.url, this.image}); 
+  factory ArticleModel.fromJson(Map<String, dynamic> json) {
     try {
-      return new CellModel(
+      return new ArticleModel(
         id: json['_id'].toString(),
         title: json['title'].toString(),
         url: json['link'].toString(),
@@ -169,14 +169,14 @@ class CellModel {
   }
 }
 
-class Cell extends StatelessWidget {
-  const Cell(
+class ArticleCell extends StatelessWidget {
+  const ArticleCell(
     this.cellModel,this.padding,this.margin,this.border,this.radius,this.shadow,this.gradient,  
     this.align,this.width,this.ratio,this.contentAlign,this.contentPadding,this.contentLine,
     this.textColor,this.textSize
   );
   @required
-  final CellModel cellModel;
+  final ArticleModel cellModel;
   final EdgeInsets padding;
   final EdgeInsets margin;
   final Border border;

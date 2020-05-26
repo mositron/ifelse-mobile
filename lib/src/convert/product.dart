@@ -12,7 +12,7 @@ import 'shadow.dart';
 import 'util.dart';
  
 class Product {
-  static Future<List<CellProduct>> getList(dynamic map) async {
+  static Future<List<ProductModel>> getList(dynamic map) async {
     final Map response = await Api.call('products', {
         'category': map['category'].toString(),
         'status': map['status'].toString(),
@@ -22,7 +22,7 @@ class Product {
         'limit': map['limit'].toString(),
       });
     if((response is Map) && (response['products'] is List)) {
-      final List<CellProduct> list = parsePostsForGrid(response['products']);
+      final List<ProductModel> list = parsePostsForGrid(response['products']);
       return list;
     }
     return null;
@@ -38,10 +38,10 @@ class Product {
     return null;
   }
 
-  static List<CellProduct> parsePostsForGrid(List body) {
+  static List<ProductModel> parsePostsForGrid(List body) {
     try {
       if((body != null) && (body != null)) {
-        return body.map<CellProduct>((json) => CellProduct.fromJson(json)).toList();
+        return body.map<ProductModel>((json) => ProductModel.fromJson(json)).toList();
       }
     } catch (e) {
       throw Exception(e.toString());
@@ -49,7 +49,7 @@ class Product {
     return null;
   }
   
-  static Widget getGrid(AsyncSnapshot<List<CellProduct>> snapshot, dynamic map, Function gridClicked) {
+  static Widget getGrid(AsyncSnapshot<List<ProductModel>> snapshot, dynamic map, Function gridClicked) {
     dynamic box = getVal(map,'box'),
       data = getVal(map,'data'),
       dataBox = getVal(data,'box');
@@ -108,7 +108,7 @@ class Product {
           
           itemBuilder: (BuildContext context, int index) {
             return GestureDetector(
-              child: Cell(
+              child: ProductCell(
                 snapshot.data[index],
                 padding,
                 margin,
@@ -164,15 +164,15 @@ class Product {
   }
 }
 
-class CellProduct {
+class ProductModel {
   String id;
   String title;
   String url;
   Map image; 
   int diff; 
   List<double> price; 
-  CellProduct({this.id, this.title, this.url, this.image, this.price, this.diff}); 
-  factory CellProduct.fromJson(Map<String, dynamic> json) {    
+  ProductModel({this.id, this.title, this.url, this.image, this.price, this.diff}); 
+  factory ProductModel.fromJson(Map<String, dynamic> json) {    
     List<double> _price = [0, 0]; 
     if(json['price'] is List) {
       List<dynamic> price = json['price'];
@@ -181,7 +181,7 @@ class CellProduct {
       }
     }
     try {      
-      return new CellProduct(
+      return new ProductModel(
         id: json['_id'].toString(),
         title: json['title'].toString(),
         url: json['link'].toString(),
@@ -196,14 +196,14 @@ class CellProduct {
   }
 }
 
-class Cell extends StatelessWidget {
-  const Cell(
+class ProductCell extends StatelessWidget {
+  const ProductCell(
     this.cellProduct,this.padding,this.margin,this.border,this.radius,this.shadow,this.gradient,  
     this.align,this.width,this.ratio,this.contentAlign,this.contentPadding,this.contentLine,
     this.textColor,this.textSize,this.normalColor,this.normalSize,this.overColor,this.overSize
   );
   @required
-  final CellProduct cellProduct;
+  final ProductModel cellProduct;
   final EdgeInsets padding;
   final EdgeInsets margin;
   final Border border;

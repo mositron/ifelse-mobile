@@ -62,7 +62,7 @@ class _JobViewState extends State<JobView> {
 
     return Center(
       child: Container(
-        child: FutureBuilder<List<CellModel>>(
+        child: FutureBuilder<List<JobModel>>(
           future: Job.getList(request),
           builder: (context, snapshot) {
             return snapshot.connectionState == ConnectionState.done
@@ -86,8 +86,8 @@ class _JobViewState extends State<JobView> {
     setLoading(true);
   }
   
-  gridClicked(CellModel cellModel) {
-    Get.to(JobPage(par:{'_id':getInt(cellModel.id,0)}));
+  gridClicked(JobModel jobModel) {
+    Get.to(JobPage(par:{'_id':getInt(jobModel.id,0)}));
     //Navigator.of(buildContext).push(MaterialPageRoute(builder: (context) => JobPage(par:{'_id':getInt(cellModel.id,0)})));
   }
 }

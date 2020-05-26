@@ -8,22 +8,16 @@ class Site {
   static final String api = 'https://api.ifelse.co/mobile/v1/',
     version = '0.1.0';
   static final log = Logger();
-  static int id = 0,
-    productEachStyle = 0,
-    productEachStyle1 = -1,
-    productEachStyle2 = -1,
-    productAmount = 1,
-    cartAmount = 0;
+  static int id = 0;
   static String name = '',
     domain = '',
     token = '',
-    font = 'Kanit',
-    productEachName1 = '',
-    productEachName2 = '';
+    font = 'Kanit';
   static double fontSize = 16;
   static Map<String, dynamic> template = {};
   static List<dynamic> articles = [],
-    products = [];
+    products = [],
+    cart = [];
   static List<Widget> pageType = <Widget>[],
     pageTab = <Widget>[];
   static CartBloc cartBloc;

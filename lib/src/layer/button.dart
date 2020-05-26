@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import '../layer.dart';
 import '../site.dart';
-import '../convert/util.dart';
+import '../convert/cart.dart';
 import '../convert/align.dart';
 import '../convert/gradient.dart';
 import '../convert/border.dart';
@@ -12,12 +11,11 @@ import '../convert/icon.dart';
 import '../convert/shadow.dart';
 import '../convert/image.dart';
 import '../convert/click.dart';
-import '../convert/toast.dart';
-import '../bloc/cart.dart';
+import '../convert/util.dart';
 
 class ButtonParser extends WidgetParser {
   Widget parse(String file, Map<String, dynamic> map, BuildContext buildContext, [Map<String, dynamic> par, Function func]) {
-    return new ButtonView(key: UniqueKey(), file: file, map: map, buildContext: buildContext, par: par);    
+    return new ButtonView(key: UniqueKey(), file: file, map: map, buildContext: buildContext, par: par, func: func);    
   }
   
   @override
@@ -47,9 +45,6 @@ class _ButtonViewState extends State<ButtonView> {
   dynamic _par;
   Function _func;
   _ButtonViewState(this._file, this._map, this.buildContext, this._par, this._func);
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -107,29 +102,8 @@ class _ButtonViewState extends State<ButtonView> {
               }
             } else if(_file == 'product') {
               if(spec == 'cart') {
-                click = {'type':spec};
                 if(_func is Function) {
-                  _func(spec);
-                }
-                if(Site.productEachStyle == 0) {
-                    Site.cartAmount += Site.productAmount;
-                    Site.productAmount = 1;
-                    Site.productEachStyle1 = -1;
-                    Site.productEachStyle2 = -1;
-                    Site.cartBloc.add('amount');
-                } else {
-                  if(Site.productEachStyle1 == -1) {
-                    Toast.show('กรุณาเลือก '+Site.productEachName1, context, duration: Toast.lengthShort, gravity:  Toast.bottom);
-                  } else if((Site.productEachStyle == 2) && (Site.productEachStyle2 == -1)) {
-                    Toast.show('กรุณาเลือก '+Site.productEachName2, context, duration: Toast.lengthShort, gravity:  Toast.bottom);
-                  } else {
-                    Site.cartAmount += Site.productAmount;
-                    Site.productAmount = 1;
-                    Site.productEachStyle1 = -1;
-                    Site.productEachStyle2 = -1;
-                    Site.cartBloc.add('amount');
-                    //context.bloc<CartBloc>().add('amount');
-                  }
+                  _func('button');
                 }
               }
             }

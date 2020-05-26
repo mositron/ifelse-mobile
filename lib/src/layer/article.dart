@@ -76,7 +76,7 @@ class _ArticleViewState extends State<ArticleView> {
 
     return Center(
       child: Container(
-        child: FutureBuilder<List<CellModel>>(
+        child: FutureBuilder<List<ArticleModel>>(
           future: Article.getList(request),
           builder: (context, snapshot) {
             return snapshot.connectionState == ConnectionState.done
@@ -101,8 +101,8 @@ class _ArticleViewState extends State<ArticleView> {
   }
   
  
-  gridClicked(CellModel cellModel) {
-    Get.to(ArticlePage(par:{'_id':getInt(cellModel.id,0)}));
+  gridClicked(ArticleModel articleModel) {
+    Get.to(ArticlePage(par:{'_id':getInt(articleModel.id,0)}));
     //Navigator.of(buildContext).push(MaterialPageRoute(builder: (context) => ArticlePage(par:{'_id':getInt(cellModel.id,0)})));
   }
 }

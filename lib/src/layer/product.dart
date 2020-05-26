@@ -74,7 +74,7 @@ class _ProductViewState extends State<ProductView> {
 
     return Center(
       child: Container(
-        child: FutureBuilder<List<CellProduct>>(
+        child: FutureBuilder<List<ProductModel>>(
           future: Product.getList(request),
           builder: (context, snapshot) {
             return snapshot.connectionState == ConnectionState.done
@@ -98,8 +98,8 @@ class _ProductViewState extends State<ProductView> {
     setLoading(true);
   }
 
-  gridClicked(CellProduct cellProduct) {
-    Get.to(ProductPage(par:{'_id':getInt(cellProduct.id,0)}));
-    //Navigator.of(buildContext).push(MaterialPageRoute(builder: (context) => ProductPage(par:{'_id':getInt(cellProduct.id,0)})));
+  gridClicked(ProductModel productModel) {
+    Get.to(ProductPage(par:{'_id':getInt(productModel.id,0)}));
+    //Navigator.of(buildContext).push(MaterialPageRoute(builder: (context) => ProductPage(par:{'_id':getInt(productModel.id,0)})));
   }
 }

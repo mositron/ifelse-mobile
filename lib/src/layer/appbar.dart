@@ -8,6 +8,7 @@ import '../convert/gradient.dart';
 import '../convert/util.dart';
 import '../page/cart.dart';
 import '../bloc/cart.dart';
+import '../convert/cart.dart';
 
 AppBar getAppBar(dynamic obj, BuildContext buildContext,  Function appClick) {
   if ((obj != null) && !(obj is List)) {
@@ -42,42 +43,45 @@ AppBar getAppBar(dynamic obj, BuildContext buildContext,  Function appClick) {
       );
     }
     if(cartStyle == 'action') {
-      _action = Stack(
-        alignment: Alignment.topRight,
-        overflow: Overflow.visible,
-        children: [
-          IconButton(
-            icon: Icon(
-              getIcon(getVal(cart,'icon')),
-              color: getColor(getVal(cart,'color'),'000'),
-              size: getDouble(getVal(cart,'size'),Site.fontSize),
-            ),      
-            onPressed: () {
-              Get.to(CartPage());
-            }
-          ),
-          Positioned(
-            top: 5,
-            left: 5,
-            child: 
-              BlocBuilder<CartBloc, int>(
-                bloc: Site.cartBloc,
-                builder: (_, count) {
-                  return Site.cartAmount == 0 ? Container(
-                      width: 1,
-                      height: 1,
-                    ) : Container(
-                  padding: EdgeInsets.only(left:5,right:5,top:0,bottom:0),
-                  decoration: BoxDecoration(
-                    color: Colors.redAccent,
-                    borderRadius: BorderRadius.circular(50),
-                  ),
-                  child: Text(Site.cartAmount.toString(), style: TextStyle(color: Colors.white, fontFamily: Site.font, fontSize: 14)),
-                );
-              }
-            )
-          ),
-        ],
+      _action = GestureDetector(
+        onTap:() {
+          Get.to(CartPage());
+        },
+        child: Stack(
+          alignment: Alignment.topRight,
+          overflow: Overflow.visible,
+          children: [
+            IconButton(
+              icon: Icon(
+                getIcon(getVal(cart,'icon')),
+                color: getColor(getVal(cart,'color'),'000'),
+                size: getDouble(getVal(cart,'size'),Site.fontSize),
+              ),      
+              onPressed: () {}
+            ),
+            Positioned(
+              top: 5,
+              left: 5,
+              child: 
+                BlocBuilder<CartBloc, int>(
+                  bloc: Site.cartBloc,
+                  builder: (_, count) {
+                    return Cart.amount == 0 ? Container(
+                        width: 1,
+                        height: 1,
+                      ) : Container(
+                    padding: EdgeInsets.only(left:5,right:5,top:0,bottom:0),
+                    decoration: BoxDecoration(
+                      color: Colors.redAccent,
+                      borderRadius: BorderRadius.circular(50),
+                    ),
+                    child: Text(Cart.amount.toString(), style: TextStyle(color: Colors.white, fontFamily: Site.font, fontSize: 14)),
+                  );
+                }
+              )
+            ),
+          ],
+        )
       );
     }
   

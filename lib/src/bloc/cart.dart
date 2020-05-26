@@ -1,6 +1,5 @@
 
 import 'package:bloc/bloc.dart';
-import '../site.dart';
 
 class CartBloc extends Bloc<String, int> {
   @override
@@ -8,13 +7,14 @@ class CartBloc extends Bloc<String, int> {
 
   @override
   Stream<int> mapEventToState(String event) async* {
+    print('mapEventToState - '+event);
     switch (event) {
       case 'amount':
-        yield Site.cartAmount;
+        yield state + 1;
         //yield state - 1;
         break;
       default:
-        yield Site.cartAmount;
+        yield state + 1;
         break;
     }
   }
