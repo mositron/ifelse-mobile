@@ -64,7 +64,6 @@ class _SpecViewState extends State<SpecView> {
                 BlocBuilder<ProductBloc, Map>(
                   bloc: context.repository<ProductBloc>(),
                   builder: (_, product) {
-                    print(product);
                     return RaisedButton(
                       onPressed: () {
                         _func('spec',{'type':'style1', 'index': j});
@@ -112,7 +111,6 @@ class _SpecViewState extends State<SpecView> {
                 BlocBuilder<ProductBloc, Map>(
                   bloc: context.repository<ProductBloc>(),
                   builder: (_, product) {
-                    print(product);
                     return RaisedButton(
                       onPressed: () {
                         _func('spec',{'type':'style2', 'index': j});
@@ -147,6 +145,38 @@ class _SpecViewState extends State<SpecView> {
           ),
         );
       }
+      
+      _spec.add(
+        Container(
+          padding: EdgeInsets.all(0),
+          margin: EdgeInsets.all(0),
+          child: BlocBuilder<ProductBloc, Map>(
+            bloc: context.repository<ProductBloc>(),
+            builder: (_, product) {
+              String txt = 'กรุณาเลือกสินค้า';
+              if(eachStyle == 1) {
+                if(product['style1'] > -1) {
+                  if(product['stock'] > 0) {
+                    txt = 'จำนวนสินค้าในคลัง ' + getString(product['stock']) + ' ' + getString(product['unit']);
+                  } else {
+                    txt = 'สินค้าหมด';
+                  }
+                }
+              } else if(eachStyle == 2) {
+                if((product['style1'] > -1) && (product['style2'] > -1)) {
+                  if(product['stock'] > 0) {
+                    txt = 'จำนวนสินค้าในคลัง ' + getString(product['stock']) + ' ' + getString(product['unit']);
+                  } else {
+                    txt = 'สินค้าหมด';
+                  }
+                }
+              }
+              return Text(txt, style: TextStyle(fontFamily: Site.font,fontSize: getDouble(getVal(data,'size'), Site.fontSize),color: getColor(getVal(data,'color'))));
+            }
+          )
+        ),
+      );
+      
     }
 
     _spec.add(
@@ -196,9 +226,7 @@ class _SpecViewState extends State<SpecView> {
           ],
         ),
       )
-    );
-    
-    print(_par['each']);
+    );    
     return Container(
       decoration: BoxDecoration(
         gradient: getGradient(getVal(box,'bg.color')),

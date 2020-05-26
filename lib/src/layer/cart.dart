@@ -3,17 +3,7 @@ import 'package:flutter/widgets.dart';
 import '../layer.dart';
 import '../site.dart';
 import '../convert/cart.dart';
-import '../convert/align.dart';
-import '../convert/gradient.dart';
-import '../convert/border.dart';
-import '../convert/edge.dart';
-import '../convert/icon.dart';
-import '../convert/shadow.dart';
-import '../convert/image.dart';
-import '../convert/click.dart';
-import '../convert/toast.dart';
 import '../convert/util.dart';
-
 class CartParser extends WidgetParser {
   Widget parse(String file, Map<String, dynamic> map, BuildContext buildContext, [Map<String, dynamic> par, Function func]) {
     return new CartView(key: UniqueKey(), file: file, map: map, buildContext: buildContext, par: par);    
@@ -56,7 +46,47 @@ class _CartViewState extends State<CartView> {
     return Container(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: Cart.getList(),
+        children: [
+          Container(),
+          Container(
+            decoration: BoxDecoration(
+              color: getColor('f0f0f0')
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: Cart.getList(),
+            )
+          ),
+
+          Container(
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("TOTAL", style: TextStyle(fontFamily: Site.font, fontSize: Site.fontSize)),
+                      Text("USD. 899.01", style: TextStyle(fontFamily: Site.font, fontSize: Site.fontSize)),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: Container(
+                    height: 50,
+                    child: RaisedButton(
+                      child: Text("CHECKOUT", style: TextStyle(fontFamily: Site.font, fontSize: Site.fontSize)),
+                      onPressed: () {},
+                      color: Colors.black,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15.0),
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          )
+        ],
       )
     );
   }

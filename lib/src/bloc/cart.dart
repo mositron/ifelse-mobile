@@ -7,7 +7,6 @@ class CartBloc extends Bloc<String, int> {
 
   @override
   Stream<int> mapEventToState(String event) async* {
-    print('mapEventToState - '+event);
     switch (event) {
       case 'amount':
         yield state + 1;

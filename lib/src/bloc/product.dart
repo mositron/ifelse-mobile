@@ -8,6 +8,9 @@ class ProductBloc extends Bloc<Map, Map>  {
     'amount': 1,
     'style1': -1,
     'style2': -1,
+    'stock': 0,
+    'price': 0,
+    'unit': '',
   };
 
   @override
@@ -23,6 +26,14 @@ class ProductBloc extends Bloc<Map, Map>  {
         break;
       case 'amount':
         state['amount'] = getInt(event['value']);
+        yield Map.from(state);
+        break;
+      case 'stock':
+        state['stock'] = getInt(event['value']);
+        yield Map.from(state);
+        break;
+      case 'update':
+        state.addAll(event['value']);
         yield Map.from(state);
         break;
       case 'clear':

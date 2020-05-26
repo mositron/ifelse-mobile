@@ -1,5 +1,6 @@
 
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../layer.dart';
 import '../site.dart';
 import '../convert/gradient.dart';
@@ -7,6 +8,7 @@ import '../convert/shadow.dart';
 import '../convert/border.dart';
 import '../convert/edge.dart';
 import '../convert/util.dart';
+import '../bloc/product.dart';
 
 class PriceParser extends WidgetParser {
   @override
@@ -31,22 +33,36 @@ class PriceParser extends WidgetParser {
     int diff = getInt(getVal(par,'diff'));
     if(diff > 0) {
       if(_price[0] > 0 && _price[1] > 0) {
+        int eachStyle = getInt(getVal(par,'each.style'));
         _widget = Container(
-          child: Text.rich(
-            TextSpan(
-              text: '฿' + getCurrency(_price[0]),
-              style: TextStyle(color: normalColor,fontSize: normalSize),
-              children: <InlineSpan>[
+          child: BlocBuilder<ProductBloc, Map>(
+            bloc: buildContext.repository<ProductBloc>(),
+            builder: (_, product) {
+              if((product['price'] > 0) && (((eachStyle == 1) && (product['style1'] > -1)) || ((eachStyle == 2) && (product['style1'] > -1) && (product['style2'] > -1)))) {
+                return Text.rich(
+                  TextSpan(
+                    text: '฿' + getCurrency(product['price']),
+                    style: TextStyle(color: normalColor,fontSize: normalSize),
+                  )
+                );
+              }
+              return Text.rich(
                 TextSpan(
-                  text: ' ~ ',  
+                  text: '฿' + getCurrency(_price[0]),
                   style: TextStyle(color: normalColor,fontSize: normalSize),
-                ),
-                TextSpan(
-                  text: '฿' + getCurrency(_price[1]),             
-                  style: TextStyle(color: normalColor,fontSize: normalSize),
-                ),
-              ],
-            )
+                  children: <InlineSpan>[
+                    TextSpan(
+                      text: ' ~ ',  
+                      style: TextStyle(color: normalColor,fontSize: normalSize),
+                    ),
+                    TextSpan(
+                      text: '฿' + getCurrency(_price[1]),             
+                      style: TextStyle(color: normalColor,fontSize: normalSize),
+                    ),
+                  ],
+                )
+              );
+            }
           )
         );
       } else if(_price[1] > 0) {

@@ -38,7 +38,6 @@ AppBar getAppBar(dynamic obj, BuildContext buildContext,  Function appClick) {
         ),      
         onPressed: () {
           appClick();
-          print('back');
         }
       );
     }

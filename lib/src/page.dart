@@ -98,10 +98,10 @@ class _PageWidgetState extends State<PageWidget> {
         template = json[0];
         dynamic child = getVal(template,'child');
         dynamic data = getVal(template,'data');
-        SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-          statusBarColor: Colors.transparent,
-        ));
-        SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
+        //SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+          //statusBarColor: Colors.transparent,
+        //));
+        //SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
         // จัดการ AppBar
         _appbar = (_showAppbar > 0 ? getAppBar(getVal(child,'appbar'), context, appClick) : null);
         if((_showAppbar == 2) && (_appbar != null)) {
