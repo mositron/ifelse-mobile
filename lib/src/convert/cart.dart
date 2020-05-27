@@ -40,7 +40,7 @@ class Cart {
     Site.cartBloc.add('amount');
   }
 
-  static List<CartCell> getList() {
+  static List<CartCell> getList(Color color, double fsize) {
     if((products != null) && (products is List) && (products.length > 0)) {
       List<CartCell> widget = [];
       products.forEach((v) {
@@ -59,12 +59,28 @@ class Cart {
             name2: v['name2'],
             label2: v['label2'],
             stock: getInt(v['stock']),
+            color: color,
+            fsize: fsize,
           ));
         }
       });
       return widget;
     }
     return null;
+  }
+
+  static double getPrice() {
+    double price = 0;
+    if((products != null) && (products is List) && (products.length > 0)) {
+      products.forEach((v) {
+        int _amount = getInt(v['amount']);
+        double _price = getDouble(v['price']);
+        if((_amount > 0) && (_price > 0)) {
+          price += (_amount * _price);
+        }
+      });
+    }
+    return price;
   }
 }
 
@@ -80,14 +96,15 @@ class CartCell extends StatefulWidget {
   final String name2;
   final String label2;
   final int stock;
+  final Color color;
+  final double fsize;
   CartCell({Key key, 
     this.id, this.index, this.title, this.image, this.amount, this.price,
-    this.name1, this.label1, this.name2, this.label2, this.stock}) : super(key: key);
-
+    this.name1, this.label1, this.name2, this.label2, this.stock, this.color, this.fsize}) : super(key: key);
 
   @override
   _CartCellState createState() {
-    return new _CartCellState(id, index, title, image, amount, price, name1, label1, name2, label2, stock);
+    return new _CartCellState(id, index, title, image, amount, price, name1, label1, name2, label2, stock, color, fsize);
   }
 }
  
@@ -103,12 +120,13 @@ class _CartCellState extends State<CartCell> {
   String name2;
   String label2;
   int stock;
+  Color color;
+  double fsize;
   _CartCellState(this.id, this.index, this.title, this.image, this.amount, this.price,
-    this.name1, this.label1, this.name2, this.label2, this.stock);
+    this.name1, this.label1, this.name2, this.label2, this.stock, this.color, this.fsize);
 
   @override
   Widget build(BuildContext context) {
-    //Site.log.e(contentAlign);
     List<String> label = [];
     if(name1.isNotEmpty && label1.isNotEmpty) {
       label.add(name1 + ': ' + label1);
@@ -135,7 +153,7 @@ class _CartCellState extends State<CartCell> {
       Row(
         children: [
           Expanded(
-            child: Text(price.toString(),maxLines: 1,overflow: TextOverflow.ellipsis,style: TextStyle(fontSize: 16.0,color: Colors.black54)),
+            child: Text(getCurrency(price),maxLines: 1,overflow: TextOverflow.ellipsis,style: TextStyle(fontSize: fsize,color: color)),
           ),
           Container(
             margin: EdgeInsets.only(top:5, bottom:5),
