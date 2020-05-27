@@ -30,7 +30,7 @@ class _NavBar extends State<NavBar> {
 
   @override
   Widget build(BuildContext context) {
-    if ((map != null) && !(map is List)) {
+    if ((map != null) && (map is Map)) {
       dynamic box = getVal(map,'box'),
         data = getVal(map,'data'),
         hover = getVal(map,'hover'),

@@ -6,11 +6,11 @@ import 'site.dart';
 import 'body.dart';
 import 'layer/appbar.dart';
 import 'layer/navbar.dart';
+import 'layer/cartbar.dart';
 import 'layer/drawer.dart';
 import 'convert/align.dart';
 import 'convert/gradient.dart';
 import 'convert/util.dart';
-import 'bloc/cart.dart';
 
 class PageWidget extends StatefulWidget {
   final String file;
@@ -108,7 +108,11 @@ class _PageWidgetState extends State<PageWidget> {
           _offsetTop = MediaQuery.of(context).padding.top + _appbar.preferredSize.height;
         }
         // จัดการ NavBar
-        _navbar = (_showNavbar > 0 ? NavBar(getVal(child,'navbar'), navClick) : null);
+        if(file == 'home') {
+          _navbar = (_showNavbar > 0 ? NavBar(getVal(child,'navbar'), navClick) : null);
+        } else if(file == 'cart') {
+          _navbar = (_showNavbar > 0 ? CartBar(getVal(child,'navbar'), navClick) : null);
+        }
         if((_showNavbar == 2) && (_navbar != null)) {
           _offsetBottom = getDouble(getVal(data,'bottom'));
         }
