@@ -27,7 +27,7 @@ class Site {
     domain = load['domain'];
     ['splash','login','home','articles','article','products','product','cart','jobs','job'].forEach((v) {
       template[v] = load['theme'][v];
-      cacheSaveTemplate(v, load['theme'][v]);
+      cacheSaveList('template-'+v, load['theme'][v]);
     });
     if((load['articles'] != null) && (load['articles'] is List)) {
       articles = load['articles'];

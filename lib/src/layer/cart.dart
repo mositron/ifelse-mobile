@@ -45,9 +45,6 @@ class _CartViewState extends State<CartView> {
   Function _func;
   _CartViewState(this._file, this._map, this.buildContext, this._par, this._func);
 
-
-
-
   @override
   Widget build(BuildContext context) {
     dynamic box = getVal(_map,'box'),
@@ -63,21 +60,61 @@ class _CartViewState extends State<CartView> {
       ),
       margin: getEdgeInset(getVal(box,'margin')),
       padding: getEdgeInset(getVal(box,'padding')),
-      alignment: Alignment(0.0, 0.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(),
-          Container(
-            decoration: BoxDecoration(
-              color: getColor('f0f0f0')
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: Cart.getList(_color, _fsize),
+      alignment: Alignment.topCenter,
+      //alignment: Alignment(0.0, 0.0),
+      child: ListView.builder(
+        primary: false,
+        shrinkWrap: true,
+        padding: EdgeInsets.all(0),
+        itemCount: Cart.products.length,
+        itemBuilder: (context, index) {
+          final v = Cart.products[index];
+          return Dismissible(
+            key: UniqueKey(),
+            onDismissed: (direction) {
+              setState(() {
+                Cart.products.removeAt(index);
+                Cart.refresh();
+              });
+            },
+            confirmDismiss: (DismissDirection direction) async {
+              return await showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: const Text('ยืนยันการลบรายการสินค้า'),
+                    content: const Text('ต้องการลบรายการสินค้านี้หรือไม่?'),
+                    actions: <Widget>[
+                      FlatButton(
+                        onPressed: () => Navigator.of(context).pop(true),
+                        child: const Text('ลบ')
+                      ),
+                      FlatButton(
+                        onPressed: () => Navigator.of(context).pop(false),
+                        child: const Text('ยกเลิก'),
+                      ),
+                    ],
+                  );
+                },
+              );
+            },
+            child: CartCell(
+              id: v['id'],
+              index: v['index'],
+              title: v['title'],
+              image: v['image'],
+              amount: getInt(v['amount']),
+              price: getDouble(v['price']),
+              name1: v['name1'],
+              label1: v['label1'],
+              name2: v['name2'],
+              label2: v['label2'],
+              stock: getInt(v['stock']),
+              color: _color,
+              fsize: _fsize,
             )
-          )
-        ]
+          );
+        }
       )
     );
   }

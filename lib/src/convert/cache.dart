@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
-Future<List> cacheGetTemplate(String key) async {
+Future<List> cacheGetList(String key) async {
   //Site.log.i('get - ' + key);
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String val = prefs.getString(key);
@@ -13,7 +13,7 @@ Future<List> cacheGetTemplate(String key) async {
   return null;
 }
 
-void cacheSaveTemplate(String key, dynamic data) async {
+void cacheSaveList(String key, dynamic data) async {
   //Site.log.i('save - ' + key);
   if((data != null) && (data is List)) {    
     String val = json.encode(data);

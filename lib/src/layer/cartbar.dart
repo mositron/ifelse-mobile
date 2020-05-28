@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import '../site.dart';
+import '../my.dart';
 import '../convert/cart.dart';
 import '../convert/util.dart';
 import '../convert/border.dart';
@@ -10,7 +12,10 @@ import '../convert/gradient.dart';
 import '../convert/image.dart';
 import '../convert/edge.dart';
 import '../convert/shadow.dart';
+import '../convert/toast.dart';
 import '../bloc/cart.dart';
+import '../page/login.dart';
+import '../page/checkout.dart';
 
 class CartBar extends StatefulWidget {
   final dynamic map;
@@ -35,8 +40,7 @@ class _CartBar extends State<CartBar> {
     dynamic box = getVal(map,'box'),
     price = getVal(map,'data.price');
     Color _color = getColor(getVal(price, 'color'), '000');
-    double _fsize = getDouble(getVal(price, 'size'), 16);
-    
+    double _fsize = getDouble(getVal(price, 'size'), 16);    
     return Container(
         height: 70,
         decoration: BoxDecoration(
@@ -117,10 +121,18 @@ class _CartBar extends State<CartBar> {
         ),
         child: RawMaterialButton(
           onPressed: () {
-            
+            if(Cart.products.length > 0) {
+              if(My.id > 0) {
+                Get.to(CheckoutPage());
+              } else {
+                Get.to(LoginPage(next: 'checkout'));
+              }
+            } else {
+              Toast.show('ยังไม่มีรายการสินค้าในตะกร้า', context, duration: Toast.lengthShort, gravity:  Toast.bottom);
+            }
           },
           padding: EdgeInsets.all(0.0),
-          elevation: 0.0,     
+          elevation: 0.0,
           child: Ink(            
             decoration: BoxDecoration(
               gradient: cartBgcolor,

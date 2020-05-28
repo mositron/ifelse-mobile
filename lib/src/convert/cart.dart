@@ -2,11 +2,19 @@ import 'package:flutter/material.dart';
 import '../site.dart';
 import 'image.dart';
 import 'util.dart';
-
+import 'cache.dart';
 
 class Cart {
   static List<dynamic> products = [];
   static int amount = 0;
+
+  static void init() async {
+    dynamic _cart = await cacheGetList('cart');
+    if((_cart != null) && (_cart is List)) {
+      Cart.products = _cart;
+      refresh(false);
+    }
+  }
   
   static void add(Map item) {
     if(item != null) {
@@ -26,7 +34,7 @@ class Cart {
     }
   }
 
-  static void refresh() {
+  static void refresh([bool save = true]) {
     int _amount = 0;
     if(products.length > 0) {
       for(int i=0; i<products.length; i++) {
@@ -37,16 +45,19 @@ class Cart {
       }
     }
     Cart.amount = _amount;
+    if(save) {
+      cacheSaveList('cart', products);
+    }
     Site.cartBloc.add('amount');
   }
-
+/*
   static List<CartCell> getList(Color color, double fsize) {
     if((products != null) && (products is List) && (products.length > 0)) {
       List<CartCell> widget = [];
       products.forEach((v) {
         int _amount = getInt(v['amount']);
         double _price = getDouble(v['price']);
-        if((_amount > 0) && (_price > 0)) {
+        //if((_amount > 0) && (_price > 0)) {
           widget.add(CartCell(
             id: v['id'],
             index: v['index'],
@@ -62,12 +73,13 @@ class Cart {
             color: color,
             fsize: fsize,
           ));
-        }
+        //}
       });
       return widget;
     }
     return null;
   }
+*/
 
   static double getPrice() {
     double price = 0;
@@ -151,6 +163,7 @@ class _CartCellState extends State<CartCell> {
     }
     lines.add(
       Row(
+        mainAxisSize: MainAxisSize.min,
         children: [
           Expanded(
             child: Text(getCurrency(price),maxLines: 1,overflow: TextOverflow.ellipsis,style: TextStyle(fontSize: fsize,color: color)),
@@ -184,12 +197,12 @@ class _CartCellState extends State<CartCell> {
                       });
                     },
                     elevation: 2,
-                    child: Icon(Icons.remove),
+                    child: Icon(Icons.remove, size: 20),
                   ),
                 ),
                 Container(
                   padding: EdgeInsets.all(0.0),
-                  width: 60,
+                  width: 50,
                   alignment: Alignment.center,
                   child: Text(amount.toString(), style: TextStyle(fontFamily: Site.font, color: Colors.black))
                 ),
@@ -215,7 +228,7 @@ class _CartCellState extends State<CartCell> {
                       });
                     },
                     elevation: 2,
-                    child: Icon(Icons.add),
+                    child: Icon(Icons.add, size: 20),
                   ),
                 ),
               ],
@@ -226,8 +239,9 @@ class _CartCellState extends State<CartCell> {
       
     );
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 10.0),
+    return Container(
+      margin: EdgeInsets.all(0),
+      padding: EdgeInsets.all(0),
       child: SizedBox(
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,

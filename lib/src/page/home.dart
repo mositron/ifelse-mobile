@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../site.dart';
 import '../layer.dart';
+import '../convert/cart.dart';
+import '../convert/cache.dart';
 import '../bloc/cart.dart';
 
 class HomePage extends StatelessWidget {
@@ -35,6 +37,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
   Widget build(BuildContext context) {
     if(Site.cartBloc == null) {
       Site.cartBloc = CartBloc();
+      Cart.init();
     }
     if(render == null) {
       render = BlocProvider<CartBloc>(

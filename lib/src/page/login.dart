@@ -1,30 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import '../site.dart';
 import '../layer.dart';
 import '../page/home.dart';
+import '../page/checkout.dart';
 import '../convert/dialog.dart';
 import '../convert/api.dart';
 
 class LoginPage extends StatelessWidget {
-  LoginPage({Key key}) : super(key: key);
+  LoginPage({Key key, this.next}) : super(key: key);
+  final String next;
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(title: Site.name, home: MyPagefulWidget(), debugShowCheckedModeBanner:false);
+    return MaterialApp(title: Site.name, home: LoginPageWidget(next: next), debugShowCheckedModeBanner:false);
   }
 }
 
-class MyPagefulWidget extends StatefulWidget {
-  MyPagefulWidget({Key key}) : super(key: key);
+class LoginPageWidget extends StatefulWidget {
+  final String next;
+  LoginPageWidget({Key key, this.next}) : super(key: key);
   @override
-  _MyPagefulWidgetState createState() => _MyPagefulWidgetState();
+  _LoginPageWidgetState createState() => _LoginPageWidgetState(next);
 }
 
 
-class _MyPagefulWidgetState extends State<MyPagefulWidget> {
+class _LoginPageWidgetState extends State<LoginPageWidget> {
+  String next;
+  _LoginPageWidgetState(this.next);
 
   @override
   void initState() {
@@ -42,7 +48,6 @@ class _MyPagefulWidgetState extends State<MyPagefulWidget> {
   }
 
   void _click(String type) {
-    print('----');
     if(type == 'google') {
       _launchGoogle(context);
     } else if(type == 'facebook') {
@@ -59,7 +64,12 @@ class _MyPagefulWidgetState extends State<MyPagefulWidget> {
         bool logged = await Api.login({'type': 'google', 'idtoken': _googleAuth.idToken});
         Navigator.of(context, rootNavigator: true).pop('dialog');
         if(logged) {
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()));
+          if(next == 'checkout') {
+            Get.off(CheckoutPage());
+          } else {
+            Get.off(HomePage());
+            //Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()));
+          }
           _googleSignIn.disconnect();
         } else {
           IfDialog.show(context: context, text: 'บัญชีนี้ไม่สามารถล็อคอินได้');
@@ -78,7 +88,12 @@ class _MyPagefulWidgetState extends State<MyPagefulWidget> {
         bool logged = await Api.login({'type': 'facebook', 'idtoken': result.accessToken.token});
         Navigator.of(context, rootNavigator: true).pop('dialog');
         if(logged) {
-          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()));
+          if(next == 'checkout') {
+            Get.off(CheckoutPage());
+          } else {
+            Get.off(HomePage());
+            //Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()));
+          }
         } else {
           IfDialog.show(context: context, text: 'บัญชีนี้ไม่สามารถล็อคอินได้');
         }

@@ -40,7 +40,7 @@ class SplashScreenState extends State<_SplashPage> {
   }
 
   Future<Widget> loadSplash() async {
-    List<dynamic> template = await cacheGetTemplate('splash');
+    List<dynamic> template = await cacheGetList('template-splash');
     if((template != null) && (template is List) && (template.length > 0)) {
       Site.template['splash'] = template;
     }
