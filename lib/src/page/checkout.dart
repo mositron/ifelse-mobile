@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:ifelse/src/convert/image.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import '../site.dart';
-import '../my.dart';
 import '../convert/cart.dart';
 import '../convert/util.dart';
 import '../convert/api.dart';
 import '../convert/dialog.dart';
+import '../bloc/checkout.dart';
 
 class CheckoutPage extends StatefulWidget {
   @override
@@ -17,12 +18,12 @@ class CheckoutPage extends StatefulWidget {
 
 
 class CheckoutPageScreenState extends State<CheckoutPage> {
-  GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey();
   bool loaded;
   List<dynamic> address;
   int addressSelected = 0;
   List<dynamic> shipping;
-  int shippingSelected = 0;
+  int shippingSelected = -1;
+  CheckoutBloc checkoutBloc;
 
   @override
   void initState() {
@@ -33,11 +34,14 @@ class CheckoutPageScreenState extends State<CheckoutPage> {
   @override
   void dispose() {
     loaded = false;
+    checkoutBloc.drain();
+    checkoutBloc.close();
     super.dispose();
   }
   
   @override
   Widget build(BuildContext context) {
+    checkoutBloc = CheckoutBloc();
     return Container(
         color: Color(0xfff0f0f0),
         child: FutureBuilder<Map<dynamic, dynamic>>(
@@ -93,7 +97,7 @@ class CheckoutPageScreenState extends State<CheckoutPage> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: Text('ตรวจสอบคำสั่งซื้อ',style: TextStyle(fontFamily: Site.font, color: Color(0xff565758))),
+          title: Text('การจัดส่ง',style: TextStyle(fontFamily: Site.font, color: Color(0xff565758))),
           centerTitle: true,
           leading: IconButton(
             icon: Icon(
@@ -105,169 +109,166 @@ class CheckoutPageScreenState extends State<CheckoutPage> {
               Get.back();
             }
           ),
-          backgroundColor: Colors.transparent,
+          backgroundColor: Colors.white,
           elevation: 0,
         ),
-        body:Builder(builder: (context) {
-          return Column(
-            
-            children: <Widget>[
-              Expanded(
-                child: Container(
-                  color: Colors.white,
-                  child: ListView(
-                    children: <Widget>[
-                      selectedAddressSection(),
-                      standardDelivery(),
-                      checkoutItem(),
-                      priceSection()
-                    ],
-                  ),
-                ),
-                flex: 90,
-              ),
-              Expanded(
-                child: Container(
-                  width: double.infinity,
-                  margin: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-                  child: RaisedButton(
-                    onPressed: () {
-                      /*Navigator.of(context).push(new MaterialPageRoute(
-                          builder: (context) => OrderPlacePage()));*/
-                      showThankYouBottomSheet(context);
-                    },
-                    child: Text(
-                      'ยืนยันคำสั่งซื้อ',
-                      style: TextStyle(fontFamily: Site.font),
+        body: Container(
+          color: Color(0xfff0f0f0),
+          child: Builder(builder: (context) {
+            return BlocProvider<CheckoutBloc>(
+              create: (context) => checkoutBloc,
+              child: Column(  
+                children: <Widget>[
+                  Expanded(
+                    child: Container(
+                      alignment: Alignment.centerLeft,
+                      child: ListView(
+                        primary: false,
+                        shrinkWrap: true,
+                        padding: EdgeInsets.all(0),
+                        children: <Widget>[
+                          selectedAddressSection(),
+                          standardDelivery(),
+                          priceSection(),
+                          checkoutItem(),
+                        ],
+                      ),
                     ),
-                    color: Colors.pink,
-                    textColor: Colors.white,
+                    flex: 90,
                   ),
-                ),
-                flex: 10,
+                  Expanded(
+                    child: Container(
+                      width: double.infinity,
+                      margin: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                      child: RaisedButton(
+                        onPressed: () {
+                          /*Navigator.of(context).push(new MaterialPageRoute(
+                              builder: (context) => OrderPlacePage()));*/
+                              
+                        },
+                        child: Text(
+                          'ชำระเงิน',
+                          style: TextStyle(fontFamily: Site.font),
+                        ),
+                        color: Colors.pink,
+                        textColor: Colors.white,
+                      ),
+                    ),
+                    flex: 10,
+                  )
+                ],
               )
-            ],
-          );
-        })
+            );
+          })
+        )
       )
     );
   }
 
-  showThankYouBottomSheet(BuildContext context) {
-    return _scaffoldKey.currentState.showBottomSheet((context) {
-      return Container(
-        height: 400,
-        decoration: BoxDecoration(
-            color: Colors.white,
-            border: Border.all(color: Colors.grey.shade200, width: 2),
-            borderRadius: BorderRadius.only(
-                topRight: Radius.circular(16), topLeft: Radius.circular(16))),
-        child: Column(
-          children: <Widget>[
-            Expanded(
-              child: Container(
-                child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Image(
-                    image: AssetImage("images/ic_thank_you.png"),
-                    width: 300,
-                  ),
-                ),
-              ),
-              flex: 5,
-            ),
-            Expanded(
-              child: Container(
-                margin: EdgeInsets.only(left: 16, right: 16),
-                child: Column(
-                  children: <Widget>[
-                    RichText(
-                      textAlign: TextAlign.center,
-                      text: TextSpan(children: [
-                        TextSpan(
-                          text:
-                              "\n\nThank you for your purchase. Our company values each and every customer. We strive to provide state-of-the-art devices that respond to our clients’ individual needs. If you have any questions or feedback, please don’t hesitate to reach out.",
-                          style: TextStyle(fontFamily: Site.font),
-                        )
-                      ]
-                      )
-                    ),
-                    SizedBox(
-                      height: 24,
-                    ),
-                    RaisedButton(
-                      onPressed: () {},
-                      padding: EdgeInsets.only(left: 48, right: 48),
-                      child: Text(
-                        "Track Order",
-                        style: TextStyle(fontFamily: Site.font)
-                      ),
-                      color: Colors.pink,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(24))),
-                    )
-                  ],
-                ),
-              ),
-              flex: 5,
-            )
-          ],
-        ),
-      );
-    },
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(16), topRight: Radius.circular(16))),
-        backgroundColor: Colors.white,
-        elevation: 2);
-  }
-
   Widget selectedAddressSection() {
-    if((address != null) && (address is List) && (address.length > addressSelected) && (address[addressSelected] is Map)) {
-      Map item = address[addressSelected];
+    if((address != null) && (address is List)) {
       return Container(
-        margin: EdgeInsets.all(4),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(4)),
+          borderRadius: BorderRadius.all(Radius.circular(5)),
+          border: Border.all(color: Colors.grey.shade200),
+          color: Colors.white
         ),
-        child: Card(
-          elevation: 0,
-          color: Color(0xffe9e9e9),
-          child: Container(
-            padding: EdgeInsets.only(left: 12, top: 8, right: 12),
-            child: Column(
+        margin: EdgeInsets.all(10),
+        padding: EdgeInsets.only(left: 12, top: 8, right: 12, bottom: 10),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(height: 4),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                SizedBox(height: 6),
-                Text(getString(item['name']), style: TextStyle(fontFamily: Site.font)),
-                SizedBox(height: 10),
-                RichText(
-                  text: TextSpan(
-                    children: [
-                      TextSpan(text: 'เบอร์โทรศัพท์: ', style: TextStyle(fontFamily: Site.font, color: Colors.black45)),
-                      TextSpan(text: getString(item['phone']), style: TextStyle(fontFamily: Site.font, color: Colors.black)),
-                    ]
-                  ),
+              children: [
+                Text('ชื่อและที่อยู่ในการจัดส่ง', style: TextStyle(fontFamily: Site.font)),
+                GestureDetector(
+                  onTap: () {
+
+                  },
+                  child: Text('เพิ่มที่อยู่ใหม่', style: TextStyle(fontFamily: Site.font)),
                 ),
-                SizedBox(height: 10),
-                RichText(
-                  text: TextSpan(
-                    children: [
-                      TextSpan(text: 'ที่อยู่: ', style: TextStyle(fontFamily: Site.font, color: Colors.black45)),
-                      TextSpan(text: getString(item['address']) + ' - ' +getString(item['address']), style: TextStyle(fontFamily: Site.font, color: Colors.black)),
-                    ]
-                  ),
+                /*
+                FlatButton(
+                  padding: EdgeInsets.all(0),
+                  onPressed: () {},
+                  child: Text('เพิ่มที่อยู่ใหม่',style: TextStyle(fontFamily: Site.font)),
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
                 ),
-                Container(
-                  color: Colors.white,
-                  height: 1,
-                  margin: EdgeInsets.only(top:10, bottom:10),
-                  width: double.infinity,
-                ),
-                addressAction()
+                */
               ],
             ),
-          ),
+            SizedBox(height: 4),
+            Container(
+              width: double.infinity,
+              height: 0.5,
+              margin: EdgeInsets.symmetric(vertical: 4),
+              color: Colors.grey.shade400,
+            ),
+            Container(
+              child: ListView.builder(
+                scrollDirection: Axis.vertical,
+                itemCount: address.length,
+                primary: false,
+                shrinkWrap: true,
+                padding: EdgeInsets.all(0),
+                itemBuilder: (BuildContext context, int position) {
+                  final Map item = address[position];
+                  _click() {
+                    addressSelected = position;
+                  }
+                  return InkWell(
+                    onTap: () {
+                      _click();
+                    },
+                    child: BlocBuilder<CheckoutBloc, int>(
+                      bloc: checkoutBloc,
+                      builder: (_, product) {
+                        return Card(
+                          shape: RoundedRectangleBorder(
+                            side: BorderSide(color: Color((addressSelected == position) ? 0xffff5717 : 0xffcccccc)),
+                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                          ),
+                          elevation: 0,
+                          margin: EdgeInsets.only(top: 10),
+                          child: Container(
+                            padding: EdgeInsets.only(top:10, bottom:10, left:5, right:15),
+                            child: Row(
+                              children: [
+                                Radio(
+                                  value: position,
+                                  groupValue: addressSelected,
+                                  activeColor: Color(0xffff5717),
+                                  onChanged: (int value) {
+                                    //addressSelected = value;
+                                    _click();
+                                  },
+                                ),
+                                SizedBox(width: 10),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(getString(item['name']) + ' ('+getString(item['phone'])+')', style: TextStyle(fontFamily: Site.font),maxLines: 1),
+                                      SizedBox(height: 5),
+                                      Text(getString(item['address']), style: TextStyle(fontFamily: Site.font),maxLines: 2),
+                                    ]
+                                  )
+                                )
+                              ],
+                            ),
+                          ),
+                        );
+                      }
+                    ),
+                  );
+                }
+              )
+            )
+          ]
         ),
       );
     }
@@ -276,94 +277,113 @@ class CheckoutPageScreenState extends State<CheckoutPage> {
     );
   }
 
-  createAddressText(String strAddress, double topMargin) {
-    return Container(
-      margin: EdgeInsets.only(top: topMargin),
-      child: Text(
-        strAddress,
-        style: TextStyle(fontFamily: Site.font)
-      ),
-    );
-  }
-
-  addressAction() {
-    return Container(
-      child: Row(
-        children: <Widget>[
-          Spacer(
-            flex: 2,
-          ),
-          FlatButton(
-            onPressed: () {},
-            child: Text(
-              "Edit / Change",
-              style: TextStyle(fontFamily: Site.font)
-            ),
-            splashColor: Colors.transparent,
-            highlightColor: Colors.transparent,
-          ),
-          Spacer(
-            flex: 3,
-          ),
-          Container(
-            height: 20,
-            width: 1,
-            color: Colors.grey,
-          ),
-          Spacer(
-            flex: 3,
-          ),
-          FlatButton(
-            onPressed: () {},
-            child: Text("Add New Address",
-              style: TextStyle(fontFamily: Site.font)
-            ),
-            splashColor: Colors.transparent,
-            highlightColor: Colors.transparent,
-          ),
-          Spacer(
-            flex: 2,
-          ),
-        ],
-      ),
-    );
-  }
-
   standardDelivery() {
-    if((shipping != null) && (shipping is List) && (shipping.length > shippingSelected) && (shipping[shippingSelected] is Map)) {
-      Map item = shipping[shippingSelected];
+    if((shipping != null) && (shipping is List)) {
       return Container(
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(4)),
-            border:
-                Border.all(color: Colors.tealAccent.withOpacity(0.4), width: 1),
-            color: Colors.tealAccent.withOpacity(0.2)),
-        margin: EdgeInsets.all(8),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            Radio(
-              value: 1,
-              groupValue: 1,
-              onChanged: (isChecked) {},
-              activeColor: Colors.tealAccent.shade400,
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text(
-                  getString(item['name']) + ' ('+getString(item['type'])+')',
-                  style: TextStyle(fontFamily: Site.font),
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                Text(item['time'], style: TextStyle(fontFamily: Site.font))
-              ],
-            ),
-          ],
+          borderRadius: BorderRadius.all(Radius.circular(5)),
+          border: Border.all(color: Colors.grey.shade200),
+          color: Colors.white
         ),
+        margin: EdgeInsets.all(10),
+        padding: EdgeInsets.only(left: 12, top: 8, right: 12, bottom: 10),
+        child: BlocBuilder<CheckoutBloc, int>(
+          bloc: checkoutBloc,
+          builder: (_, product) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 4),
+                Text('วิธีการจัดส่ง', style: TextStyle(fontFamily: Site.font)),
+                SizedBox(height: 8),
+                Container(
+                  width: double.infinity,
+                  height: 0.5,
+                  color: Colors.grey.shade400,
+                ),
+                Container(
+                  child: ListView.builder(
+                    scrollDirection: Axis.vertical,
+                    itemCount: shipping.length,
+                    primary: false,
+                    shrinkWrap: true,
+                    padding: EdgeInsets.all(0),
+                    itemBuilder: (BuildContext context, int position) {
+                      final Map item = shipping[position];
+                      final double shipPrice = calcShipping(item);
+                      _click() {
+                          Cart.shipId = getInt(item['id']);
+                          Cart.shipPrice = shipPrice;
+                          shippingSelected = position;
+                          checkoutBloc.add('selected');
+                      }
+                      return InkWell(
+                        onTap: () {
+                          _click();
+                        },
+                        child: BlocBuilder<CheckoutBloc, int>(
+                          bloc: checkoutBloc,
+                          builder: (_, product) {
+                            String time = getString(item['time']);
+                            return Card(
+                              shape: RoundedRectangleBorder(
+                                side: BorderSide(color: Color((shippingSelected == position) ? 0xffff5717 : 0xffcccccc)),
+                                borderRadius: BorderRadius.all(Radius.circular(5)),
+                              ),
+                              elevation: 0,
+                              margin: EdgeInsets.only(top: 10),
+                              child: Container(
+                                padding: EdgeInsets.only(top:10, bottom:10, left:5, right:15),
+                                child: Row(
+                                  children: [
+                                    Radio(
+                                      value: position,
+                                      groupValue: shippingSelected,
+                                      activeColor: Color(0xffff5717),
+                                      onChanged: (int value) {
+                                        //shippingSelected = value;
+                                        _click();
+                                      },
+                                    ),
+                                    SizedBox(width: 10),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            getString(item['name']) + ' ('+getString(item['type'])+')',
+                                            style: TextStyle(fontFamily: Site.font),
+                                          ),
+                                          SizedBox(height: 5),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(time + (time.isNotEmpty?' วัน':''), style: TextStyle(fontFamily: Site.font)),
+                                              (
+                                                shipPrice > 0 ?
+                                                Text('+' + getCurrency(shipPrice), style: TextStyle(fontFamily: Site.font, color: Color(0xffff5717)), textAlign: TextAlign.right) : 
+                                                Text('ฟรี', style: TextStyle(fontFamily: Site.font, color: Colors.green), textAlign: TextAlign.right)
+                                              )
+                                            ],
+                                          )
+                                        ],
+                                      )
+                                    )
+                                  ],
+                                ),
+                              ),
+                            );
+                          }
+                        ),
+                      );
+                    }
+                  )
+                )
+              ],
+            );
+          }
+        )
       );
     }
     return Container(
@@ -371,34 +391,86 @@ class CheckoutPageScreenState extends State<CheckoutPage> {
     );
   }
 
+  double calcShipping(Map item) {
+    int rate = getInt(item['rate']);
+    double found = -1;
+    if(rate == 3) {
+      dynamic range = item['range'];
+      if((range != null) && (range is Map)) {
+        for (var key in range.keys) {
+          double price = getDouble(key);
+          if(price < Cart.price) {
+            found = getDouble(range[key]);
+          }
+        }
+      }
+    } else if(rate == 4) {
+      dynamic range = item['range'];
+      if((range != null) && (range is Map)) {
+        for (var key in range.keys) {
+          double weight = getDouble(key);
+          if(weight < Cart.weight) {
+            found = getDouble(range[key]);
+          }
+        }
+      }
+    } else if(rate == 5) {
+      dynamic range = item['range'];
+      if((range != null) && (range is Map)) {
+        for (var key in range.keys) {
+          double amount = getDouble(key);
+          if(amount < Cart.amount) {
+            found = getDouble(range[key]);
+          }
+        }
+      }
+    } else if(rate == 6) {
+      found = getDouble(item['range']) + ((Cart.amount - 1) * getDouble(item['price']));
+    }
+    if(found == -1) {
+      found = getDouble(item['price']);
+    }
+    return found;
+  }
+
   checkoutItem() {
     return Container(
-      margin: EdgeInsets.all(4),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(4)),
+        borderRadius: BorderRadius.all(Radius.circular(5)),
+        border: Border.all(color: Colors.grey.shade200),
+        color: Colors.white
       ),
-      child: Card(
-        elevation: 0,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(4))),
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(4)),
-            border: Border.all(color: Colors.grey.shade200)),
-          padding: EdgeInsets.only(left: 12, top: 8, right: 12, bottom: 8),
-          child: ListView.builder(
-            itemCount: Cart.products.length,
-            shrinkWrap: true,
-            primary: false,
-            scrollDirection: Axis.vertical,
-            itemBuilder: (context, index) {
-              if((Cart.products.length > index)) {
-                final Map item = Cart.products[index];
-                return checkoutListItem(item);
-              }
-              return null;
-            },
+      margin: EdgeInsets.all(10),
+      padding: EdgeInsets.only(left: 12, top: 8, right: 12, bottom: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SizedBox(height: 4),
+          Text('รายละเอียดสินค้า', style: TextStyle(fontFamily: Site.font)),
+          SizedBox(height: 4),
+          Container(
+            width: double.infinity,
+            height: 0.5,
+            margin: EdgeInsets.symmetric(vertical: 4),
+            color: Colors.grey.shade400,
           ),
-        ),
+          SizedBox(height: 8),
+          Container(
+            child: ListView.builder(
+              itemCount: Cart.products.length,
+              shrinkWrap: true,
+              primary: false,
+              scrollDirection: Axis.vertical,
+              itemBuilder: (context, index) {
+                if((Cart.products.length > index)) {
+                  final Map item = Cart.products[index];
+                  return checkoutListItem(item);
+                }
+                return null;
+              },
+            )
+          )
+        ]
       ),
     );
   }
@@ -473,99 +545,64 @@ class CheckoutPageScreenState extends State<CheckoutPage> {
 
   priceSection() {
     return Container(
-      margin: EdgeInsets.all(4),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(4)),
+        borderRadius: BorderRadius.all(Radius.circular(5)),
+        border: Border.all(color: Colors.grey.shade200),
+        color: Colors.white
       ),
-      child: Card(
-        elevation: 0,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(4))),
-        child: Container(
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(4)),
-              border: Border.all(color: Colors.grey.shade200)),
-          padding: EdgeInsets.only(left: 12, top: 8, right: 12, bottom: 8),
-          child: Column(
+      margin: EdgeInsets.all(10),
+      padding: EdgeInsets.only(left: 12, top: 8, right: 12, bottom: 8),
+      child: BlocBuilder<CheckoutBloc, int>(
+        bloc: checkoutBloc,
+        builder: (_, product) {
+          return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              SizedBox(
-                height: 4,
-              ),
-              Text(
-                "PRICE DETAILS",
-                style: TextStyle(fontFamily: Site.font),
-              ),
-              SizedBox(
-                height: 4,
-              ),
+            children: [
+              SizedBox(height: 4),
+              Text('สรุปคำสั่งซื้อ', style: TextStyle(fontFamily: Site.font)),
+              SizedBox(height: 4),
               Container(
                 width: double.infinity,
                 height: 0.5,
                 margin: EdgeInsets.symmetric(vertical: 4),
                 color: Colors.grey.shade400,
               ),
-              SizedBox(
-                height: 8,
-              ),
-              createPriceItem("Total MRP", getCurrency(5197),
-                  Colors.grey.shade700),
-              createPriceItem("Bag discount", getCurrency(3280),
-                  Colors.teal.shade300),
-              createPriceItem(
-                  "Tax", getCurrency(96), Colors.grey.shade700),
-              createPriceItem("Order Total", getCurrency(2013),
-                  Colors.grey.shade700),
-              createPriceItem(
-                  "Delievery Charges", "FREE", Colors.teal.shade300),
-              SizedBox(
-                height: 8,
+              SizedBox(height: 8),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 0, vertical: 3),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('ยอดรวมสินค้า', style: TextStyle(fontFamily: Site.font)),
+                    Text(getCurrency(Cart.price), style: TextStyle(fontFamily: Site.font))
+                  ],
+                ),
               ),
               Container(
-                width: double.infinity,
-                height: 0.5,
-                margin: EdgeInsets.symmetric(vertical: 4),
-                color: Colors.grey.shade400,
+                padding: EdgeInsets.symmetric(horizontal: 0, vertical: 3),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text('ค่าขนส่ง', style: TextStyle(fontFamily: Site.font)),
+                    Text(Cart.shipPrice > 0 ? getCurrency(Cart.shipPrice) : 'ฟรี', style: TextStyle(fontFamily: Site.font),
+                    )
+                  ],
+                ),
               ),
-              SizedBox(
-                height: 8,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    "Total",
-                    style: TextStyle(fontFamily: Site.font),
-                  ),
-                  Text(
-                    getCurrency(2013),
-                    style: TextStyle(fontFamily: Site.font),
-                  )
-                ],
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 0, vertical: 3),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text('ยอดรวมที่ต้องชำระ', style: TextStyle(fontFamily: Site.font)),
+                    Text(getCurrency(Cart.price + Cart.shipPrice), style: TextStyle(fontFamily: Site.font),
+                    )
+                  ],
+                ),
               )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  createPriceItem(String key, String value, Color color) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 0, vertical: 3),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Text(
-            key,
-            style: TextStyle(fontFamily: Site.font),
-          ),
-          Text(
-            value,
-            style: TextStyle(fontFamily: Site.font),
-          )
-        ],
+            ]
+          );
+        }
       ),
     );
   }

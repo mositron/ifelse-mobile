@@ -48,12 +48,12 @@ class _ProductPageWidgetState extends State<ProductPageWidget> {
     eachName2 = '',
     unit = '';
   Map image;
+  double weight = 0;
   List<double> price = [0, 0];
   List<dynamic> items = [],
     style1 = [],
     style2 = [];
   ProductBloc productBloc;
-
 
   _ProductPageWidgetState(this.buildContext, this.par);
   
@@ -113,6 +113,7 @@ class _ProductPageWidgetState extends State<ProductPageWidget> {
       diff = getInt(data['diff']);
       Map dim = getVal(data,'dim');
       unit = getString(dim['unit']);
+      weight = getDouble(dim['weight']);
       if(diff > 0) {
         items = [];
         dynamic _each = getVal(data,'each');
@@ -188,6 +189,7 @@ class _ProductPageWidgetState extends State<ProductPageWidget> {
         'amount': amount,
         'stock': stock,
         'unit': unit,
+        'weight': weight,
         'diff': 0,
         'price': 0.0,
         'index': 0,
@@ -223,7 +225,7 @@ class _ProductPageWidgetState extends State<ProductPageWidget> {
             });
           }
           if(found) {
-            Cart.add(item);       
+            Cart.add(item);
             //eachStyle1 = -1;
             //eachStyle2 = -1;
             //amount = 1;
@@ -279,6 +281,5 @@ class _ProductPageWidgetState extends State<ProductPageWidget> {
         }
       }
     }
-    //print(type);
   }
 }

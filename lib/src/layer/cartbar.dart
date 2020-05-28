@@ -63,7 +63,7 @@ class _CartBar extends State<CartBar> {
                 BlocBuilder<CartBloc, int>(
                   bloc: Site.cartBloc,
                   builder: (_, count) {
-                    return Text(getCurrency(Cart.getPrice()), style: TextStyle(fontFamily: Site.font, color: _color, fontSize: _fsize));
+                    return Text(getCurrency(Cart.price), style: TextStyle(fontFamily: Site.font, color: _color, fontSize: _fsize));
                   }
                 )
               ],

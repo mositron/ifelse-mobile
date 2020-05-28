@@ -7,12 +7,24 @@ import 'cache.dart';
 class Cart {
   static List<dynamic> products = [];
   static int amount = 0;
+  static double price = 0;
+  static double weight = 0;
+  static int shipId = 0;
+  static double shipPrice = 0; 
 
   static void init() async {
+    Cart.products = [];
     dynamic _cart = await cacheGetList('cart');
-    if((_cart != null) && (_cart is List)) {
-      Cart.products = _cart;
-      refresh(false);
+    if((_cart != null) && (_cart is List) && (_cart.length > 0)) {
+      bool save = false;
+      _cart.forEach((v){
+        if((v['amount'] != null) && (v['amount'] is int)) {
+          Cart.products.add(v);
+        } else {
+          save = true;
+        }
+      });
+      refresh(save);
     }
   }
   
@@ -38,61 +50,49 @@ class Cart {
     int _amount = 0;
     if(products.length > 0) {
       for(int i=0; i<products.length; i++) {
-        if(products[i]['amount'] > products[i]['stock']) {
-          products[i]['amount'] = products[i]['stock'];
+        if((products[i] != null) && (products[i] is Map) && (products[i]['amount'] != null) && (products[i]['amount'] is int)) {
+          if(products[i]['amount'] > products[i]['stock']) {
+            products[i]['amount'] = products[i]['stock'];
+          }
+          _amount += products[i]['amount'];
         }
-        _amount += products[i]['amount'];
       }
     }
     Cart.amount = _amount;
+    Cart.price = getPrice();
+    Cart.weight = getWeight();
     if(save) {
       cacheSaveList('cart', products);
     }
     Site.cartBloc.add('amount');
   }
-/*
-  static List<CartCell> getList(Color color, double fsize) {
-    if((products != null) && (products is List) && (products.length > 0)) {
-      List<CartCell> widget = [];
-      products.forEach((v) {
-        int _amount = getInt(v['amount']);
-        double _price = getDouble(v['price']);
-        //if((_amount > 0) && (_price > 0)) {
-          widget.add(CartCell(
-            id: v['id'],
-            index: v['index'],
-            title: v['title'],
-            image: v['image'],
-            amount: _amount,
-            price: _price,
-            name1: v['name1'],
-            label1: v['label1'],
-            name2: v['name2'],
-            label2: v['label2'],
-            stock: getInt(v['stock']),
-            color: color,
-            fsize: fsize,
-          ));
-        //}
-      });
-      return widget;
-    }
-    return null;
-  }
-*/
 
   static double getPrice() {
-    double price = 0;
+    double sumPrice = 0;
     if((products != null) && (products is List) && (products.length > 0)) {
       products.forEach((v) {
         int _amount = getInt(v['amount']);
         double _price = getDouble(v['price']);
         if((_amount > 0) && (_price > 0)) {
-          price += (_amount * _price);
+          sumPrice += (_amount * _price);
         }
       });
     }
-    return price;
+    return sumPrice;
+  }
+
+  static double getWeight() {
+    double sumWeight = 0;
+    if((products != null) && (products is List) && (products.length > 0)) {
+      products.forEach((v) {
+        int _amount = getInt(v['amount']);
+        double _weight = getDouble(v['weight']);
+        if((_amount > 0) && (_weight > 0)) {
+          sumWeight += (_amount * _weight);
+        }
+      });
+    }
+    return sumWeight;
   }
 }
 
