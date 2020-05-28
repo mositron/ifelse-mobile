@@ -24,7 +24,7 @@ class JobView extends StatefulWidget {
 
   @override
   _JobViewState createState() {
-    //Site.log.w(_map);
+    //print(_map);
     return new _JobViewState(map, buildContext, par);
   }
 }
@@ -35,14 +35,14 @@ class _JobViewState extends State<JobView> {
   BuildContext buildContext;
   dynamic _par;
   _JobViewState(this._map, this.buildContext, this._par) {
-    //Site.log.w(_map);
+    //print(_map);
 
   }
 
   @override
   void initState() {
     super.initState();
-    //Site.log.w(' ---- state ---------------');
+    //print(' ---- state ---------------');
     loaded = false;
   }
  

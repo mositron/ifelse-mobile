@@ -54,7 +54,7 @@ class ProfileScreenState extends State<_ProfilePage> with SingleTickerProviderSt
         'type': 'profile',
         'image': base64Encode(_imageFile.readAsBytesSync())
       });
-      Site.log.i(response);
+      print(response);
       if((response != null) && (response is Map)) {
         setState(() {
           My.image += '?' + Random.secure().nextInt(9999999).toString();
@@ -87,18 +87,18 @@ class ProfileScreenState extends State<_ProfilePage> with SingleTickerProviderSt
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Container(
-      color: Colors.white,
-      child: ListView(
-        children: <Widget>[
-          Column(
-            children: <Widget>[
-              Container(
-                height: 250.0,
-                color: Colors.white,
-                child: Column(
-                  children: <Widget>[
-                    Padding(
+      body: Container(
+        color: Colors.white,
+        child: ListView(
+          children: <Widget>[
+            Column(
+              children: <Widget>[
+                Container(
+                  height: 250.0,
+                  color: Colors.white,
+                  child: Column(
+                    children: <Widget>[
+                      Padding(
                         padding: EdgeInsets.only(left: 20.0, top: 20.0),
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -123,28 +123,29 @@ class ProfileScreenState extends State<_ProfilePage> with SingleTickerProviderSt
                                       color: Colors.black)),
                             )
                           ],
-                        )),
-                    Padding(
-                      padding: EdgeInsets.only(top: 20.0),
-                      child: Stack(fit: StackFit.loose, children: <Widget>[
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Container(
-                              width: 150.0,
-                              height: 150.0,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                image: DecorationImage(
-                                  image: Image.network(My.image).image,
-                                  fit: BoxFit.cover,
-                                ),
-                              )
-                            ),
-                          ],
-                        ),
-                        Padding(
+                        )
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 20.0),
+                        child: Stack(fit: StackFit.loose, children: <Widget>[
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Container(
+                                width: 150.0,
+                                height: 150.0,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  image: DecorationImage(
+                                    image: Image.network(My.image).image,
+                                    fit: BoxFit.cover,
+                                  ),
+                                )
+                              ),
+                            ],
+                          ),
+                          Padding(
                             padding: EdgeInsets.only(top: 90.0, right: 100.0),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -163,8 +164,10 @@ class ProfileScreenState extends State<_ProfilePage> with SingleTickerProviderSt
                                   )
                                 )
                               ],
-                            )),
-                      ]),
+                            )
+                          ),
+                        ]
+                      ),
                     )
                   ],
                 ),

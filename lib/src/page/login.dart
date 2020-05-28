@@ -99,11 +99,11 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
         }
         break;
       case FacebookLoginStatus.cancelledByUser:
-        Site.log.i('cancel');
+        print('cancel');
         //cancel
         break;
       case FacebookLoginStatus.error:      
-        Site.log.i('error');
+        print('error');
         break;
     }
   }

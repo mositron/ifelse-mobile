@@ -64,7 +64,7 @@ DecorationImage getImageBG(dynamic obj) {
 }
 
 Widget getImageWidget(String src) {
-  if(src.isNotEmpty) {
+  if((src != null) && (src.isNotEmpty)) {
     return CachedNetworkImage(
       imageUrl: src,
       alignment: Alignment.topCenter,

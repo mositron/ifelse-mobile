@@ -31,7 +31,7 @@ class CartView extends StatefulWidget {
 
   @override
   _CartViewState createState() {
-    //Site.log.w(_map);
+    //print(_map);
     return new _CartViewState(file, map, buildContext, par, func);
   }
 }

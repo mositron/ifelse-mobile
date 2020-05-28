@@ -82,8 +82,8 @@ class Product {
     }
 
     try {
-      //Site.log.i(colDirect);
-      //Site.log.i(colHeight);
+      //print(colDirect);
+      //print(colHeight);
       return  Container(
         alignment: Alignment.center,    
         decoration: BoxDecoration(

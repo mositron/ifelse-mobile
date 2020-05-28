@@ -32,7 +32,7 @@ class ButtonView extends StatefulWidget {
 
   @override
   _ButtonViewState createState() {
-    //Site.log.w(_map);
+    //print(_map);
     return new _ButtonViewState(file, map, buildContext, par, func);
   }
 }

@@ -25,7 +25,7 @@ class ArticleView extends StatefulWidget {
 
   @override
   _ArticleViewState createState() {
-    //Site.log.w(_map);
+    //print(_map);
     return new _ArticleViewState(map, buildContext, par);
   }
 }

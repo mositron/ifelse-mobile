@@ -28,7 +28,7 @@ class SpecView extends StatefulWidget {
 
   @override
   _SpecViewState createState() {
-    //Site.log.w(_map);
+    //print(_map);
     return new _SpecViewState(map, buildContext, par, func);
   }
 }

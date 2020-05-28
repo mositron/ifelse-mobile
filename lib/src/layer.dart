@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:logger/logger.dart';
 import 'site.dart';
 import 'page.dart';
 import 'layer/split1.dart';
@@ -28,7 +27,6 @@ import 'layer/cart.dart';
 import 'convert/util.dart';
 
 class Layer {
-  static final Logger log = Logger();
   static final _parsers = [
     Split1Parser(),
     Split2Parser(),
@@ -165,7 +163,7 @@ class Layer {
     if (parser != null) {
       return parser.parse(file, map, buildContext, par, func);
     }
-    log.w("Not support - $widgetName");
+    print("Not support - $widgetName");
     return null;
   }
 }

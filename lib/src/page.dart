@@ -64,7 +64,7 @@ class _PageWidgetState extends State<PageWidget> {
         _showAppbar = getInt(getVal(data,'appbar'));
         _showNavbar = getInt(getVal(data,'navbar'));
         //_items = [];
-        //Site.log.i(_pages.length);
+        //print(_pages.length);
         if(_showNavbar > 0) {
           dynamic items = getVal(template,'child.navbar.data.items');
           if((items != null) && (items is List)) {

@@ -2,25 +2,25 @@ import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
 Future<List> cacheGetList(String key) async {
-  //Site.log.i('get - ' + key);
+  //print('get - ' + key);
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String val = prefs.getString(key);
   if((val != null) && (val is String)) {    
     dynamic data = json.decode(val);
-    //Site.log.w(data);
+    //print(data);
     return data;
   }
   return null;
 }
 
 void cacheSaveList(String key, dynamic data) async {
-  //Site.log.i('save - ' + key);
+  //print('save - ' + key);
   if((data != null) && (data is List)) {    
     String val = json.encode(data);
     if((val != null) && (val is String)) {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setString(key, val);
-      //Site.log.w('saved');
+      //print('saved');
     }
   }
 }

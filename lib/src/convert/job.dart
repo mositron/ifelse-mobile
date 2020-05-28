@@ -71,7 +71,7 @@ class Job {
       width = 50;
     }
     try {
-      //Site.log.i(box);
+      //print(box);
       return  Container(
         alignment: Alignment.center,    
         decoration: BoxDecoration(

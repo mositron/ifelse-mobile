@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:logger/logger.dart';
 import 'convert/cache.dart';
 import 'bloc/cart.dart';
 
 class Site {
   static final String api = 'https://api.ifelse.co/mobile/v1/',
     version = '0.1.0';
-  static final log = Logger();
   static int id = 0;
   static String name = '',
     domain = '',

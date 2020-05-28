@@ -27,20 +27,24 @@ class Api {
         getMy(resp, method);
         return resp;
       } else if (response.statusCode == 401) {
+        print('api - 401 - ' + Site.api + method);
         return null;
       } else if (response.statusCode == 402) {
+        print('api - 402 - ' + Site.api + method);
         return null;
       } else if (response.statusCode == 403) {
+        print('api - 403 - ' + Site.api + method);
         return null;
       } else if (response.statusCode == 404) {
+        print('api - 404 - ' + Site.api + method);
         return null;
       } else {
-        Site.log.w(request);
+        print(request);
         return null;
       }
     } catch (e) {
-      Site.log.w(e);
-      Site.log.w(response.body);
+      print(e);
+      print(response.body);
       return null;
     }
   }

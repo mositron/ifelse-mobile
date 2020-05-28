@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
 import 'package:get/get.dart';
 import 'dart:async';
 import '../site.dart';
@@ -31,7 +30,6 @@ class _SplashPage extends StatefulWidget {
 }
 
 class SplashScreenState extends State<_SplashPage> {
-  static final log = Logger();
   @override
   void initState() {
     sessionLoad();
