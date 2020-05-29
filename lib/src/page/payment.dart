@@ -11,7 +11,7 @@ import '../convert/bank.dart';
 import '../convert/image.dart';
 import '../convert/toast.dart';
 import '../bloc/payment.dart';
-import 'order.dart';
+import 'home.dart';
 
 class PaymentPage extends StatefulWidget {
   @override
@@ -282,6 +282,7 @@ class PaymentPageScreenState extends State<PaymentPage> {
     }
     return Container();
   }
+
   Widget paymentBank(dynamic data) {
     if((data != null) && (data is List) && (data.length > 0)) {
       return Container(
@@ -370,7 +371,7 @@ class PaymentPageScreenState extends State<PaymentPage> {
       );
     }
     return Container(
-      child: Text('- ยังไม่มีที่อยู่ในการส่ง -')
+      child: Text('- ยังไม่มีวิธีการชำระเงิน -')
     );
   }
   
@@ -474,7 +475,7 @@ class PaymentPageScreenState extends State<PaymentPage> {
             );
           }
         } else if((response['order'] != null) && (response['order'].toString().isNotEmpty)) {
-          Get.to(OrderPage(id: getInt(response['order'])));
+          Get.offAll(HomePage(next: 'order', par: {'id': getInt(response['order'])}));
         }
       }
     }
@@ -677,7 +678,8 @@ class PaymentPageScreenState extends State<PaymentPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text('จัดส่งโดย', style: TextStyle(fontFamily: Site.font)),
-                Text(Cart.shipDetail, style: TextStyle(fontFamily: Site.font))
+                SizedBox(width: 10),
+                Expanded(child: Text(Cart.shipDetail, textAlign: TextAlign.right, style: TextStyle(fontFamily: Site.font))),
               ],
             ),
           ),
@@ -687,7 +689,8 @@ class PaymentPageScreenState extends State<PaymentPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text('ชื่อผู้รับ', style: TextStyle(fontFamily: Site.font)),
-                Text(Cart.shipName, style: TextStyle(fontFamily: Site.font))
+                SizedBox(width: 10),
+                Expanded(child: Text(Cart.shipName, textAlign: TextAlign.right, style: TextStyle(fontFamily: Site.font))),
               ],
             ),
           ),
@@ -697,7 +700,8 @@ class PaymentPageScreenState extends State<PaymentPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text('เบอร์โทรศัพท์', style: TextStyle(fontFamily: Site.font)),
-                Text(Cart.shipPhone, style: TextStyle(fontFamily: Site.font))
+                SizedBox(width: 10),
+                Expanded(child: Text(Cart.shipPhone, textAlign: TextAlign.right, style: TextStyle(fontFamily: Site.font))),
               ],
             ),
           ),
@@ -705,9 +709,11 @@ class PaymentPageScreenState extends State<PaymentPage> {
             padding: EdgeInsets.symmetric(horizontal: 0, vertical: 3),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text('ที่อยู่', style: TextStyle(fontFamily: Site.font)),
-                Text(Cart.shipAddress, style: TextStyle(fontFamily: Site.font))
+                SizedBox(width: 10),
+                Expanded(child: Text(Cart.shipAddress, textAlign: TextAlign.right, style: TextStyle(fontFamily: Site.font))),
               ],
             ),
           ),

@@ -3,6 +3,7 @@ import '../site.dart';
 import 'image.dart';
 import 'util.dart';
 import 'cache.dart';
+import 'toast.dart';
 
 class Cart {
   static List<dynamic> products = [];
@@ -115,16 +116,17 @@ class CartCell extends StatefulWidget {
   final String label1;
   final String name2;
   final String label2;
+  final String unit;
   final int stock;
   final Color color;
   final double fsize;
   CartCell({Key key, 
     this.id, this.index, this.title, this.image, this.amount, this.price,
-    this.name1, this.label1, this.name2, this.label2, this.stock, this.color, this.fsize}) : super(key: key);
+    this.name1, this.label1, this.name2, this.label2, this.unit, this.stock, this.color, this.fsize}) : super(key: key);
 
   @override
   _CartCellState createState() {
-    return new _CartCellState(id, index, title, image, amount, price, name1, label1, name2, label2, stock, color, fsize);
+    return new _CartCellState(id, index, title, image, amount, price, name1, label1, name2, label2, unit, stock, color, fsize);
   }
 }
  
@@ -139,11 +141,12 @@ class _CartCellState extends State<CartCell> {
   String label1;
   String name2;
   String label2;
+  String unit;
   int stock;
   Color color;
   double fsize;
   _CartCellState(this.id, this.index, this.title, this.image, this.amount, this.price,
-    this.name1, this.label1, this.name2, this.label2, this.stock, this.color, this.fsize);
+    this.name1, this.label1, this.name2, this.label2, this.unit, this.stock, this.color, this.fsize);
 
   @override
   Widget build(BuildContext context) {
@@ -192,6 +195,7 @@ class _CartCellState extends State<CartCell> {
                         amount--;
                         if(amount < 1) {
                           amount = 1;
+                          Toast.show('หากต้องการลบ ให้ปัดสินค้ารายการนี้ไปทางด้านซ้ายหรือขวา', context, duration: Toast.lengthShort, gravity:  Toast.bottom);
                         }
                         if(Cart.products.length > 0) {
                           for(int i=0; i<Cart.products.length; i++) {
@@ -223,6 +227,7 @@ class _CartCellState extends State<CartCell> {
                         amount++;
                         if(amount > stock) {
                           amount = stock;
+                          Toast.show('มีสินค้านี้คงเหลือในคลัง ' + stock.toString() + ' ' + unit, context, duration: Toast.lengthShort, gravity:  Toast.bottom);
                         }
                         if(Cart.products.length > 0) {
                           for(int i=0; i<Cart.products.length; i++) {
@@ -244,23 +249,25 @@ class _CartCellState extends State<CartCell> {
           )
         ]
       )
-      
     );
 
     return Container(
-      margin: EdgeInsets.all(0),
-      padding: EdgeInsets.all(0),
+      margin: EdgeInsets.only(top:5, bottom:5),
+      padding: EdgeInsets.only(top:10, left:10, right:10, bottom:3),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.all(Radius.circular(5)),
+      ),
       child: SizedBox(
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Container(
-              width: 90,
+              width: 70,
               child: getImageRatio(image, 's', 0)
             ),
-            SizedBox(width: 15),
+            SizedBox(width: 10),
             Expanded(
-              flex: 1,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: lines,

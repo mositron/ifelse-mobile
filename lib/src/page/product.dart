@@ -42,7 +42,8 @@ class _ProductPageWidgetState extends State<ProductPageWidget> {
     eachCount2 = 1,
     amount = 1,
     index = 0,
-    stock = 0;
+    stock = 0,
+    download = 0;
   String title = '',
     eachName1 = '',
     eachName2 = '',
@@ -110,6 +111,7 @@ class _ProductPageWidgetState extends State<ProductPageWidget> {
       title = getString(data['title']);
       image = data['image'];
       stock = getInt(data['stock']);
+      download = getInt(data['download']);
       diff = getInt(data['diff']);
       Map dim = getVal(data,'dim');
       unit = getString(dim['unit']);
@@ -167,7 +169,7 @@ class _ProductPageWidgetState extends State<ProductPageWidget> {
       if(data['price'] is List) {
         List<dynamic> _price = data['price'];
         if(_price.length == 2) {
-          price = [getDouble(price[0]), getDouble(price[1])];
+          price = [getDouble(_price[0]), getDouble(_price[1])];
         }
       }
       
@@ -190,6 +192,7 @@ class _ProductPageWidgetState extends State<ProductPageWidget> {
         'stock': stock,
         'unit': unit,
         'weight': weight,
+        'download': download,
         'diff': 0,
         'price': 0.0,
         'index': 0,
@@ -201,13 +204,14 @@ class _ProductPageWidgetState extends State<ProductPageWidget> {
         'label2': '',
       };
       if(diff == 0) {
+        print(price);
         if(price[0] > 0 && price[1] > 0) {
           item['price'] = price[0];
         } else if(price[1] > 0) {
           item['price'] = price[1];
         }
         Cart.add(item);
-        amount = 1;
+        //amount = 1;
         productBloc.add({'type':'clear'});
       } else {
         if(eachStyle1 == -1) {
@@ -226,10 +230,6 @@ class _ProductPageWidgetState extends State<ProductPageWidget> {
           }
           if(found) {
             Cart.add(item);
-            //eachStyle1 = -1;
-            //eachStyle2 = -1;
-            //amount = 1;
-            //productBloc.add({'type':'clear'});
           } else {
             Toast.show('ไม่มีสินค้าที่เลือก', context, duration: Toast.lengthShort, gravity:  Toast.bottom);
           }
@@ -238,9 +238,13 @@ class _ProductPageWidgetState extends State<ProductPageWidget> {
     } else if(type == 'spec') {
       if(data['type'] == 'inc') {
         amount++;
-        if(diff == 0) {
+        if(download == 1) {
+          amount = 1;
+        } else if(diff == 0) {
+          print(1);
           if(amount > stock) {
             amount = stock;
+            Toast.show('มีจำนวนสินค้าชนิดนี้นคลัง '+amount.toString()+' '+unit, context, duration: Toast.lengthShort, gravity:  Toast.bottom);
           }
         } else {
           if((eachStyle == 1) && (eachStyle1 > -1)) {
@@ -257,7 +261,9 @@ class _ProductPageWidgetState extends State<ProductPageWidget> {
         productBloc.add({'type':'amount','value':amount});
       } else if(data['type'] == 'dec') {
         amount--;
-        if(amount < 1) {
+        if(download == 1) {
+          amount = 1;
+        } else if(amount < 1) {
           amount = 1;
         }
         productBloc.add({'type':'amount','value':amount});

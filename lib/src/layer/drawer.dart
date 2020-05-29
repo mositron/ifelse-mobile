@@ -5,11 +5,11 @@ import '../site.dart';
 import '../convert/util.dart';
 import '../convert/gradient.dart';
 import '../convert/icon.dart';
-import '../convert/image.dart';
 import '../convert/session.dart';
 import '../page/login.dart';
 import '../page/home.dart';
 import '../page/profile.dart';
+import '../page/orders.dart';
 
 class GetDrawer extends StatefulWidget {
   final dynamic map;
@@ -87,6 +87,14 @@ Widget _logged(BuildContext context, Color profileColor, Gradient profileBg, Col
         onTap: () {
           Navigator.of(context).pop(context);
           Get.to(ProfilePage());
+        },
+      ),
+      ListTile(
+        leading: Icon(getIcon('shopping-cart'), color: menuIcon, size: Site.fontSize),
+        title: Text('ประวัติการสั่งซื้อ', style: _menu),
+        onTap: () {
+          Navigator.of(context).pop(context);
+          Get.to(OrdersPage());
         },
       ),
       ListTile(

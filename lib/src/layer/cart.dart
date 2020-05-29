@@ -106,6 +106,7 @@ class _CartViewState extends State<CartView> {
               label1: v['label1'],
               name2: v['name2'],
               label2: v['label2'],
+              unit: v['unit'],
               stock: getInt(v['stock']),
               color: _color,
               fsize: _fsize,

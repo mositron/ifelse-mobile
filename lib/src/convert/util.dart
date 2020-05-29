@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:html_unescape/html_unescape_small.dart';
+import 'package:intl/intl.dart';
 
 String getString(dynamic val, [String def]) {
   //final log = Logger();
@@ -103,4 +104,14 @@ double getRatio(String size) {
     default:
       return 0;
   }
+}
+
+String getTime(dynamic time, String format) {
+  if(time != null) {
+    if((time is Map) && (time['milliseconds'] != null)) {
+      var date = new DateTime.fromMillisecondsSinceEpoch(getInt(time['milliseconds']));
+      return DateFormat('y-MM-d HH:mm').format(date);
+    }
+  }
+  return '';
 }

@@ -21,7 +21,7 @@ class Api {
       headers: {'user-agent': 'ifelse.co-' + Site.version},
       body: request
     );
-    print(request);
+    //print(request);
     try {
       if (response.statusCode == 200) {
         Map<String, dynamic> resp = json.decode(response.body);
@@ -44,6 +44,7 @@ class Api {
         return null;
       }
     } catch (e) {
+      print(response.statusCode);
       print(e);
       print(response.body);
       return null;

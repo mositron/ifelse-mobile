@@ -34,4 +34,13 @@ class Site {
       products = load['products'];
     }
   }
+
+  static Map<int,dynamic> orderStatus = {
+    -2: {'name':'ยกเลิกโดยลูกค้า','badge':'dark','text':'dark','code':'customer','icon':'close-squared-alt'},
+    -1: {'name':'ยกเลิกโดยร้านค้า','badge':'secondary','text':'secondary','code':'store','icon':'close-circled'},
+    0: {'name':'รอชำระเงิน','badge':'light','text':'black','code':'payment','icon':'credit-card'},
+    1: {'name':'รอตรวจสอบ','badge':'warning','text':'warning','code':'confirm','icon':'waiter-alt'},
+    2: {'name':'รอส่ง','badge':'info','text':'info','code':'delivery','icon':'truck-loaded'},
+    3: {'name':'ส่งสินค้าแล้ว','badge':'success','text':'success','code':'success','icon':'check-circled'},
+  };
 } 
