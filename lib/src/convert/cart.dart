@@ -17,6 +17,8 @@ class Cart {
   static String shipPhone = '';
   static String shipAddress = '';
   static String shipDetail = '';
+  static int payBank = 0;
+  static String payType = '';
 
   static void init() async {
     Cart.products = [];

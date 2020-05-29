@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import '../site.dart';
 import '../convert/cart.dart';
@@ -7,6 +9,9 @@ import '../convert/api.dart';
 import '../convert/dialog.dart';
 import '../convert/bank.dart';
 import '../convert/image.dart';
+import '../convert/toast.dart';
+import '../bloc/payment.dart';
+import 'order.dart';
 
 class PaymentPage extends StatefulWidget {
   @override
@@ -17,10 +22,8 @@ class PaymentPage extends StatefulWidget {
 
 class PaymentPageScreenState extends State<PaymentPage> {
   bool loaded;
-  List<dynamic> address;
-  int addressSelected = -1;
-  List<dynamic> shipping;
-  int shippingSelected = -1;
+  PaymentBloc paymentBloc;
+  int paymentSelected = -1;
 
   @override
   void initState() {
@@ -31,11 +34,14 @@ class PaymentPageScreenState extends State<PaymentPage> {
   @override
   void dispose() {
     loaded = false;
+    paymentBloc.drain();
+    paymentBloc.close();
     super.dispose();
   }
   
   @override
   Widget build(BuildContext context) {
+    paymentBloc = PaymentBloc();
     return Container(
       color: Color(0xffe0e0e0),
       child: FutureBuilder<Map<dynamic, dynamic>>(
@@ -86,78 +92,82 @@ class PaymentPageScreenState extends State<PaymentPage> {
   }
 
   Widget getWidget(Map<dynamic, dynamic> data) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('การชำระเงิน',style: TextStyle(fontFamily: Site.font, color: Color(0xff565758))),
-          centerTitle: true,
-          leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back_ios,
-              color: Colors.black,
-              size: 22.0,
-            ),      
-            onPressed: () {
-              Get.back();
-            }
+    return MaterialApp(      
+      home: BlocProvider<PaymentBloc>(
+        create: (context) => paymentBloc,
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text('การชำระเงิน',style: TextStyle(fontFamily: Site.font, color: Color(0xff565758))),
+            centerTitle: true,
+            leading: IconButton(
+              icon: Icon(
+                Icons.arrow_back_ios,
+                color: Colors.black,
+                size: 22.0,
+              ),      
+              onPressed: () {
+                Get.back();
+              }
+            ),
+            backgroundColor: Colors.white,
+            elevation: 0,
           ),
-          backgroundColor: Colors.white,
-          elevation: 0,
-        ),
-        body: Container(
-          color: Color(0xffe0e0e0),
-          child: Column(  
-            children: <Widget>[
-              Expanded(
-                child: Container(
-                  alignment: Alignment.centerLeft,
-                  child: ListView(
-                    primary: false,
-                    shrinkWrap: true,
-                    padding: EdgeInsets.all(0),
-                    children: <Widget>[
-                      paymentSection(),
-                      priceSection(),
-                      shippingSection(),
-                      checkoutItem(),
-                    ],
+          body: Container(
+            color: Color(0xffe0e0e0),
+            child: Column(  
+              children: <Widget>[
+                Expanded(
+                  child: Container(
+                    alignment: Alignment.centerLeft,
+                    child: ListView(
+                      primary: false,
+                      shrinkWrap: true,
+                      padding: EdgeInsets.all(0),
+                      children: <Widget>[
+                        paymentSection(),
+                        priceSection(),
+                        shippingSection(),
+                        checkoutItem(),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
-          )
-        ),
-        bottomNavigationBar: Container(
-          //height: 70,
-          decoration: BoxDecoration(
-            color: Colors.white,
+              ],
+            )
           ),
-          margin: EdgeInsets.all(0),
-          padding: EdgeInsets.only(left:10, right:10),
-          child: Container(
-            child:Row(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                height: 70,
-                child:Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    //Text('ยอดรวมต้องชำระ', style: TextStyle(fontFamily: Site.font, fontSize: Site.fontSize)),
-                  ],
-                )
-              ),
-              Container(
-                alignment: Alignment.centerRight,
-                height: 70,
-                child: _getButton('btn'),
+          bottomNavigationBar: Container(
+            //height: 70,
+            decoration: BoxDecoration(
+              color: Colors.white,
+            ),
+            margin: EdgeInsets.all(0),
+            padding: EdgeInsets.only(left:10, right:10),
+            child: Container(
+              child:Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    height: 70,
+                    child:Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        //Text('ยอดรวมต้องชำระ', style: TextStyle(fontFamily: Site.font, fontSize: Site.fontSize)),
+                      ],
+                    )
+                  ),
+                  Container(
+                    alignment: Alignment.centerRight,
+                    height: 70,
+                    child: _getButton('btn'),
+                  )
+                ],
               )
-            ],
-          ))
+            )
+          )
         )
       )
     );
@@ -176,15 +186,13 @@ class PaymentPageScreenState extends State<PaymentPage> {
               onPressed: () {
                 Navigator.of(context, rootNavigator: true).pop('dialog');
               },
-              child: const Text('ปิด')
+              child: Text('ปิด', style: TextStyle(fontFamily: Site.font, fontSize: Site.fontSize, color: Color(0xffff5717))),
             ),
           ],
         )
       );
     }
   }
-
-
 
   Widget _getButton(String type) {
     String cartText = 'ยืนยันคำสั่งซื้อ';
@@ -227,7 +235,7 @@ class PaymentPageScreenState extends State<PaymentPage> {
         ),
         child: RawMaterialButton(
           onPressed: () {
-            
+            _paymentConfirm();
           },
           padding: EdgeInsets.all(0.0),
           elevation: 0.0,
@@ -276,7 +284,6 @@ class PaymentPageScreenState extends State<PaymentPage> {
   }
   Widget paymentBank(dynamic data) {
     if((data != null) && (data is List) && (data.length > 0)) {
-      print(data);
       return Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(5)),
@@ -306,76 +313,54 @@ class PaymentPageScreenState extends State<PaymentPage> {
                 padding: EdgeInsets.all(0),
                 itemBuilder: (BuildContext context, int position) {
                   final Map item = data[position];
-                  return Dismissible(
-                    key: UniqueKey(),
-                    onDismissed: (direction) {
-                      
-                      print(position);
+                  return InkWell(
+                    onTap: () {
+                      Cart.payType = 'bank';
+                      Cart.payBank = getInt(item['_id']);
+                      _paymentSelect(position);
                     },
-                    confirmDismiss: (DismissDirection direction) async {
-                      return await showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: const Text('ยืนยันการลบที่อยู่'),
-                            content: const Text('ต้องการลบที่อยู่ในการจัดส่งนี้หรือไม่?'),
-                            actions: <Widget>[
-                              FlatButton(
-                                onPressed: () => Navigator.of(context).pop(true),
-                                child: const Text('ลบ')
-                              ),
-                              FlatButton(
-                                onPressed: () => Navigator.of(context).pop(false),
-                                child: const Text('ยกเลิก'),
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                    },
-                    child: InkWell(
-                      onTap: () {
-
-                      },
-                      child: Card(
-                        shape: RoundedRectangleBorder(
-                          side: BorderSide(color: Color((addressSelected == position) ? 0xffff5717 : 0xffcccccc)),
-                          borderRadius: BorderRadius.all(Radius.circular(5)),
-                        ),
-                        elevation: 0,
-                        margin: EdgeInsets.only(top: 10),
-                        child: Container(
-                          padding: EdgeInsets.only(top:10, bottom:10, left:5, right:15),
-                          child: Row(
-                            children: [
-                              Radio(
-                                value: position,
-                                groupValue: addressSelected,
-                                activeColor: Color(0xffff5717),
-                                onChanged: (int value) {
-                                  //addressSelected = value;
-                                },
-                              ),
-                              Container(
-                                width: 50,
-                                child: Bank.getWidget(item['bank']),
-                              ),
-                              SizedBox(width: 10),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(getString(item['name']), style: TextStyle(fontFamily: Site.font),maxLines: 1),
-                                    Text(Bank.getName(item['bank']) + ': ' + getString(item['number']), style: TextStyle(fontFamily: Site.font),maxLines: 2),
-                                  ]
+                    child: BlocBuilder<PaymentBloc, int>(
+                      bloc: paymentBloc,
+                      builder: (_, product) {
+                        return Card(
+                          shape: RoundedRectangleBorder(
+                            side: BorderSide(color: Color((paymentSelected == position) ? 0xffff5717 : 0xffcccccc)),
+                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                          ),
+                          elevation: 0,
+                          margin: EdgeInsets.only(top: 10),
+                          child: Container(
+                            padding: EdgeInsets.only(top:10, bottom:10, left:5, right:15),
+                            child: Row(
+                              children: [
+                                Radio(
+                                  value: position,
+                                  groupValue: paymentSelected,
+                                  activeColor: Color(0xffff5717),
+                                  onChanged: (int value) {
+                                    _paymentSelect(position);
+                                  },
+                                ),
+                                Container(
+                                  width: 50,
+                                  child: Bank.getWidget(item['bank']),
+                                ),
+                                SizedBox(width: 10),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(getString(item['name']), style: TextStyle(fontFamily: Site.font),maxLines: 1),
+                                      Text(Bank.getName(item['bank']) + ': ' + getString(item['number']), style: TextStyle(fontFamily: Site.font),maxLines: 2),
+                                    ]
+                                  )
                                 )
-                              )
-                            ]
+                              ]
+                            )
                           )
-                        )
-                      )
-                    )
-                  
+                        );
+                      }
+                    )                  
                   );
                 }
               )
@@ -389,8 +374,111 @@ class PaymentPageScreenState extends State<PaymentPage> {
     );
   }
   
-  
-  
+  _paymentSelect(int index) {
+    paymentSelected = index;
+    paymentBloc.add('selected');
+  }
+
+  _paymentConfirm() async {
+    if((paymentSelected == -1) || (Cart.payBank  == 0)) {
+      Toast.show('กรุณาเลือกวิธีการชำระเงิน', context, duration: Toast.lengthShort, gravity:  Toast.bottom);
+      return;
+    }
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('ยันยันคำสั่งซื้อ'),
+          content: const Text('หากยืนยันแล้วจะไม่สามารถแก้ไขข้อมูลได้อีก, ต้องการดำเนินการต่อหรือไม่?'),
+          actions: <Widget>[
+            FlatButton(
+              onPressed: () {
+                Navigator.of(context, rootNavigator: true).pop('dialog');
+                _sendCart();
+              },
+              child: Text('ยืนยัน', style: TextStyle(fontFamily: Site.font, fontSize: Site.fontSize, color: Colors.white)),
+              color: Color(0xffff5717),
+            ),
+            FlatButton(
+              onPressed: () {
+                Navigator.of(context, rootNavigator: true).pop('dialog');
+              },
+              child: Text('ยกเลิก', style: TextStyle(fontFamily: Site.font, fontSize: Site.fontSize, color: Color(0xffff5717))),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  _sendCart() async {    
+    IfDialog().loading(context);
+    List<dynamic> products = [];
+    List<dynamic> error = [];
+    Cart.products.forEach((v) {
+      int id = getInt(v['id']);
+      int amount = getInt(v['amount']);
+      int index = getInt(v['index']);
+      double price = getDouble(v['price']);
+      if((id > 0) && (amount > 0)) {
+        products.add({'_id':id, 'index': index, 'amount': amount, 'price': price});
+      } else {
+        products.add({'_id':id, 'title': getString(v['title']), 'amount': amount});
+      }
+    });
+    if(error.length > 0) {
+      Navigator.of(context, rootNavigator: true).pop('dialog');
+      Toast.show('สินค้าบางรายการ มีข้อมูลไม่ถูกต้อง', context, duration: Toast.lengthShort, gravity:  Toast.bottom);
+    } else if(products.length == 0) {
+      Navigator.of(context, rootNavigator: true).pop('dialog');      
+      Toast.show('ไม่มีสินค้าในตะกร้า', context, duration: Toast.lengthShort, gravity:  Toast.bottom);
+    } else {
+      dynamic response = await Api.call('cart', {
+        'type': 'new',
+        'product': json.encode(products),
+        'amount': Cart.amount.toString(),
+        'price': Cart.price.toString(),
+        'weight': Cart.weight.toString(),
+        'ship_id': Cart.shipId.toString(),
+        'ship_price': Cart.shipPrice.toString(),
+        'ship_name': Cart.shipName,
+        'ship_phone': Cart.shipPhone,
+        'ship_address': Cart.shipAddress,
+        'pay_bank': Cart.payBank.toString(),
+        'pay_type': Cart.payType,
+      });
+      print(response);
+      Navigator.of(context, rootNavigator: true).pop('dialog');
+      if((response != null) && (response is Map)) {
+        if((response['error'] != null) && (response['error'] is List)) {
+          List<Widget> _error = [];
+          response['error'].forEach((v) {
+            _error.add(Text(getString(v), maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(fontFamily: Site.font, fontSize: Site.fontSize)));
+          });
+          print(response['error']);
+          if(_error.length > 0) {
+            showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                title: const Text('เกิดข้อผิดพลาด'),
+                content: Column(children: _error),
+                actions: <Widget>[
+                  FlatButton(
+                    onPressed: () {
+                      Navigator.of(context, rootNavigator: true).pop('dialog');
+                    },
+                    child: Text('ปิด', style: TextStyle(fontFamily: Site.font, fontSize: Site.fontSize, color: Color(0xffff5717))),
+                  ),
+                ],
+              )
+            );
+          }
+        } else if((response['order'] != null) && (response['order'].toString().isNotEmpty)) {
+          Get.to(OrderPage(id: getInt(response['order'])));
+        }
+      }
+    }
+  }
 
   checkoutItem() {
     return Container(

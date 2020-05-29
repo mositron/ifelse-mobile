@@ -204,7 +204,8 @@ class CheckoutPageScreenState extends State<CheckoutPage> {
                 Navigator.of(context, rootNavigator: true).pop('dialog');
                 _addAddress(-1);
               },
-              child: const Text('เพิ่มที่อยู่')
+              child: Text('เพิ่มที่อยู่', style: TextStyle(fontFamily: Site.font, fontSize: Site.fontSize, color: Colors.white)),
+              color: Color(0xffff5717),
             ),
           ],
         )
@@ -256,9 +257,9 @@ class CheckoutPageScreenState extends State<CheckoutPage> {
         child: RawMaterialButton(
           onPressed: () {           
             if((addressSelected == -1) || (addressSelected >= Cart.address.length)) {
-              Toast.show('กรุณาเลือกที่อยู่ในการจัดส่ง', context, duration: Toast.lengthShort, gravity:  Toast.bottom);
+              Toast.show('กรุณาเลือกที่อยู่ในการจัดส่ง', context, duration: Toast.lengthShort, gravity: Toast.bottom);
             } else if((shippingSelected == -1) || (shippingSelected >= shipping.length)) {
-              Toast.show('กรุณาเลือกวิธีการจัดส่ง', context, duration: Toast.lengthShort, gravity:  Toast.bottom);
+              Toast.show('กรุณาเลือกวิธีการจัดส่ง', context, duration: Toast.lengthShort, gravity: Toast.bottom);
             } else {
               Get.to(PaymentPage());
             }
@@ -354,11 +355,12 @@ class CheckoutPageScreenState extends State<CheckoutPage> {
                                 actions: <Widget>[
                                   FlatButton(
                                     onPressed: () => Navigator.of(context).pop(true),
-                                    child: const Text('ลบ')
+                                    child: Text('ลบ', style: TextStyle(fontFamily: Site.font, fontSize: Site.fontSize, color: Colors.white)),
+                                    color: Color(0xffff5717),
                                   ),
                                   FlatButton(
                                     onPressed: () => Navigator.of(context).pop(false),
-                                    child: const Text('ยกเลิก'),
+                                    child: Text('ยกเลิก', style: TextStyle(fontFamily: Site.font, fontSize: Site.fontSize, color: Color(0xffff5717))),
                                   ),
                                 ],
                               );
@@ -485,7 +487,7 @@ class CheckoutPageScreenState extends State<CheckoutPage> {
                       final Map item = shipping[position];
                       final double shipPrice = calcShipping(item);
                       _click() {
-                        Cart.shipId = getInt(item['id']);
+                        Cart.shipId = getInt(item['_id']);
                         Cart.shipPrice = shipPrice;
                         Cart.shipDetail = getString(item['name']) + ' ('+getString(item['type'])+')';
                         shippingSelected = position;
@@ -572,8 +574,9 @@ class CheckoutPageScreenState extends State<CheckoutPage> {
       if((range != null) && (range is Map)) {
         for (var key in range.keys) {
           double price = getDouble(key);
-          if(price < Cart.price) {
+          if(Cart.price < price) {
             found = getDouble(range[key]);
+            break;
           }
         }
       }
@@ -582,8 +585,9 @@ class CheckoutPageScreenState extends State<CheckoutPage> {
       if((range != null) && (range is Map)) {
         for (var key in range.keys) {
           double weight = getDouble(key);
-          if(weight < Cart.weight) {
+          if(Cart.weight < weight) {
             found = getDouble(range[key]);
+            break;
           }
         }
       }
@@ -592,8 +596,9 @@ class CheckoutPageScreenState extends State<CheckoutPage> {
       if((range != null) && (range is Map)) {
         for (var key in range.keys) {
           double amount = getDouble(key);
-          if(amount < Cart.amount) {
+          if(Cart.amount < amount) {
             found = getDouble(range[key]);
+            break;
           }
         }
       }

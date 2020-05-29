@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import '../layer.dart';
+import '../site.dart';
 import '../convert/cart.dart';
 import '../convert/util.dart';
 import '../convert/border.dart';
@@ -82,11 +83,12 @@ class _CartViewState extends State<CartView> {
                     actions: <Widget>[
                       FlatButton(
                         onPressed: () => Navigator.of(context).pop(true),
-                        child: const Text('ลบ')
+                        child: Text('ลบ', style: TextStyle(fontFamily: Site.font, fontSize: Site.fontSize, color: Colors.white)),
+                        color: Color(0xffff5717),
                       ),
                       FlatButton(
                         onPressed: () => Navigator.of(context).pop(false),
-                        child: const Text('ยกเลิก'),
+                        child: Text('ยกเลิก', style: TextStyle(fontFamily: Site.font, fontSize: Site.fontSize, color: Color(0xffff5717))),
                       ),
                     ],
                   );
