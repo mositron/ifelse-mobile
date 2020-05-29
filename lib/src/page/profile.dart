@@ -30,7 +30,7 @@ typedef void OnPickImageCallback(double maxWidth, double maxHeight, int quality)
 
 class ProfileScreenState extends State<_ProfilePage> with SingleTickerProviderStateMixin {
   bool _status = true;
-  final FocusNode myFocusNode = FocusNode();
+  //final FocusNode myFocusNode = FocusNode();
   TextEditingController controllerFirstName;
   TextEditingController controllerLastName;
   File _imageFile;
@@ -276,7 +276,7 @@ class ProfileScreenState extends State<_ProfilePage> with SingleTickerProviderSt
 
   @override
   void dispose() {
-    myFocusNode.dispose();
+    //myFocusNode.dispose();
     controllerFirstName.dispose();
     controllerLastName.dispose();
     super.dispose();

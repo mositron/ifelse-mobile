@@ -1,17 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import '../layer.dart';
-import '../site.dart';
 import '../convert/cart.dart';
 import '../convert/util.dart';
 import '../convert/border.dart';
-import '../convert/icon.dart';
 import '../convert/gradient.dart';
-import '../convert/image.dart';
 import '../convert/edge.dart';
 import '../convert/shadow.dart';
-import '../bloc/cart.dart';
 class CartParser extends WidgetParser {
   Widget parse(String file, Map<String, dynamic> map, BuildContext buildContext, [Map<String, dynamic> par, Function func]) {
     return new CartView(key: UniqueKey(), file: file, map: map, buildContext: buildContext, par: par);    

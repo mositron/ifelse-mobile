@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ifelse/src/convert/image.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import '../site.dart';
@@ -7,7 +6,11 @@ import '../convert/cart.dart';
 import '../convert/util.dart';
 import '../convert/api.dart';
 import '../convert/dialog.dart';
+import '../convert/image.dart';
+import '../convert/toast.dart';
 import '../bloc/checkout.dart';
+import 'address.dart';
+import 'payment.dart';
 
 class CheckoutPage extends StatefulWidget {
   @override
@@ -16,11 +19,10 @@ class CheckoutPage extends StatefulWidget {
   }
 }
 
-
 class CheckoutPageScreenState extends State<CheckoutPage> {
   bool loaded;
   List<dynamic> address;
-  int addressSelected = 0;
+  int addressSelected = -1;
   List<dynamic> shipping;
   int shippingSelected = -1;
   CheckoutBloc checkoutBloc;
@@ -43,22 +45,34 @@ class CheckoutPageScreenState extends State<CheckoutPage> {
   Widget build(BuildContext context) {
     checkoutBloc = CheckoutBloc();
     return Container(
-        color: Color(0xfff0f0f0),
-        child: FutureBuilder<Map<dynamic, dynamic>>(
-          future: getCheckout(),
-          builder: (context, snapshot) {
-            return snapshot.connectionState == ConnectionState.done
-                ? snapshot.hasData
-                    ? getWidget(snapshot.data)
-                    : retryButton(fetch)
-                : IfDialog.getLoading();
-          }
-        )
+      color: Color(0xffe0e0e0),
+      child: FutureBuilder<Map<dynamic, dynamic>>(
+        future: getCheckout(),
+        builder: (context, snapshot) {
+          return snapshot.connectionState == ConnectionState.done
+              ? snapshot.hasData
+                ? getWidget(snapshot.data)
+                : retryButton(fetch)
+              : IfDialog.getLoading();
+        }
+      )
     );
   }
 
   Future<Map<dynamic, dynamic>> getCheckout() async {
-    return await Api.call('checkout');
+    dynamic data = await Api.call('checkout');    
+    if((data != null) && (data is Map)) {
+      if((data['address'] != null) && (data['address'] is List)) {
+        Cart.address = data['address'].toList();
+      }
+    }
+    if((data != null) && (data is Map)) {
+      if((data['shipping'] != null) && (data['shipping'] is List)) {
+        shipping = data['shipping'].toList();
+      }
+    }
+    _alertNoAddress();
+    return data;
   }
 
   setLoading(bool loading) {
@@ -84,89 +98,201 @@ class CheckoutPageScreenState extends State<CheckoutPage> {
   }
 
   Widget getWidget(Map<dynamic, dynamic> data) {
-    if((data != null) && (data is Map)) {
-      if((data['address'] != null) && (data['address'] is List)) {
-        address = data['address'].toList();
-      }
-    }
-    if((data != null) && (data is Map)) {
-      if((data['shipping'] != null) && (data['shipping'] is List)) {
-        shipping = data['shipping'].toList();
-      }
-    }
     return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('การจัดส่ง',style: TextStyle(fontFamily: Site.font, color: Color(0xff565758))),
-          centerTitle: true,
-          leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back_ios,
-              color: Colors.black,
-              size: 22.0,
-            ),      
-            onPressed: () {
-              Get.back();
-            }
+      home: BlocProvider<CheckoutBloc>(
+        create: (context) => checkoutBloc,
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text('การจัดส่ง',style: TextStyle(fontFamily: Site.font, color: Color(0xff565758))),
+            centerTitle: true,
+            leading: IconButton(
+              icon: Icon(
+                Icons.arrow_back_ios,
+                color: Colors.black,
+                size: 22.0,
+              ),      
+              onPressed: () {
+                Get.back();
+              }
+            ),
+            backgroundColor: Colors.white,
+            elevation: 0,
           ),
-          backgroundColor: Colors.white,
-          elevation: 0,
-        ),
-        body: Container(
-          color: Color(0xfff0f0f0),
-          child: Builder(builder: (context) {
-            return BlocProvider<CheckoutBloc>(
-              create: (context) => checkoutBloc,
-              child: Column(  
-                children: <Widget>[
-                  Expanded(
-                    child: Container(
-                      alignment: Alignment.centerLeft,
-                      child: ListView(
-                        primary: false,
-                        shrinkWrap: true,
-                        padding: EdgeInsets.all(0),
-                        children: <Widget>[
-                          selectedAddressSection(),
-                          standardDelivery(),
-                          priceSection(),
-                          checkoutItem(),
-                        ],
-                      ),
+          body: Container(
+            color: Color(0xffe0e0e0),
+            child: Column(  
+              children: <Widget>[
+                Expanded(
+                  child: Container(
+                    alignment: Alignment.centerLeft,
+                    child: ListView(
+                      primary: false,
+                      shrinkWrap: true,
+                      padding: EdgeInsets.all(0),
+                      children: <Widget>[
+                        selectedAddressSection(),
+                        standardDelivery(),
+                        priceSection(),
+                        checkoutItem(),
+                      ],
                     ),
-                    flex: 90,
                   ),
-                  Expanded(
-                    child: Container(
-                      width: double.infinity,
-                      margin: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-                      child: RaisedButton(
-                        onPressed: () {
-                          /*Navigator.of(context).push(new MaterialPageRoute(
-                              builder: (context) => OrderPlacePage()));*/
-                              
-                        },
-                        child: Text(
-                          'ชำระเงิน',
-                          style: TextStyle(fontFamily: Site.font),
-                        ),
-                        color: Colors.pink,
-                        textColor: Colors.white,
-                      ),
-                    ),
-                    flex: 10,
+                ),
+              ],
+            )
+          ),
+          bottomNavigationBar: Container(
+            //height: 70,
+            decoration: BoxDecoration(
+              color: Colors.white,
+            ),
+            margin: EdgeInsets.all(0),
+            padding: EdgeInsets.only(left:10, right:10),
+            child: Container(
+              child:Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  height: 70,
+                  child:Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('ยอดรวมต้องชำระ', style: TextStyle(fontFamily: Site.font, fontSize: Site.fontSize)),
+                      BlocBuilder<CheckoutBloc, int>(
+                        bloc: checkoutBloc,
+                        builder: (_, count) {
+                          if((addressSelected == -1) || (addressSelected >= Cart.address.length)) {
+                            return Text('กรุณาเลือกที่อยู่ในการจัดส่ง', style: TextStyle(fontFamily: Site.font, color: Colors.redAccent, fontSize: 16));
+                          } else if((shippingSelected == -1) || (shippingSelected >= shipping.length)) {
+                            return Text('กรุณาเลือกวิธีการจัดส่ง', style: TextStyle(fontFamily: Site.font, color: Colors.redAccent, fontSize: 16));
+                          } else {
+                            return Text(getCurrency(Cart.price + Cart.shipPrice), style: TextStyle(fontFamily: Site.font, color: Color(0xffff5717), fontSize: 18));
+                          }
+                        }
+                      )
+                    ],
                   )
-                ],
+                ),
+                Container(
+                  alignment: Alignment.centerRight,
+                  height: 70,
+                  child: _getButton('btn'),
+                )
+              ],
+            ))
+          )
+        )
+      )
+    );
+  }
+
+  _alertNoAddress() async {
+    if((Cart.address == null) ||  (Cart.address is! List) ||  (Cart.address.length == 0)) {
+      print('no');
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('ยังไม่มีที่อยู่'),
+          content: const Text('ยังไม่มีข้อมูลสำหรับที่อยู่ในการจัดส่ง, กรุณาเพิ่มข้อมูล'),
+          actions: <Widget>[
+            FlatButton(
+              onPressed: () {
+                Navigator.of(context, rootNavigator: true).pop('dialog');
+                _addAddress(-1);
+              },
+              child: const Text('เพิ่มที่อยู่')
+            ),
+          ],
+        )
+      );
+    }
+  }
+
+
+
+  Widget _getButton(String type) {
+    String cartText = 'ชำระเงิน';
+    Color cartColor = getColor('fff');
+    double cartFSize = 16;
+    IconData cartIcon;
+    String cartIpos = 'left';
+    DecorationImage cartBg;
+    Border cartBorder;
+    BorderRadius cartRadius = BorderRadius.all(Radius.circular(5));
+    List<BoxShadow> cartShadow;
+    EdgeInsetsGeometry cartSpace = EdgeInsets.only(left:30,right:30,top:7,bottom:7);
+
+    List<Widget> widget = [];
+    Icon _icon = Icon(cartIcon, color: cartColor, size: cartFSize,);
+    Text _text = Text(cartText, style: TextStyle(color:cartColor,fontFamily: Site.font, fontSize: cartFSize));
+    
+    if(cartText.isNotEmpty && cartIcon != null) {
+      if(cartIpos == 'right') {
+        widget = [_text, SizedBox(width: 8), _icon,];
+      } else if(cartIpos == 'up') {
+        widget = [_icon, SizedBox(height: 3), _text,];
+      } else {
+        widget = [_icon, SizedBox(width: 8), _text,];
+      }
+    } else if(cartText.isNotEmpty) {
+      widget = [_text];
+    } else if(cartIcon != null) {
+      widget = [_icon];
+    }
+    return Align(
+      alignment: Alignment.center,
+      child: Container(
+        margin: EdgeInsets.all(0),
+        padding: EdgeInsets.all(0),
+        //alignment: getAlignBox(align),
+        decoration: BoxDecoration(
+          borderRadius: cartRadius,
+          boxShadow: cartShadow,
+        ),
+        child: RawMaterialButton(
+          onPressed: () {           
+            if((addressSelected == -1) || (addressSelected >= Cart.address.length)) {
+              Toast.show('กรุณาเลือกที่อยู่ในการจัดส่ง', context, duration: Toast.lengthShort, gravity:  Toast.bottom);
+            } else if((shippingSelected == -1) || (shippingSelected >= shipping.length)) {
+              Toast.show('กรุณาเลือกวิธีการจัดส่ง', context, duration: Toast.lengthShort, gravity:  Toast.bottom);
+            } else {
+              Get.to(PaymentPage());
+            }
+          },
+          padding: EdgeInsets.all(0.0),
+          elevation: 0.0,
+          child: Ink(            
+            decoration: BoxDecoration(
+              color: Color(0xffff5717),
+              borderRadius: cartRadius,
+              border: cartBorder,
+              image: cartBg,
+            ),
+            padding: cartSpace,
+            child: cartIpos == 'up' ?
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center ,
+                mainAxisSize: MainAxisSize.min,
+                children: widget,
               )
-            );
-          })
+              :
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center ,
+                mainAxisSize: MainAxisSize.min,
+                children: widget,
+            )
+          )
         )
       )
     );
   }
 
   Widget selectedAddressSection() {
-    if((address != null) && (address is List)) {
+    if((Cart.address != null) && (Cart.address is List)) {
       return Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(5)),
@@ -174,7 +300,7 @@ class CheckoutPageScreenState extends State<CheckoutPage> {
           color: Colors.white
         ),
         margin: EdgeInsets.all(10),
-        padding: EdgeInsets.only(left: 12, top: 8, right: 12, bottom: 10),
+        padding: EdgeInsets.only(left: 12, top: 8, right: 12, bottom: 12),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -186,19 +312,10 @@ class CheckoutPageScreenState extends State<CheckoutPage> {
                 Text('ชื่อและที่อยู่ในการจัดส่ง', style: TextStyle(fontFamily: Site.font)),
                 GestureDetector(
                   onTap: () {
-
+                     _addAddress(-1);
                   },
                   child: Text('เพิ่มที่อยู่ใหม่', style: TextStyle(fontFamily: Site.font)),
                 ),
-                /*
-                FlatButton(
-                  padding: EdgeInsets.all(0),
-                  onPressed: () {},
-                  child: Text('เพิ่มที่อยู่ใหม่',style: TextStyle(fontFamily: Site.font)),
-                  splashColor: Colors.transparent,
-                  highlightColor: Colors.transparent,
-                ),
-                */
               ],
             ),
             SizedBox(height: 4),
@@ -209,61 +326,86 @@ class CheckoutPageScreenState extends State<CheckoutPage> {
               color: Colors.grey.shade400,
             ),
             Container(
-              child: ListView.builder(
-                scrollDirection: Axis.vertical,
-                itemCount: address.length,
-                primary: false,
-                shrinkWrap: true,
-                padding: EdgeInsets.all(0),
-                itemBuilder: (BuildContext context, int position) {
-                  final Map item = address[position];
-                  _click() {
-                    addressSelected = position;
-                  }
-                  return InkWell(
-                    onTap: () {
-                      _click();
-                    },
-                    child: BlocBuilder<CheckoutBloc, int>(
-                      bloc: checkoutBloc,
-                      builder: (_, product) {
-                        return Card(
-                          shape: RoundedRectangleBorder(
-                            side: BorderSide(color: Color((addressSelected == position) ? 0xffff5717 : 0xffcccccc)),
-                            borderRadius: BorderRadius.all(Radius.circular(5)),
-                          ),
-                          elevation: 0,
-                          margin: EdgeInsets.only(top: 10),
-                          child: Container(
-                            padding: EdgeInsets.only(top:10, bottom:10, left:5, right:15),
-                            child: Row(
-                              children: [
-                                Radio(
-                                  value: position,
-                                  groupValue: addressSelected,
-                                  activeColor: Color(0xffff5717),
-                                  onChanged: (int value) {
-                                    //addressSelected = value;
-                                    _click();
-                                  },
-                                ),
-                                SizedBox(width: 10),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(getString(item['name']) + ' ('+getString(item['phone'])+')', style: TextStyle(fontFamily: Site.font),maxLines: 1),
-                                      SizedBox(height: 5),
-                                      Text(getString(item['address']), style: TextStyle(fontFamily: Site.font),maxLines: 2),
-                                    ]
-                                  )
-                                )
-                              ],
+              child: BlocBuilder<CheckoutBloc, int>(
+                bloc: checkoutBloc,
+                builder: (_, product) {
+                  return ListView.builder(
+                    scrollDirection: Axis.vertical,
+                    itemCount: Cart.address.length,
+                    primary: false,
+                    shrinkWrap: true,
+                    padding: EdgeInsets.all(0),
+                    itemBuilder: (BuildContext context, int position) {
+                      final Map item = Cart.address[position];
+                      return Dismissible(
+                        key: UniqueKey(),
+                        onDismissed: (direction) {
+                          Cart.address.removeAt(position);
+                          print(position);
+                          _addressRemove(position);
+                        },
+                        confirmDismiss: (DismissDirection direction) async {
+                          return await showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: const Text('ยืนยันการลบที่อยู่'),
+                                content: const Text('ต้องการลบที่อยู่ในการจัดส่งนี้หรือไม่?'),
+                                actions: <Widget>[
+                                  FlatButton(
+                                    onPressed: () => Navigator.of(context).pop(true),
+                                    child: const Text('ลบ')
+                                  ),
+                                  FlatButton(
+                                    onPressed: () => Navigator.of(context).pop(false),
+                                    child: const Text('ยกเลิก'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                        child: InkWell(
+                          onTap: () {
+                            _addressSelect(position);
+                          },
+                          child: Card(
+                            shape: RoundedRectangleBorder(
+                              side: BorderSide(color: Color((addressSelected == position) ? 0xffff5717 : 0xffcccccc)),
+                              borderRadius: BorderRadius.all(Radius.circular(5)),
                             ),
-                          ),
-                        );
-                      }
-                    ),
+                            elevation: 0,
+                            margin: EdgeInsets.only(top: 10),
+                            child: Container(
+                              padding: EdgeInsets.only(top:10, bottom:10, left:5, right:15),
+                              child: Row(
+                                children: [
+                                  Radio(
+                                    value: position,
+                                    groupValue: addressSelected,
+                                    activeColor: Color(0xffff5717),
+                                    onChanged: (int value) {
+                                      //addressSelected = value;
+                                      _addressSelect(position);
+                                    },
+                                  ),
+                                  SizedBox(width: 10),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(getString(item['name']) + ' ('+getString(item['phone'])+')', style: TextStyle(fontFamily: Site.font),maxLines: 1),
+                                        Text(getString(item['address']), style: TextStyle(fontFamily: Site.font),maxLines: 2),
+                                      ]
+                                    )
+                                  )
+                                ]
+                              )
+                            )
+                          )
+                        )
+                      );
+                    }
                   );
                 }
               )
@@ -277,6 +419,37 @@ class CheckoutPageScreenState extends State<CheckoutPage> {
     );
   }
 
+  _addAddress(int index) async {
+    await Get.to(AddressPage(edit: index, next: 'back'));
+    checkoutBloc.add('selected');
+  }
+  
+  _addressSelect(int index) {
+    addressSelected = index;
+    if((Cart.address[index] != null) && (Cart.address[index] is Map)) {
+      Cart.shipName = getString(Cart.address[index]['name']);
+      Cart.shipPhone = getString(Cart.address[index]['phone']);
+      Cart.shipAddress = getString(Cart.address[index]['address']);
+    }
+    checkoutBloc.add('selected');
+  }
+
+  _addressRemove(int index) async {
+    IfDialog().loading(context);
+    dynamic response = await Api.call('address', {
+      'type': 'remove',
+      'index': index.toString(),
+    });
+    print(response);
+    if((response != null) && (response is Map)) {
+      if((getString(response['status']) == 'OK') && (response['address'] is List)) {
+        Cart.address = response['address'].toList();
+      }
+    }
+    checkoutBloc.add('selected');
+    Navigator.of(context, rootNavigator: true).pop('dialog');
+  }
+
   standardDelivery() {
     if((shipping != null) && (shipping is List)) {
       return Container(
@@ -286,7 +459,7 @@ class CheckoutPageScreenState extends State<CheckoutPage> {
           color: Colors.white
         ),
         margin: EdgeInsets.all(10),
-        padding: EdgeInsets.only(left: 12, top: 8, right: 12, bottom: 10),
+        padding: EdgeInsets.only(left: 12, top: 8, right: 12, bottom: 12),
         child: BlocBuilder<CheckoutBloc, int>(
           bloc: checkoutBloc,
           builder: (_, product) {
@@ -312,10 +485,11 @@ class CheckoutPageScreenState extends State<CheckoutPage> {
                       final Map item = shipping[position];
                       final double shipPrice = calcShipping(item);
                       _click() {
-                          Cart.shipId = getInt(item['id']);
-                          Cart.shipPrice = shipPrice;
-                          shippingSelected = position;
-                          checkoutBloc.add('selected');
+                        Cart.shipId = getInt(item['id']);
+                        Cart.shipPrice = shipPrice;
+                        Cart.shipDetail = getString(item['name']) + ' ('+getString(item['type'])+')';
+                        shippingSelected = position;
+                        checkoutBloc.add('selected');
                       }
                       return InkWell(
                         onTap: () {
@@ -341,7 +515,6 @@ class CheckoutPageScreenState extends State<CheckoutPage> {
                                       groupValue: shippingSelected,
                                       activeColor: Color(0xffff5717),
                                       onChanged: (int value) {
-                                        //shippingSelected = value;
                                         _click();
                                       },
                                     ),

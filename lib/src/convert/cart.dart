@@ -11,6 +11,12 @@ class Cart {
   static double weight = 0;
   static int shipId = 0;
   static double shipPrice = 0; 
+  static List<dynamic> address = [];
+  static Map<String,dynamic> payment = {};
+  static String shipName = '';
+  static String shipPhone = '';
+  static String shipAddress = '';
+  static String shipDetail = '';
 
   static void init() async {
     Cart.products = [];
