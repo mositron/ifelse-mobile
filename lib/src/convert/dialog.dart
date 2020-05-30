@@ -4,9 +4,7 @@ import 'gradient.dart';
 
 class IfDialog {
   bool _barrierDismissible = true;
-  BuildContext _dismissingContext;
-  bool _isShowing = false;
-
+  
   static Widget getLoading() {
     return Container(
         color: Colors.transparent,
@@ -32,7 +30,6 @@ class IfDialog {
         context: context,
         barrierDismissible: _barrierDismissible,
         builder: (BuildContext context) {
-          _dismissingContext = context;
           return WillPopScope(
             onWillPop: () async => _barrierDismissible,
             child: Dialog(
@@ -52,80 +49,31 @@ class IfDialog {
         },
       );
       await Future.delayed(Duration(milliseconds: 200));
-      _isShowing = true;
       return true;
-    
     } catch (err) {
-      _isShowing = false;
       debugPrint('Exception while showing the dialog');
       debugPrint(err.toString());
       return false;
     }
   }
   
-  Future<bool> hide() async {
-    try {
-      if (_isShowing) {
-        _isShowing = false;
-        Navigator.of(_dismissingContext).pop();
-        return Future.value(true);
-      } else {
-        return Future.value(false);
-      }
-    } catch (err) {
-      debugPrint('...');
-      debugPrint(err.toString());
-      return Future.value(false);
-    }
-  }
-
-  static Future show({@required BuildContext context, String text, Widget container, Widget icon, Widget title}) {
-    return showGeneralDialog(
-        barrierColor: Colors.black.withOpacity(0.5),
-        transitionBuilder: (context, a1, a2, widget) {
-          return Transform.scale(
-            scale: a1.value,
-            child: Opacity(
-              opacity: a1.value,
-              child: AlertDialog(
-                shape: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15.0)),
-                title: title,
-                content: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Icon(Icons.info_outline,color: Color(0xFFCCCCCC)),
-                    Container(
-                      height: 10,
-                    ),
-                    text != null ?
-                      Text(text, style:TextStyle(fontFamily: Site.font)) :
-                      widget
-                  ],
-                ),
-                actions: <Widget>[
-                  MaterialButton(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(40),
-                    ),
-                    color: Colors.white,
-                    child: Text('ปิด', style:TextStyle(fontFamily: Site.font)),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                ],
-              ),
+  static Future show({@required BuildContext context, String title, String text, String close}) {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: title != null ? Text('ยืนยันคำสั่งซื้อ', style: TextStyle(fontFamily: Site.font)) : null,
+          content: Text(text, style:TextStyle(fontFamily: Site.font)),
+          actions: <Widget>[
+            FlatButton(
+              onPressed: () {
+                Navigator.of(context, rootNavigator: true).pop('dialog');
+              },
+              child: Text(close ?? 'ปิด', style: TextStyle(fontFamily: Site.font, fontSize: Site.fontSize, color: Color(0xffff5717))),
             ),
-          );
-        },
-        transitionDuration: Duration(milliseconds: 200),
-        barrierDismissible: true,
-        barrierLabel: '',
-        context: context,
-        pageBuilder: (context, animation1, animation2) {
-          return Container();
-        }
-      );
+          ],
+        );
+      },
+    );
   }
 }

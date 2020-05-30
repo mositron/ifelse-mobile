@@ -4,6 +4,10 @@
  
 
 ## Changelog ###
+30/05/2563
+* เพิ่มระบบ Shopping Cart รองรับ Stock, คำนวนค่าจัดส่ง, แจ้งชำระเงิน
+* เริ่มเก็บ token สำหรับทำ push notification (ส่งกลับมายัง server)
+
 24/05/2563
 * ล็อคอินด้วย Google/Facebook รองรับทั้ง iOS/Android
 * เพิ่มแก้ไขรูปโปรไฟล์/ข้อมูลส่วนตัว รองรับทั้ง iOS/Android

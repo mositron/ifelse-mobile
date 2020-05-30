@@ -8,7 +8,7 @@ class App {
   static void run(String token) async {
     Site.token = token;
     runApp(GetMaterialApp(
-      home: Site.token.length == 10 ? SplashPage() : DemoPage(),
+      home: Site.token.length >= 10 ? SplashPage() : DemoPage(),
       debugShowCheckedModeBanner: false,
       /*
       initialRoute: '/' + (token.length != 10 ? 'demo' : 'splash'),

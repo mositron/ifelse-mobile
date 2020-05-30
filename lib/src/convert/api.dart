@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -9,9 +10,20 @@ import 'session.dart';
 class Api {
   static Future<Map> call(String method, [Map<String,String> map]) async {
     final client = new http.Client();
+    if(Site.platform.isEmpty) {
+      if(Platform.isIOS) {
+        Site.platform = 'ios';
+      } else if(Platform.isAndroid) {
+        Site.platform = 'android';
+      } else {
+        Site.platform = 'other';
+      }
+    }
     Map<String,String> request = {
         'token': Site.token,
         'session': My.session,
+        'fcm': Site.fcm,
+        'platform': Site.platform,
       };
     if(map != null) {
       request.addAll(map);

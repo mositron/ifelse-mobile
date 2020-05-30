@@ -10,7 +10,9 @@ class Site {
   static String name = '',
     domain = '',
     token = '',
-    font = 'Kanit';
+    font = 'Kanit',
+    fcm = '',
+    platform = '';
   static double fontSize = 16;
   static Map<String, dynamic> template = {};
   static List<dynamic> articles = [],

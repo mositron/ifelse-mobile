@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get/get.dart';
 import '../site.dart';
 import '../layer.dart';
@@ -30,6 +31,8 @@ class HomePageWidget extends StatefulWidget {
 class _HomePageWidgetState extends State<HomePageWidget> {
   final String next;
   final Map par;
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+
   _HomePageWidgetState({Key key, this.next, this.par});
 
   TabController controller;
@@ -38,12 +41,34 @@ class _HomePageWidgetState extends State<HomePageWidget> {
   void initState() {
     render = null;
     super.initState();
+    _firebaseMessaging.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        print("onMessage: $message");
+      },
+      onLaunch: (Map<String, dynamic> message) async {
+        print("onLaunch: $message");
+      },
+      onResume: (Map<String, dynamic> message) async {
+        print("onResume: $message");
+      },
+    );
+    _firebaseMessaging.requestNotificationPermissions(const IosNotificationSettings(sound: true, badge: true, alert: true, provisional: true));
+    _firebaseMessaging.onIosSettingsRegistered.listen((IosNotificationSettings settings) {
+      print("Settings registered: $settings");
+    });
+    _firebaseMessaging.getToken().then((String token) {
+      if(token != null) {
+        Site.fcm = token;
+      }
+    });
   }
+
   @override
   void dispose() {
     render = null;
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     if(Site.cartBloc == null) {
@@ -74,4 +99,5 @@ class _HomePageWidgetState extends State<HomePageWidget> {
       }
     }
   }
+
 }

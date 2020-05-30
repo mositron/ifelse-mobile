@@ -1,4 +1,4 @@
-package com.example.studio
+package co.ifelse.demo
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity

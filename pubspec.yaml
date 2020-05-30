@@ -43,6 +43,7 @@ dependencies:
   flutter_svg: ^0.17.4
   intl: ^0.16.1
   pull_to_refresh: ^1.5.8
+  firebase_messaging: ^6.0.16
 
 dev_dependencies:
   flutter_test:
