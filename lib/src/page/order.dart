@@ -24,9 +24,8 @@ class OrderPageScreenState extends State<OrderPage> {
   bool loaded;
   Map order;
   int status = 0;
-
+  List<dynamic> bank;
   OrderPageScreenState(this.id);
-
 
   @override
   void initState() {
@@ -63,6 +62,7 @@ class OrderPageScreenState extends State<OrderPage> {
       if((data['order'] != null) && (data['order'] is Map)) {
         order = data['order'];
         status = getInt(order['status']);
+        bank = order['bank'];
       }
     }
     return data;
@@ -184,7 +184,8 @@ class OrderPageScreenState extends State<OrderPage> {
           mainAxisSize: MainAxisSize.min,
           children: [
             _getButton('แจ้งการชำระเงิน', getColor('#28a745'), () {
-              Get.to(InformPage());
+              print(bank);
+              _nextPage();
             }),
             SizedBox(width: 20),
             _getButton('ยกเลิกคำสั่งซื้อ', getColor('#999'), () {
@@ -221,7 +222,12 @@ class OrderPageScreenState extends State<OrderPage> {
     return Container();
   }
 
-
+  _nextPage() async {
+    dynamic result = await Get.to(InformPage(order: id, bank: bank));
+    if((result is String) && (result == 'success')) {
+      setLoading(true);
+    }
+  }
   _getButton(String text, Color color, Function func) {
     Color cartColor = getColor('fff');
     double cartFSize = 16;

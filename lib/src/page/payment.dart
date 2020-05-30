@@ -268,7 +268,6 @@ class PaymentPageScreenState extends State<PaymentPage> {
   Widget paymentSection() {
     if((Cart.payment != null) && (Cart.payment is Map) && (Cart.payment.length > 0)) {
       List<Widget> _widget = [];
-      print('object');
       for(var k in Cart.payment.keys) {
         if(k == 'bank') {
           _widget.add(paymentBank(Cart.payment[k]));
@@ -389,7 +388,7 @@ class PaymentPageScreenState extends State<PaymentPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('ยันยันคำสั่งซื้อ'),
+          title: const Text('ยืนยันคำสั่งซื้อ'),
           content: const Text('หากยืนยันแล้วจะไม่สามารถแก้ไขข้อมูลได้อีก, ต้องการดำเนินการต่อหรือไม่?'),
           actions: <Widget>[
             FlatButton(
@@ -448,7 +447,6 @@ class PaymentPageScreenState extends State<PaymentPage> {
         'pay_bank': Cart.payBank.toString(),
         'pay_type': Cart.payType,
       });
-      print(response);
       Navigator.of(context, rootNavigator: true).pop('dialog');
       if((response != null) && (response is Map)) {
         if((response['error'] != null) && (response['error'] is List)) {
@@ -456,7 +454,6 @@ class PaymentPageScreenState extends State<PaymentPage> {
           response['error'].forEach((v) {
             _error.add(Text(getString(v), maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(fontFamily: Site.font, fontSize: Site.fontSize)));
           });
-          print(response['error']);
           if(_error.length > 0) {
             showDialog(
               context: context,
@@ -475,6 +472,7 @@ class PaymentPageScreenState extends State<PaymentPage> {
             );
           }
         } else if((response['order'] != null) && (response['order'].toString().isNotEmpty)) {
+          Cart.clear();
           Get.offAll(HomePage(next: 'order', par: {'id': getInt(response['order'])}));
         }
       }

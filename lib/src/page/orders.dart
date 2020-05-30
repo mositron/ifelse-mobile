@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import '../site.dart';
-import '../convert/cart.dart';
 import '../convert/util.dart';
 import '../convert/api.dart';
-import '../convert/dialog.dart';
 import '../convert/image.dart';
 import 'order.dart';
 
@@ -18,10 +17,12 @@ class OrdersPage extends StatefulWidget {
 class OrdersPageScreenState extends State<OrdersPage> {
   bool loaded;
   List<dynamic> orders = [];
+  RefreshController _refreshController = RefreshController(initialRefresh: false);
 
   @override
   void initState() {
     loaded = false;
+    _loading();
     super.initState();
   }
   
@@ -33,56 +34,10 @@ class OrdersPageScreenState extends State<OrdersPage> {
   
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Color(0xffe0e0e0),
-      child: FutureBuilder<Map<dynamic, dynamic>>(
-        future: getPayment(),
-        builder: (context, snapshot) {
-          return snapshot.connectionState == ConnectionState.done
-            ? snapshot.hasData
-              ? getWidget(snapshot.data)
-              : retryButton(fetch)
-            : IfDialog.getLoading();
-        }
-      )
-    );
-  }
-
-  Future<Map<dynamic, dynamic>> getPayment() async {
-    dynamic data = await Api.call('orders');
-    return data;
-  }
-
-  setLoading(bool loading) {
-    setState(() {
-      loaded = loading;
-    });
-  }
- 
-  fetch() {
-    setLoading(true);
-  }  
-
-  FlatButton retryButton(Function fetch) {
-    return FlatButton(
-      child: Text(
-        "No Internet Connection.\nPlease Retry",
-        textAlign: TextAlign.center,
-        overflow: TextOverflow.ellipsis,
-        style: TextStyle(fontWeight: FontWeight.normal),
-      ),
-      onPressed: () => fetch(),
-    );
-  }
-
-  Widget getWidget(Map<dynamic, dynamic> data) {
-    if((data != null) && (data is Map)) {
-      if((data['orders'] != null) && (data['orders'] is List)) {
-        orders = data['orders'].toList();
-      }
-    }
     return MaterialApp(      
+      color: Color(0xffe0e0e0),
       home: Scaffold(
+        backgroundColor: Color(0xffe0e0e0),
         appBar: AppBar(
           title: Text('ประวัติการสั่งซื้อสินค้า',style: TextStyle(fontFamily: Site.font, color: Color(0xff565758))),
           centerTitle: true,
@@ -99,75 +54,107 @@ class OrdersPageScreenState extends State<OrdersPage> {
           backgroundColor: Colors.white,
           elevation: 0,
         ),
-        body: Container(
-          color: Color(0xffe0e0e0),
-          child: Column(  
-            children: <Widget>[
-              Expanded(
-                child: Container(
-                  //alignment: Alignment.centerLeft,
-                  child: ListView.builder(
-                    scrollDirection: Axis.vertical,
-                    itemCount: orders.length,
-                    primary: false,
-                    shrinkWrap: true,
-                    padding: EdgeInsets.all(5),
-                    itemBuilder: (BuildContext context, int position) {
-                      final Map item = orders[position];
-                      return GestureDetector(
-                        onTap: () {
-                          Get.to(OrderPage(id: getInt(item['_id'])));
-                        },
-                        child: Card(
-                          shape: RoundedRectangleBorder(
-                            side: BorderSide(color: Color(0xffcccccc)),
-                            borderRadius: BorderRadius.all(Radius.circular(5)),
-                          ),
-                          elevation: 0,
-                          child: Container(
-                            padding: EdgeInsets.all(15),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text('คำสั่งซื้อ: #' + getString(item['no']), style: TextStyle(fontFamily: Site.font),maxLines: 1),
-                                          Text('สั่งซื้อวันที่: ' + getTime(item['added'],'datetime'), style: TextStyle(fontFamily: Site.font),maxLines: 1),
-                                        ]
-                                      ),
-                                    ),
-                                    Container(
-                                      child: Text(Site.orderStatus[getInt(item['status'])]['name'], style: TextStyle(fontFamily: Site.font),maxLines: 1),
-                                      
-                                    ),
-                                  ]
-                                ),
-                                SizedBox(width: 10),
-                                _orderItem(item['product']),
-                              ]
-                            ) 
-                          )
-                        )
-                      );
-                    }
-                  ),
-                ),
-              ),
-            ],
-          )
-        )
+        body: _getBody()
       )
     );
   }
 
+  _loading() async {
+    dynamic data = await Api.call('orders');
+    loaded = true;
+    if((data != null) && (data is Map)) {
+      if((data['orders'] != null) && (data['orders'] is List)) {
+        setState(() {
+          orders = data['orders'].toList();
+        });
+      }
+    }
+  }
 
+  _getBody() {
+    if(loaded) {
+      if(orders.length > 0) {
+        return _smartView();
+      } else {
+        return Center(child: Text('- ยังไม่มีประวัติการสั่งซื้อ -', style: TextStyle(fontFamily: Site.font, fontSize: 14)));
+      }
+    }
+    _loading();
+    return Center(child: CircularProgressIndicator());
+  }
 
-  _orderItem(dynamic items) {
+  _smartView() {
+    return SmartRefresher(
+      enablePullDown: true,
+      enablePullUp: false,
+      controller: _refreshController,
+      onRefresh: _onRefresh,
+      onLoading: _onLoading,
+      header: MaterialClassicHeader(),
+      child: ListView.builder(
+        scrollDirection: Axis.vertical,
+        itemCount: orders.length,
+        primary: false,
+        shrinkWrap: true,
+        padding: EdgeInsets.all(5),
+        itemBuilder: (BuildContext context, int position) {
+          final Map item = orders[position];
+          return GestureDetector(
+            onTap: () {
+              Get.to(OrderPage(id: getInt(item['_id'])));
+            },
+            child: Card(
+              shape: RoundedRectangleBorder(
+                side: BorderSide(color: Color(0xffcccccc)),
+                borderRadius: BorderRadius.all(Radius.circular(5)),
+              ),
+              elevation: 0,
+              child: Container(
+                padding: EdgeInsets.all(15),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('คำสั่งซื้อ: #' + getString(item['no']), style: TextStyle(fontFamily: Site.font),maxLines: 1),
+                              Text('สั่งซื้อวันที่: ' + getTime(item['added'],'datetime'), style: TextStyle(fontFamily: Site.font),maxLines: 1),
+                            ]
+                          ),
+                        ),
+                        Container(
+                          child: Text(Site.orderStatus[getInt(item['status'])]['name'], style: TextStyle(fontFamily: Site.font),maxLines: 1),
+                          
+                        ),
+                      ]
+                    ),
+                    SizedBox(width: 10),
+                    _orderItem(context, item['product']),
+                  ]
+                ) 
+              )
+            )
+          );
+        }
+      )
+    );
+  }
+  
+  _onRefresh() async{
+    _loading();
+    _refreshController.refreshCompleted();
+  }
+  
+  void _onLoading() async{
+    _loading();
+    _refreshController.loadComplete();
+  }
+
+  _orderItem(BuildContext context, dynamic items) {
     if((items != null) && (items is List)) {
       return Container(
         child: Column(
@@ -183,7 +170,7 @@ class OrdersPageScreenState extends State<OrdersPage> {
             SizedBox(height: 8),
             Container(
               child: ListView.builder(
-                itemCount: items.length,
+                itemCount: (items.length > 3 ? 3 : items.length),
                 shrinkWrap: true,
                 primary: false,
                 scrollDirection: Axis.vertical,
@@ -192,7 +179,16 @@ class OrdersPageScreenState extends State<OrdersPage> {
                   return _orderListItem(item);
                 },
               )
-            )
+            ),
+            items.length > 3 ? 
+              Container(
+                margin: EdgeInsets.only(top: 19),
+                padding: EdgeInsets.all(10),
+                width: double.infinity,
+                color: Color(0xfff0f0f0),
+                child: Text('- คลิกเพื่อดูรายการอื่นๆ -', textAlign: TextAlign.center, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontFamily: Site.font, fontSize: 14)),
+              ) :
+              Container()
           ]
         ),
       );

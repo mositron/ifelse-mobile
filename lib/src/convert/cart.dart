@@ -76,6 +76,21 @@ class Cart {
     Site.cartBloc.add('amount');
   }
 
+  static void clear() {
+    products = [];
+    shipId = 0;
+    shipPrice = 0;
+    address = [];
+    payment = {};
+    shipName = '';
+    shipPhone = '';
+    shipAddress = '';
+    shipDetail = '';
+    payBank = 0;
+    payType = '';
+    refresh();
+  }
+
   static double getPrice() {
     double sumPrice = 0;
     if((products != null) && (products is List) && (products.length > 0)) {
