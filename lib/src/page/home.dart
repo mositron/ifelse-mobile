@@ -44,6 +44,10 @@ class _HomePageWidgetState extends State<HomePageWidget> {
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
         print("onMessage: $message");
+        Map mapNotification = message["notification"];
+        String title = mapNotification["title"];
+        String body = mapNotification["body"];
+        //sendNotification(title: title, body: body);
       },
       onLaunch: (Map<String, dynamic> message) async {
         print("onLaunch: $message");

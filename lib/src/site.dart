@@ -12,7 +12,7 @@ class Site {
     token = '',
     font = 'Kanit',
     fcm = '',
-    platform = '';
+    os = '';
   static double fontSize = 16;
   static Map<String, dynamic> template = {};
   static List<dynamic> articles = [],

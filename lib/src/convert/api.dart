@@ -10,20 +10,21 @@ import 'session.dart';
 class Api {
   static Future<Map> call(String method, [Map<String,String> map]) async {
     final client = new http.Client();
-    if(Site.platform.isEmpty) {
+    if(Site.os.isEmpty) {
       if(Platform.isIOS) {
-        Site.platform = 'ios';
+        Site.os = 'ios';
       } else if(Platform.isAndroid) {
-        Site.platform = 'android';
+        Site.os = 'android';
       } else {
-        Site.platform = 'other';
+        Site.os = 'other';
       }
     }
     Map<String,String> request = {
         'token': Site.token,
         'session': My.session,
         'fcm': Site.fcm,
-        'platform': Site.platform,
+        'os': Site.os,
+        'version': Site.version,
       };
     if(map != null) {
       request.addAll(map);
