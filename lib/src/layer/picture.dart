@@ -21,7 +21,6 @@ class PictureParser extends WidgetParser {
     String colDirect = getVal(col,'direct').toString();
     double colHeight  = getDouble(getVal(col,'height'),200),
       ratio = getRatio(getVal(data,'ratio'));
-      
 
     EdgeInsets contentPadding = getEdgeInset(getVal(data,'box.padding'));
     if(par['gallery'] is List) {
@@ -76,6 +75,7 @@ class PictureParser extends WidgetParser {
     }
     return Container();
   }
+  
   @override
   String get widgetName => 'picture';
 }

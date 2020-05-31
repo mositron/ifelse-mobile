@@ -11,7 +11,6 @@ import '../convert/session.dart';
 import '../convert/gradient.dart';
 import '../convert/api.dart';
 
-
 class DemoPage extends StatefulWidget {
   @override
   _DemoPageState createState() => _DemoPageState();
@@ -23,6 +22,7 @@ class _DemoPageState extends State<DemoPage> with SingleTickerProviderStateMixin
   double _scale;
   AnimationController _controller;
   TextEditingController tokenControler = new TextEditingController();
+  
   @override
   void initState() {
     _controller = AnimationController(
@@ -133,7 +133,7 @@ class _DemoPageState extends State<DemoPage> with SingleTickerProviderStateMixin
           child: GestureDetector(
             onTap: () {
               String token = tokenControler.text.trim();
-              if(token.length != 10) {
+              if(token.length < 10) {
                 _invalidToken();
               } else {
                 state = 1;
@@ -162,7 +162,7 @@ class _DemoPageState extends State<DemoPage> with SingleTickerProviderStateMixin
             onTap: () {
               setState(() {
                 state = 1;
-                Site.token = '1:c1c16e82';
+                Site.token = '161:1568d1164e';
                 _loadData();
               });
             },

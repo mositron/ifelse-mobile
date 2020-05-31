@@ -24,18 +24,17 @@ class ArticleView extends StatefulWidget {
   ArticleView({Key key, this.map, this.buildContext, this.par, this.func}) : super(key: key);
 
   @override
-  _ArticleViewState createState() {
-    //print(_map);
-    return new _ArticleViewState(map, buildContext, par);
+  ArticleViewState createState() {
+    return ArticleViewState(map, buildContext, par);
   }
 }
  
-class _ArticleViewState extends State<ArticleView> {
+class ArticleViewState extends State<ArticleView> {
   bool loaded;
   dynamic _map;
   BuildContext buildContext;
   dynamic _par;
-  _ArticleViewState(this._map, this.buildContext, this._par);
+  ArticleViewState(this._map, this.buildContext, this._par);
 
   @override
   void initState() {

@@ -2,30 +2,20 @@ import 'package:flutter/material.dart';
 import '../site.dart';
 import '../layer.dart';
 
-class ProductsPage extends StatelessWidget {
+class ProductsPage extends StatefulWidget {
   ProductsPage({Key key, this.par}) : super(key: key);
   final Map<String, dynamic> par;
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(title: Site.name, home: ProductsPageWidget(buildContext: context, par: par), debugShowCheckedModeBanner:false);
+  State<StatefulWidget> createState() {
+    return ProductsState(par);
   }
 }
 
-class ProductsPageWidget extends StatefulWidget {
-  final Map<String, dynamic> par;
-  final BuildContext buildContext;
-  ProductsPageWidget({Key key, this.buildContext, this.par}) : super(key: key);
-  @override
-  _ProductsPageWidgetState createState() => _ProductsPageWidgetState(buildContext, par);
-}
-
-class _ProductsPageWidgetState extends State<ProductsPageWidget> {
+class ProductsState extends State<ProductsPage> {
   bool loaded;
-  BuildContext buildContext;
   Map<String, dynamic> par;
-
-  _ProductsPageWidgetState(this.buildContext, this.par);
+  ProductsState(this.par);
   
   @override
   void initState() {
@@ -56,6 +46,14 @@ class _ProductsPageWidgetState extends State<ProductsPageWidget> {
     } else {
       request['text'] = 'สินค้าทั้งหมด';
     }
-    return Layer.buildContent('products', buildContext, request);
+
+    return MaterialApp(
+      title: Site.name, 
+      debugShowCheckedModeBanner:false,
+      color: Colors.white,
+      builder: (context, child) {
+        return Layer.buildContent('products', context, request);
+      }
+    );
   }
 }

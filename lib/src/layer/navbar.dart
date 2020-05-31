@@ -10,17 +10,18 @@ import '../convert/util.dart';
 class NavBar extends StatefulWidget {
   final dynamic map;
   final Function func;
-  NavBar(this.map, this.func);
+  NavBar({Key key, this.map, this.func}) : super(key: key);
   @override
-  _NavBar createState() => _NavBar(map, func);
+  NavBarState createState() {
+    return NavBarState(map, func);
+  }
 }
 
-class _NavBar extends State<NavBar> {
+class NavBarState extends State<NavBar> {
   dynamic map;
   Function func;
   int selectedIndex;
-
-  _NavBar(this.map, this.func);
+  NavBarState(this.map, this.func);
 
   @override
   void initState() {

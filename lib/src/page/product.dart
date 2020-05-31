@@ -9,28 +9,19 @@ import '../convert/cart.dart';
 import '../convert/toast.dart';
 import '../bloc/product.dart';
 
-class ProductPage extends StatelessWidget {
+class ProductPage extends StatefulWidget {
   ProductPage({Key key, this.par}) : super(key: key);
   final Map<String, dynamic> par;
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(title: Site.name, home: ProductPageWidget(buildContext: context, par: par), debugShowCheckedModeBanner:false);
+  State<StatefulWidget> createState() {
+    return ProductState(par);
   }
 }
 
-class ProductPageWidget extends StatefulWidget {
-  final Map<String, dynamic> par;
-  final BuildContext buildContext;
-  ProductPageWidget({Key key, this.buildContext, this.par}) : super(key: key);
-  @override
-  _ProductPageWidgetState createState() => _ProductPageWidgetState(buildContext, par);
-}
-
-class _ProductPageWidgetState extends State<ProductPageWidget> {
+class ProductState extends State<ProductPage> {
   Widget render;
   bool loaded;
-  BuildContext buildContext;
   Map<String, dynamic> par;
   int id = 0,
     diff = 0,
@@ -55,8 +46,7 @@ class _ProductPageWidgetState extends State<ProductPageWidget> {
     style1 = [],
     style2 = [];
   ProductBloc productBloc;
-
-  _ProductPageWidgetState(this.buildContext, this.par);
+  ProductState(this.par);
   
   @override
   void initState() {
@@ -75,24 +65,28 @@ class _ProductPageWidgetState extends State<ProductPageWidget> {
   @override
   Widget build(BuildContext context) {
     productBloc = ProductBloc();
-    int id = getInt(getVal(par, '_id'));
-    if(id > 0) {
-      return Container(
-          color: Color(0xfff0f0f0),
-          child: FutureBuilder<Map<dynamic,dynamic>>(
+    return MaterialApp(
+      title: Site.name, 
+      debugShowCheckedModeBanner:false,
+      color: Colors.white,
+      builder: (context, child) {
+        int id = getInt(getVal(par, '_id'));
+        if(id > 0) {
+          return FutureBuilder<Map<dynamic,dynamic>>(
             future: Product.getProduct(id),
             builder: (context, snapshot) {
               return snapshot.connectionState == ConnectionState.done
-                  ? snapshot.hasData
-                      ? getWidget(snapshot.data)
-                      : Product.retryButton(fetch)
-                  : IfDialog.getLoading();
+                ? snapshot.hasData
+                  ? getWidget(snapshot.data)
+                  : Product.retryButton(fetch)
+                : IfDialog.getLoading();
             }
-          )
-      );
-    } else {
-      return Container();
-    }
+          );
+        } else {
+          return Container();
+        }    
+      },  
+    );  
   }
 
   setLoading(bool loading) {
@@ -215,9 +209,9 @@ class _ProductPageWidgetState extends State<ProductPageWidget> {
         productBloc.add({'type':'clear'});
       } else {
         if(eachStyle1 == -1) {
-          Toast.show('กรุณาเลือก '+eachName1, context, duration: Toast.lengthShort, gravity:  Toast.bottom);
+          Toast.show('กรุณาเลือก '+eachName1, context, duration: Toast.lengthLong, gravity:  Toast.bottom);
         } else if((eachStyle == 2) && (eachStyle2 == -1)) {
-          Toast.show('กรุณาเลือก '+eachName2, context, duration: Toast.lengthShort, gravity:  Toast.bottom);
+          Toast.show('กรุณาเลือก '+eachName2, context, duration: Toast.lengthLong, gravity:  Toast.bottom);
         } else {
           bool found = false;
           if(items.length > 0) {
@@ -231,7 +225,7 @@ class _ProductPageWidgetState extends State<ProductPageWidget> {
           if(found) {
             Cart.add(item);
           } else {
-            Toast.show('ไม่มีสินค้าที่เลือก', context, duration: Toast.lengthShort, gravity:  Toast.bottom);
+            Toast.show('ไม่มีสินค้าที่เลือก', context, duration: Toast.lengthLong, gravity:  Toast.bottom);
           }
         }
       }
@@ -244,7 +238,7 @@ class _ProductPageWidgetState extends State<ProductPageWidget> {
           print(1);
           if(amount > stock) {
             amount = stock;
-            Toast.show('มีจำนวนสินค้าชนิดนี้นคลัง '+amount.toString()+' '+unit, context, duration: Toast.lengthShort, gravity:  Toast.bottom);
+            Toast.show('มีจำนวนสินค้าชนิดนี้นคลัง '+amount.toString()+' '+unit, context, duration: Toast.lengthLong, gravity:  Toast.bottom);
           }
         } else {
           if((eachStyle == 1) && (eachStyle1 > -1)) {

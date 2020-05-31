@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+import 'package:ifelse/src/convert/toast.dart';
 import '../site.dart';
 import '../layer.dart';
 import '../page/home.dart';
@@ -10,27 +11,19 @@ import '../page/checkout.dart';
 import '../convert/dialog.dart';
 import '../convert/api.dart';
 
-class LoginPage extends StatelessWidget {
-  LoginPage({Key key, this.next}) : super(key: key);
+class LoginPage extends StatefulWidget {
   final String next;
+  LoginPage({Key key, this.next}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(title: Site.name, home: LoginPageWidget(next: next), debugShowCheckedModeBanner:false);
+  State<StatefulWidget> createState() {
+    return LoginState(next);
   }
 }
 
-class LoginPageWidget extends StatefulWidget {
-  final String next;
-  LoginPageWidget({Key key, this.next}) : super(key: key);
-  @override
-  _LoginPageWidgetState createState() => _LoginPageWidgetState(next);
-}
-
-
-class _LoginPageWidgetState extends State<LoginPageWidget> {
+class LoginState extends State<LoginPage> {
   String next;
-  _LoginPageWidgetState(this.next);
+  LoginState(this.next);
 
   @override
   void initState() {
@@ -43,8 +36,15 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
   }
 
   @override
-  Widget build(BuildContext context) {    
-    return Layer.buildContent('login', context, null, _click);
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: Site.name, 
+      debugShowCheckedModeBanner:false,
+      color: Colors.white,
+      builder: (context, child) {
+        return Layer.buildContent('login', context, null, _click);
+      }
+    );
   }
 
   void _click(String type) {
@@ -56,10 +56,12 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
   }
 
   void _launchGoogle(BuildContext context) async {
-    try{
-        GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email']);
-        GoogleSignInAccount _googleUser = await _googleSignIn.signIn();
-        GoogleSignInAuthentication _googleAuth = await _googleUser.authentication;
+    try {
+      GoogleSignIn _googleSignIn = GoogleSignIn(scopes: ['email']);
+      GoogleSignInAccount _googleUser = await _googleSignIn.signIn();
+      GoogleSignInAuthentication _googleAuth = await _googleUser.authentication;
+      String token = _googleAuth.idToken;
+      if((token != null) && (token.isNotEmpty)) {
         IfDialog().loading(context);
         bool logged = await Api.login({'type': 'google', 'idtoken': _googleAuth.idToken});
         Navigator.of(context, rootNavigator: true).pop('dialog');
@@ -71,12 +73,13 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
             //Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()));
           }
           _googleSignIn.disconnect();
-        } else {
-          IfDialog.show(context: context, text: 'บัญชีนี้ไม่สามารถล็อคอินได้');
+          return;
         }
+      }
     } catch (err){
-      IfDialog.show(context: context, text: 'ไม่สามารถล็อคอินได้ ('+err+')');
+
     }  
+    Toast.show('การล็อคอินไม่สำเร็จ', context, duration: Toast.lengthLong, gravity:  Toast.bottom);
   }
 
   void _launchFacebook(BuildContext context) async {
@@ -92,10 +95,8 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
             Get.off(CheckoutPage());
           } else {
             Get.off(HomePage());
-            //Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage()));
           }
-        } else {
-          IfDialog.show(context: context, text: 'บัญชีนี้ไม่สามารถล็อคอินได้');
+          return;
         }
         break;
       case FacebookLoginStatus.cancelledByUser:
@@ -106,5 +107,6 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
         print('error');
         break;
     }
+    Toast.show('การล็อคอินไม่สำเร็จ', context, duration: Toast.lengthLong, gravity:  Toast.bottom);
   }
 }

@@ -210,7 +210,7 @@ class _CartCellState extends State<CartCell> {
                         amount--;
                         if(amount < 1) {
                           amount = 1;
-                          Toast.show('หากต้องการลบ ให้ปัดสินค้ารายการนี้ไปทางด้านซ้ายหรือขวา', context, duration: Toast.lengthShort, gravity:  Toast.bottom);
+                          Toast.show('หากต้องการลบ ให้ปัดสินค้ารายการนี้ไปทางด้านซ้ายหรือขวา', context, duration: Toast.lengthLong, gravity:  Toast.bottom);
                         }
                         if(Cart.products.length > 0) {
                           for(int i=0; i<Cart.products.length; i++) {
@@ -242,7 +242,7 @@ class _CartCellState extends State<CartCell> {
                         amount++;
                         if(amount > stock) {
                           amount = stock;
-                          Toast.show('มีสินค้านี้คงเหลือในคลัง ' + stock.toString() + ' ' + unit, context, duration: Toast.lengthShort, gravity:  Toast.bottom);
+                          Toast.show('มีสินค้านี้คงเหลือในคลัง ' + stock.toString() + ' ' + unit, context, duration: Toast.lengthLong, gravity:  Toast.bottom);
                         }
                         if(Cart.products.length > 0) {
                           for(int i=0; i<Cart.products.length; i++) {

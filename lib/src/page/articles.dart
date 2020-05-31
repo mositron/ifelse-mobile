@@ -2,30 +2,21 @@ import 'package:flutter/material.dart';
 import '../site.dart';
 import '../layer.dart';
 
-class ArticlesPage extends StatelessWidget {
+class ArticlesPage extends StatefulWidget {
   ArticlesPage({Key key, this.par}) : super(key: key);
   final Map<String, dynamic> par;
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(title: Site.name, home: ArticlesPageWidget(buildContext: context, par: par), debugShowCheckedModeBanner:false);
+  State<StatefulWidget> createState() {
+    return ArticlesState(par);
   }
 }
 
-class ArticlesPageWidget extends StatefulWidget {
-  final Map<String, dynamic> par;
-  final BuildContext buildContext;
-  ArticlesPageWidget({Key key, this.buildContext, this.par}) : super(key: key);
-  @override
-  _ArticlesPageWidgetState createState() => _ArticlesPageWidgetState(buildContext, par);
-}
-
-class _ArticlesPageWidgetState extends State<ArticlesPageWidget> {
+class ArticlesState extends State<ArticlesPage> {
   bool loaded;
   BuildContext buildContext;
   Map<String, dynamic> par;
-
-  _ArticlesPageWidgetState(this.buildContext, this.par);
+  ArticlesState(this.par);
   
   @override
   void initState() {
@@ -56,6 +47,13 @@ class _ArticlesPageWidgetState extends State<ArticlesPageWidget> {
     } else {
       request['text'] = 'บทความทั้งหมด';
     }
-    return Layer.buildContent('articles', buildContext, request);
+    return MaterialApp(
+      title: Site.name, 
+      debugShowCheckedModeBanner:false,
+      color: Colors.white,
+      builder: (context, child) {
+        return Layer.buildContent('articles', buildContext, request);
+      }
+    );
   }
 }

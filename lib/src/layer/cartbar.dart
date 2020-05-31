@@ -20,15 +20,18 @@ import '../page/checkout.dart';
 class CartBar extends StatefulWidget {
   final dynamic map;
   final Function func;
-  CartBar(this.map, this.func);
+  CartBar({Key key, this.map, this.func}) : super(key: key);
+
   @override
-  _CartBar createState() => _CartBar(map, func);
+  State<StatefulWidget> createState() {
+    return CartBarState(map, func);
+  }
 }
 
-class _CartBar extends State<CartBar> {
+class CartBarState extends State<CartBar> {
   dynamic map;
   Function func;
-  _CartBar(this.map, this.func);
+  CartBarState(this.map, this.func);
 
   @override
   void initState() {
@@ -76,7 +79,6 @@ class _CartBar extends State<CartBar> {
         )
     );
   }
-  
 
   Widget _getButton(String type) {
     dynamic _cart = getVal(map,'data.'+type);
@@ -128,7 +130,7 @@ class _CartBar extends State<CartBar> {
                 Get.to(LoginPage(next: 'checkout'));
               }
             } else {
-              Toast.show('ยังไม่มีรายการสินค้าในตะกร้า', context, duration: Toast.lengthShort, gravity:  Toast.bottom);
+              Toast.show('ยังไม่มีรายการสินค้าในตะกร้า', context, duration: Toast.lengthLong, gravity:  Toast.bottom);
             }
           },
           padding: EdgeInsets.all(0.0),

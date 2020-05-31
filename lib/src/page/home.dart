@@ -10,43 +10,35 @@ import '../convert/util.dart';
 import '../bloc/cart.dart';
 import 'order.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   final String next;
   final Map par;
   HomePage({Key key, this.next, this.par}) : super(key: key);
+
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(title: Site.name, home: HomePageWidget(next: next, par: par), debugShowCheckedModeBanner:false);
+  State<StatefulWidget> createState() {
+    return HoneState(next: next, par: par);
   }
 }
 
-class HomePageWidget extends StatefulWidget {
-  final String next;
-  final Map par;
-  HomePageWidget({Key key, this.next, this.par}) : super(key: key);
-  @override
-  _HomePageWidgetState createState() => _HomePageWidgetState(next: next, par: par);
-}
-
-class _HomePageWidgetState extends State<HomePageWidget> {
+class HoneState extends State<HomePage> {
   final String next;
   final Map par;
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
-
-  _HomePageWidgetState({Key key, this.next, this.par});
+  HoneState({Key key, this.next, this.par});
 
   TabController controller;
-  Widget render;
+  //Widget render;
   @override
   void initState() {
-    render = null;
+    //render = null;
     super.initState();
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
         print("onMessage: $message");
-        Map mapNotification = message["notification"];
-        String title = mapNotification["title"];
-        String body = mapNotification["body"];
+        //Map mapNotification = message["notification"];
+        //String title = mapNotification["title"];
+        //String body = mapNotification["body"];
         //sendNotification(title: title, body: body);
       },
       onLaunch: (Map<String, dynamic> message) async {
@@ -69,7 +61,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
 
   @override
   void dispose() {
-    render = null;
+    //render = null;
     super.dispose();
   }
 
@@ -79,29 +71,37 @@ class _HomePageWidgetState extends State<HomePageWidget> {
       Site.cartBloc = CartBloc();
       Cart.init();
     }
+
+    _openNext();
+/*
     if(render == null) {
       render = BlocProvider<CartBloc>(
         create: (context) => Site.cartBloc,
         child: Layer.buildContent('home',context)
       );
     }
-    _openNext();
     return render;
+*/
+    return MaterialApp(
+      title: Site.name, 
+      debugShowCheckedModeBanner:false,
+      color: Colors.white,
+      builder: (context, child) {   
+        return BlocProvider<CartBloc>(
+          create: (context) => Site.cartBloc,
+          child: Layer.buildContent('home',context)
+        );
+      }
+    );
   }
 
   _openNext() async {
-    print(next);
-    print(par);
     if((next != null) && (next is String)) {
-      print('1');
       if((next == 'order') && (par != null)) {
-        print('2');
         Timer(Duration(seconds: 1),() {
-          print('3');
           Get.to(OrderPage(id:getInt(par['id'])));
         });
       }
     }
   }
-
 }

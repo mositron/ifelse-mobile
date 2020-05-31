@@ -9,26 +9,20 @@ import '../my.dart';
 import '../convert/api.dart';
 import '../convert/dialog.dart';
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   ProfilePage({Key key, this.par}) : super(key: key);
   final Map<String, dynamic> par;
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(title: Site.name, home: _ProfilePage(), debugShowCheckedModeBanner:false);
-  }
-}
-
-class _ProfilePage extends StatefulWidget {
-  @override
   State<StatefulWidget> createState() {
-    return ProfileScreenState();
+    return ProfileState();
   }
 }
+//SingleTickerProviderStateMixin
 
 typedef void OnPickImageCallback(double maxWidth, double maxHeight, int quality);
 
-class ProfileScreenState extends State<_ProfilePage> with SingleTickerProviderStateMixin {
+class ProfileState extends State<ProfilePage>  {
   bool _status = true;
   //final FocusNode myFocusNode = FocusNode();
   TextEditingController controllerFirstName;
@@ -86,123 +80,118 @@ class ProfileScreenState extends State<_ProfilePage> with SingleTickerProviderSt
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        color: Colors.white,
-        child: ListView(
-          children: <Widget>[
-            Column(
-              children: <Widget>[
-                Container(
-                  height: 250.0,
-                  color: Colors.white,
-                  child: Column(
-                    children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.only(left: 20.0, top: 20.0),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            GestureDetector(
-                              onTap: () {
-                                Get.back();
-                              },
-                              child: Icon(
-                                Icons.arrow_back_ios,
-                                color: Colors.black,
-                                size: 22.0,
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(left: 25.0),
-                              child: Text('โปรไฟล์',
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20.0,
-                                      fontFamily: Site.font,
-                                      color: Colors.black)),
-                            )
-                          ],
-                        )
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 20.0),
-                        child: Stack(fit: StackFit.loose, children: <Widget>[
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.center,
+    return MaterialApp(
+      title: Site.name, 
+      debugShowCheckedModeBanner:false,
+      color: Colors.white,
+      builder: (context, child) {
+        return Scaffold(
+          body: ListView(
+            children: <Widget>[
+              Column(
+                children: <Widget>[
+                  Container(
+                    height: 250.0,
+                    color: Colors.white,
+                    child: Column(
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.only(left: 20.0, top: 20.0),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              Container(
-                                width: 150.0,
-                                height: 150.0,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  image: DecorationImage(
-                                    image: Image.network(My.image).image,
-                                    fit: BoxFit.cover,
-                                  ),
-                                )
+                              GestureDetector(
+                                onTap: () {
+                                  Get.back();
+                                },
+                                child: Icon(Icons.arrow_back_ios,color: Colors.black,size: 22.0),
                               ),
+                              Padding(
+                                padding: EdgeInsets.only(left: 25.0),
+                                child: Text('โปรไฟล์', style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20.0,fontFamily: Site.font,color: Colors.black)),
+                              )
                             ],
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(top: 90.0, right: 100.0),
-                            child: Row(
+                          )
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(top: 20.0),
+                          child: Stack(fit: StackFit.loose, children: <Widget>[
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
-                                GestureDetector(
-                                  onTap: () {
-                                    _uploadProfile(ImageSource.gallery, context: context);
-                                  },
-                                  child: CircleAvatar(
-                                    backgroundColor: Colors.red,
-                                    radius: 25.0,
-                                    child: Icon(
-                                      Icons.camera_alt,
-                                      color: Colors.white,
+                                Container(
+                                  width: 150.0,
+                                  height: 150.0,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    image: DecorationImage(
+                                      image: Image.network(My.image).image,
+                                      fit: BoxFit.cover,
                                     ),
                                   )
-                                )
-                              ],
-                            )
-                          ),
-                        ]
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              Container(
-                color: Color(0xffFFFFFF),
-                child: Padding(
-                  padding: EdgeInsets.only(bottom: 25.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: <Widget>[
-                      Padding(
-                        padding: EdgeInsets.only(left: 25.0, right: 25.0, top: 25.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          mainAxisSize: MainAxisSize.max,
-                          children: <Widget>[
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                Text('ข้อมูลส่วนตัว', style: TextStyle(fontSize: 18.0,fontFamily: Site.font,fontWeight: FontWeight.bold)),
+                                ),
                               ],
                             ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                _status ? _getEditIcon() : Container(),
-                              ],
-                            )
-                          ],
-                        )),
-                      Padding(
+                            Padding(
+                              padding: EdgeInsets.only(top: 90.0, right: 100.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  GestureDetector(
+                                    onTap: () {
+                                      _uploadProfile(ImageSource.gallery, context: context);
+                                    },
+                                    child: CircleAvatar(
+                                      backgroundColor: Colors.red,
+                                      radius: 25.0,
+                                      child: Icon(
+                                        Icons.camera_alt,
+                                        color: Colors.white,
+                                      ),
+                                    )
+                                  )
+                                ],
+                              )
+                            ),
+                          ]
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                Container(
+                  color: Color(0xffFFFFFF),
+                  child: Padding(
+                    padding: EdgeInsets.only(bottom: 25.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Padding(
+                          padding: EdgeInsets.only(left: 25.0, right: 25.0, top: 25.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisSize: MainAxisSize.max,
+                            children: <Widget>[
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  Text('ข้อมูลส่วนตัว', style: TextStyle(fontSize: 18.0,fontFamily: Site.font,fontWeight: FontWeight.bold)),
+                                ],
+                              ),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  _status ? _getEditIcon() : Container(),
+                                ],
+                              )
+                            ],
+                          )
+                        ),
+                        Padding(
                           padding: EdgeInsets.only(left: 25.0, right: 25.0, top: 25.0),
                           child: Row(
                             mainAxisSize: MainAxisSize.max,
@@ -215,8 +204,9 @@ class ProfileScreenState extends State<_ProfilePage> with SingleTickerProviderSt
                                 ],
                               ),
                             ],
-                          )),
-                      Padding(
+                          )
+                        ),
+                        Padding(
                           padding: EdgeInsets.only(left: 25.0, right: 25.0, top: 2.0),
                           child: Row(
                             mainAxisSize: MainAxisSize.max,
@@ -231,8 +221,9 @@ class ProfileScreenState extends State<_ProfilePage> with SingleTickerProviderSt
                                 ),
                               ),
                             ],
-                          )),
-                      Padding(
+                          )
+                        ),
+                        Padding(
                           padding: EdgeInsets.only(left: 25.0, right: 25.0, top: 25.0),
                           child: Row(
                             mainAxisSize: MainAxisSize.max,
@@ -245,8 +236,9 @@ class ProfileScreenState extends State<_ProfilePage> with SingleTickerProviderSt
                                 ],
                               ),
                             ],
-                          )),
-                      Padding(
+                          )
+                        ),
+                        Padding(
                           padding: EdgeInsets.only(left: 25.0, right: 25.0, top: 2.0),
                           child: Row(
                             mainAxisSize: MainAxisSize.max,
@@ -260,17 +252,20 @@ class ProfileScreenState extends State<_ProfilePage> with SingleTickerProviderSt
                                 ),
                               ),
                             ],
-                          )),
-                      !_status ? _getActionButtons() : Container(),
-                    ],
+                          )
+                        ),
+                        !_status ? _getActionButtons() : Container(),
+                      ],
+                    ),
                   ),
-                ),
-              )
-            ],
-          ),
-        ],
-      ),
-    ));
+                )
+              ],
+            ),
+          ],
+        )
+      );
+      },
+    );
   }
 
 

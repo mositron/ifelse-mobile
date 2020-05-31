@@ -23,21 +23,17 @@ class JobView extends StatefulWidget {
   JobView({Key key, this.map, this.buildContext, this.par}) : super(key: key);
 
   @override
-  _JobViewState createState() {
-    //print(_map);
-    return new _JobViewState(map, buildContext, par);
+  JobViewState createState() {
+    return JobViewState(map, buildContext, par);
   }
 }
  
-class _JobViewState extends State<JobView> {
+class JobViewState extends State<JobView> {
   bool loaded;
   dynamic _map;
   BuildContext buildContext;
   dynamic _par;
-  _JobViewState(this._map, this.buildContext, this._par) {
-    //print(_map);
-
-  }
+  JobViewState(this._map, this.buildContext, this._par);
 
   @override
   void initState() {

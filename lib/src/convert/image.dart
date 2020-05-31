@@ -83,7 +83,7 @@ Widget getImageWidget(String src) {
       errorWidget: (context, url, error) => Icon(Icons.error),
     );
   }
-  return null;
+  return Container();
 }
 
 Widget getImageRatio(dynamic obj, String size, double ratio) {
@@ -111,5 +111,5 @@ Widget getImageRatio(dynamic obj, String size, double ratio) {
       }
     }
   }
-  return null;
+  return Container();
 }

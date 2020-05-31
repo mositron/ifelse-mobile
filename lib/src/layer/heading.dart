@@ -44,6 +44,7 @@ class HeadingParser extends WidgetParser {
       )
     );
   }
+  
   @override
   String get widgetName => 'heading';
 }

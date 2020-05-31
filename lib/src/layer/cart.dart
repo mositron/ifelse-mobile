@@ -10,7 +10,7 @@ import '../convert/edge.dart';
 import '../convert/shadow.dart';
 class CartParser extends WidgetParser {
   Widget parse(String file, Map<String, dynamic> map, BuildContext buildContext, [Map<String, dynamic> par, Function func]) {
-    return new CartView(key: UniqueKey(), file: file, map: map, buildContext: buildContext, par: par);    
+    return CartView(key: UniqueKey(), file: file, map: map, buildContext: buildContext, par: par);    
   }
   
   @override
@@ -26,20 +26,19 @@ class CartView extends StatefulWidget {
   CartView({Key key, this.file, this.map, this.buildContext, this.par, this.func}) : super(key: key);
 
   @override
-  _CartViewState createState() {
-    //print(_map);
-    return new _CartViewState(file, map, buildContext, par, func);
+  State<StatefulWidget> createState() {
+    return CartViewState(file, map, buildContext, par, func);
   }
 }
  
-class _CartViewState extends State<CartView> {
+class CartViewState extends State<CartView> {
   bool loaded;
   dynamic _map;
   String _file;
   BuildContext buildContext;
   dynamic _par;
   Function _func;
-  _CartViewState(this._file, this._map, this.buildContext, this._par, this._func);
+  CartViewState(this._file, this._map, this.buildContext, this._par, this._func);
 
   @override
   Widget build(BuildContext context) {

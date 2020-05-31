@@ -34,41 +34,44 @@ class OrdersPageScreenState extends State<OrdersPage> {
   
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(      
+    return MaterialApp(
+      title: Site.name, 
+      debugShowCheckedModeBanner:false,
       color: Color(0xffe0e0e0),
-      home: Scaffold(
-        backgroundColor: Color(0xffe0e0e0),
-        appBar: AppBar(
-          title: Text('ประวัติการสั่งซื้อสินค้า',style: TextStyle(fontFamily: Site.font, color: Color(0xff565758))),
-          centerTitle: true,
-          leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back_ios,
-              color: Colors.black,
-              size: 22.0,
-            ),      
-            onPressed: () {
-              Get.back();
-            }
+      builder: (context, child) {
+        return Scaffold(
+          appBar: AppBar(
+            title: Text('ประวัติการสั่งซื้อสินค้า',style: TextStyle(fontFamily: Site.font, color: Color(0xff565758))),
+            centerTitle: true,
+            leading: IconButton(
+              icon: Icon(
+                Icons.arrow_back_ios,
+                color: Colors.black,
+                size: 22.0,
+              ),      
+              onPressed: () {
+                Get.back();
+              }
+            ),
+            backgroundColor: Colors.white,
+            elevation: 0,
           ),
-          backgroundColor: Colors.white,
-          elevation: 0,
-        ),
-        body: _getBody()
-      )
+          body: _getBody()
+        );
+      }
     );
   }
 
   _loading() async {
     dynamic data = await Api.call('orders');
-    loaded = true;
     if((data != null) && (data is Map)) {
       if((data['orders'] != null) && (data['orders'] is List)) {
-        setState(() {
-          orders = data['orders'].toList();
-        });
+        orders = data['orders'].toList();
       }
     }
+    setState(() {
+      loaded = true;
+    });
   }
 
   _getBody() {

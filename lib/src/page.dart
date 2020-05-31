@@ -63,8 +63,6 @@ class _PageWidgetState extends State<PageWidget> {
         dynamic data = getVal(template,'data');
         _showAppbar = getInt(getVal(data,'appbar'));
         _showNavbar = getInt(getVal(data,'navbar'));
-        //_items = [];
-        //print(_pages.length);
         if(_showNavbar > 0) {
           dynamic items = getVal(template,'child.navbar.data.items');
           if((items != null) && (items is List)) {
@@ -98,10 +96,6 @@ class _PageWidgetState extends State<PageWidget> {
         template = json[0];
         dynamic child = getVal(template,'child');
         dynamic data = getVal(template,'data');
-        //SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-          //statusBarColor: Colors.transparent,
-        //));
-        //SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
         // จัดการ AppBar
         _appbar = (_showAppbar > 0 ? getAppBar(getVal(child,'appbar'), context, appClick) : null);
         if((_showAppbar == 2) && (_appbar != null)) {
@@ -109,9 +103,9 @@ class _PageWidgetState extends State<PageWidget> {
         }
         // จัดการ NavBar
         if(file == 'home') {
-          _navbar = (_showNavbar > 0 ? NavBar(getVal(child,'navbar'), navClick) : null);
+          _navbar = (_showNavbar > 0 ? NavBar(map: getVal(child,'navbar'), func: navClick) : null);
         } else if(file == 'cart') {
-          _navbar = (_showNavbar > 0 ? CartBar(getVal(child,'navbar'), navClick) : null);
+          _navbar = (_showNavbar > 0 ? CartBar(map: getVal(child,'navbar'), func: navClick) : null);
         }
         if((_showNavbar == 2) && (_navbar != null)) {
           _offsetBottom = getDouble(getVal(data,'bottom'));

@@ -9,31 +9,20 @@ import '../convert/dialog.dart';
 import '../convert/session.dart';
 import '../convert/cache.dart';
 
-class SplashPage extends StatelessWidget {
+class SplashPage extends StatefulWidget {
   SplashPage({Key key, this.par}) : super(key: key);
   final Map<String, dynamic> par;
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: Site.name,
-      home: _SplashPage(), debugShowCheckedModeBanner:false
-    );
-  }
-}
-
-class _SplashPage extends StatefulWidget {
-  @override
   State<StatefulWidget> createState() {
-    return SplashScreenState();
+    return SplashState();
   }
 }
 
-class SplashScreenState extends State<_SplashPage> {
+class SplashState extends State<SplashPage> {
   @override
   void initState() {
     sessionLoad();
-    //loadData();
     super.initState();    
   }
 
@@ -59,17 +48,23 @@ class SplashScreenState extends State<_SplashPage> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<Widget>(
-      future: loadSplash(),
-      builder: (BuildContext context, AsyncSnapshot<Widget> snapshot) {
-        if (snapshot.hasData) {
-          loadData();
-          return snapshot.data;
-        } else {
-          return IfDialog.getLoading();
-        }
-      },
+    return MaterialApp(
+      title: Site.name,
+      debugShowCheckedModeBanner:false,
+      color: Colors.white,
+      builder: (context, child) {
+        return FutureBuilder<Widget>(
+          future: loadSplash(),
+          builder: (BuildContext context, AsyncSnapshot<Widget> snapshot) {
+            if (snapshot.hasData) {
+              loadData();
+              return snapshot.data;
+            } else {
+              return IfDialog.getLoading();
+            }
+          }
+        );
+      }
     );
-    //Layer.buildContent('splash', context, null, null);
   }
 }

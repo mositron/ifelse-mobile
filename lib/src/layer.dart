@@ -92,11 +92,7 @@ class Layer {
     if(file == 'splash') {
       return Container(      
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Color(0xFFFFFFFF),Color(0xFFDDDDDD),]
-          )
+          gradient: Site.splashBackground
         ),    
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

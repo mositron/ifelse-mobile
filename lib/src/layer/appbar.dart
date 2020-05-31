@@ -16,10 +16,11 @@ AppBar getAppBar(dynamic obj, BuildContext buildContext,  Function appClick) {
       data = getVal(obj,'data'),
       logo = getVal(data,'logo'),
       nav = getVal(data,'nav'),
-      cart = getVal(data,'cart');
+      cart = getVal(data,'cart');;
     String logoStyle = getVal(logo,'style'),
       navStyle = getVal(nav,'style'),
       cartStyle = getVal(cart,'style');
+    int light = getInt(getVal(data,'light'));
     Widget _title, _leading,_action;
     if(logoStyle == 'text') {
       _title = Text(
@@ -27,7 +28,8 @@ AppBar getAppBar(dynamic obj, BuildContext buildContext,  Function appClick) {
         style: TextStyle(fontFamily: Site.font,fontSize: getDouble(getVal(logo,'size'), Site.fontSize),color: getColor(getVal(logo,'color'),'fff'))
       );
     } else if(logoStyle == 'image') {
-      _title = Image.network(getImage(getVal(data,'image'),'s'));
+      _title = getImageRatio(getVal(data,'image'),'s',0);
+
     }
     if(navStyle == 'action') {
       _leading = IconButton(
@@ -85,12 +87,12 @@ AppBar getAppBar(dynamic obj, BuildContext buildContext,  Function appClick) {
       );
     }
   
-    
     return AppBar(
       title: _title,
       centerTitle: getVal(logo,'align') == 'center',
       leading: _leading,
       backgroundColor: Colors.transparent,
+      brightness: light == 1 ? Brightness.light : Brightness.dark,
       elevation: 0,
       flexibleSpace: Container(
         decoration: BoxDecoration(

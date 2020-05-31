@@ -16,11 +16,11 @@ import 'home.dart';
 class PaymentPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return PaymentPageScreenState();
+    return PaymentState();
   }
 }
 
-class PaymentPageScreenState extends State<PaymentPage> {
+class PaymentState extends State<PaymentPage> {
   bool loaded;
   PaymentBloc paymentBloc;
   int paymentSelected = -1;
@@ -42,18 +42,22 @@ class PaymentPageScreenState extends State<PaymentPage> {
   @override
   Widget build(BuildContext context) {
     paymentBloc = PaymentBloc();
-    return Container(
+    return MaterialApp(
+      title: Site.name, 
+      debugShowCheckedModeBanner:false,
       color: Color(0xffe0e0e0),
-      child: FutureBuilder<Map<dynamic, dynamic>>(
-        future: getPayment(),
-        builder: (context, snapshot) {
-          return snapshot.connectionState == ConnectionState.done
+      builder: (context, child) {
+        return FutureBuilder<Map<dynamic, dynamic>>(
+          future: getPayment(),
+          builder: (context, snapshot) {
+            return snapshot.connectionState == ConnectionState.done
               ? snapshot.hasData
                 ? getWidget(snapshot.data)
                 : retryButton(fetch)
               : IfDialog.getLoading();
-        }
-      )
+          }
+        );
+      }
     );
   }
 
@@ -64,7 +68,6 @@ class PaymentPageScreenState extends State<PaymentPage> {
         Cart.payment = data['payment'];
       }
     }
-    print(data);
     _alertNoPayment();
     return data;
   }
@@ -381,7 +384,7 @@ class PaymentPageScreenState extends State<PaymentPage> {
 
   _paymentConfirm() async {
     if((paymentSelected == -1) || (Cart.payBank  == 0)) {
-      Toast.show('กรุณาเลือกวิธีการชำระเงิน', context, duration: Toast.lengthShort, gravity:  Toast.bottom);
+      Toast.show('กรุณาเลือกวิธีการชำระเงิน', context, duration: Toast.lengthLong, gravity:  Toast.bottom);
       return;
     }
     showDialog(
@@ -428,10 +431,10 @@ class PaymentPageScreenState extends State<PaymentPage> {
     });
     if(error.length > 0) {
       Navigator.of(context, rootNavigator: true).pop('dialog');
-      Toast.show('สินค้าบางรายการ มีข้อมูลไม่ถูกต้อง', context, duration: Toast.lengthShort, gravity:  Toast.bottom);
+      Toast.show('สินค้าบางรายการ มีข้อมูลไม่ถูกต้อง', context, duration: Toast.lengthLong, gravity:  Toast.bottom);
     } else if(products.length == 0) {
       Navigator.of(context, rootNavigator: true).pop('dialog');      
-      Toast.show('ไม่มีสินค้าในตะกร้า', context, duration: Toast.lengthShort, gravity:  Toast.bottom);
+      Toast.show('ไม่มีสินค้าในตะกร้า', context, duration: Toast.lengthLong, gravity:  Toast.bottom);
     } else {
       dynamic response = await Api.call('cart', {
         'type': 'new',

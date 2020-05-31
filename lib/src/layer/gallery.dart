@@ -81,6 +81,7 @@ class GalleryParser extends WidgetParser {
     }
     return Container();
   }
+  
   @override
   String get widgetName => 'gallery';
 }

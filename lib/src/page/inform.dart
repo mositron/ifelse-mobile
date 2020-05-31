@@ -20,11 +20,11 @@ class InformPage extends StatefulWidget {
   InformPage({Key key, this.order, this.bank}) : super(key: key);
   @override
   State<StatefulWidget> createState() {
-    return InformPageScreenState(order, bank);
+    return InformState(order, bank);
   }
 }
 
-class InformPageScreenState extends State<InformPage> {
+class InformState extends State<InformPage> {
   int order = 0;
   List<dynamic> bank;
   DateTime pickedDate;
@@ -36,8 +36,7 @@ class InformPageScreenState extends State<InformPage> {
   int bankSelected = -1;
   int bankId = 0;
   InformBloc informBloc;
-
-  InformPageScreenState(this.order, this.bank);
+  InformState(this.order, this.bank);
 
   @override
   void initState() {
@@ -61,67 +60,71 @@ class InformPageScreenState extends State<InformPage> {
   Widget build(BuildContext context) {    
     informBloc = InformBloc();
     return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('แจ้งการชำระเงิน',style: TextStyle(fontFamily: Site.font, color: Color(0xff565758))),
-          centerTitle: true,
-          leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back_ios,
-              color: Colors.black,
-              size: 22.0,
-            ),      
-            onPressed: () {
-              Get.back();
-            }
+      title: Site.name, 
+      debugShowCheckedModeBanner:false,
+      color: Color(0xffe0e0e0),
+      builder: (context, child) { 
+        return Scaffold(
+          appBar: AppBar(
+            title: Text('แจ้งการชำระเงิน',style: TextStyle(fontFamily: Site.font, color: Color(0xff565758))),
+            centerTitle: true,
+            leading: IconButton(
+              icon: Icon(
+                Icons.arrow_back_ios,
+                color: Colors.black,
+                size: 22.0,
+              ),      
+              onPressed: () {
+                Get.back();
+              }
+            ),
+            backgroundColor: Colors.white,
+            elevation: 0,
           ),
-          backgroundColor: Colors.white,
-          elevation: 0,
-        ),
-        backgroundColor: Color(0xffe0e0e0),
-        body: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Column(
-            children: [
-              _formBank(),
-              _formDetail()
-            ],
-          )
-        )
-        ,bottomNavigationBar: Container(
-            //height: 70,
-          decoration: BoxDecoration(
-            color: Colors.white,
-          ),
-          margin: EdgeInsets.all(0),
-          padding: EdgeInsets.only(left:10, right:10),
-          child: Container(
-            child:Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
+          body: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: Column(
               children: [
-                Container(
-                  height: 70,
-                  child:Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text('กรุณากรอกข้อมูลให้ครบถ้วน', overflow: TextOverflow.ellipsis, style: TextStyle(fontFamily: Site.font, fontSize: Site.fontSize)),
-                    ],
-                  )
-                ),
-                Container(
-                  alignment: Alignment.centerRight,
-                  height: 70,
-                  child: _getButton(),
-                )
+                _formBank(),
+                _formDetail()
               ],
             )
           )
-        )
-      ),
+          ,bottomNavigationBar: Container(
+              //height: 70,
+            decoration: BoxDecoration(
+              color: Colors.white,
+            ),
+            margin: EdgeInsets.all(0),
+            padding: EdgeInsets.only(left:10, right:10),
+            child: Container(
+              child:Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    height: 70,
+                    child:Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('กรุณากรอกข้อมูลให้ครบถ้วน', overflow: TextOverflow.ellipsis, style: TextStyle(fontFamily: Site.font, fontSize: Site.fontSize)),
+                      ],
+                    )
+                  ),
+                  Container(
+                    alignment: Alignment.centerRight,
+                    height: 70,
+                    child: _getButton(),
+                  )
+                ],
+              )
+            )
+          )
+        );
+      }
     );
   }
 
@@ -205,9 +208,9 @@ class InformPageScreenState extends State<InformPage> {
     String note = controllerNote.text.trim();
     
     if(amount.length == 0) {
-      Toast.show('กรุณากรอกจำนวนเงิน', context, duration: Toast.lengthShort, gravity:  Toast.bottom);
+      Toast.show('กรุณากรอกจำนวนเงิน', context, duration: Toast.lengthLong, gravity:  Toast.bottom);
     } else if(bankId == 0) {   
-      Toast.show('กรุณาเลือกธนาคารที่โอน', context, duration: Toast.lengthShort, gravity:  Toast.bottom);
+      Toast.show('กรุณาเลือกธนาคารที่โอน', context, duration: Toast.lengthLong, gravity:  Toast.bottom);
     } else {
       IfDialog().loading(context);
       dynamic response = await Api.call('inform', {        

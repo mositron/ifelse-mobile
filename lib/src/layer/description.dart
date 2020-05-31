@@ -49,6 +49,7 @@ class DescriptionParser extends WidgetParser {
       )
     );
   }
+  
   @override
   String get widgetName => 'description';
 }

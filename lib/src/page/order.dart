@@ -10,7 +10,6 @@ import '../page/inform.dart';
 
 class OrderPage extends StatefulWidget {
   final int id;
-  
   OrderPage({Key key, this.id}) : super(key: key);
 
   @override
@@ -41,18 +40,22 @@ class OrderPageScreenState extends State<OrderPage> {
   
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return MaterialApp(
+      title: Site.name, 
+      debugShowCheckedModeBanner:false,
       color: Color(0xffe0e0e0),
-      child: FutureBuilder<Map<dynamic, dynamic>>(
-        future: getOder(),
-        builder: (context, snapshot) {
-          return snapshot.connectionState == ConnectionState.done
+      builder: (context, child) {
+        return FutureBuilder<Map<dynamic, dynamic>>(
+          future: getOder(),
+          builder: (context, snapshot) {
+            return snapshot.connectionState == ConnectionState.done
               ? snapshot.hasData
                 ? getWidget(snapshot.data)
                 : retryButton(fetch)
               : IfDialog.getLoading();
-        }
-      )
+          }
+        );
+      }
     );
   }
 

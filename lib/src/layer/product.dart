@@ -23,17 +23,17 @@ class ProductView extends StatefulWidget {
   ProductView({Key key, this.map, this.buildContext, this.par}) : super(key: key);
 
   @override
-  _ProductViewState createState() {
-    return new _ProductViewState(map, buildContext, par);
+  ProductViewState createState() {
+    return new ProductViewState(map, buildContext, par);
   }
 }
  
-class _ProductViewState extends State<ProductView> {
+class ProductViewState extends State<ProductView> {
   bool loaded;
   dynamic _map;
   BuildContext buildContext;
   dynamic _par;
-  _ProductViewState(this._map, this.buildContext, this._par);
+  ProductViewState(this._map, this.buildContext, this._par);
 
   @override
   void initState() {

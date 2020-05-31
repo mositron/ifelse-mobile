@@ -30,6 +30,7 @@ class DetailParser extends WidgetParser {
       )
     );
   }
+  
   @override
   String get widgetName => 'detail';
 }

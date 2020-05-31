@@ -14,7 +14,7 @@ import '../convert/util.dart';
 
 class ButtonParser extends WidgetParser {
   Widget parse(String file, Map<String, dynamic> map, BuildContext buildContext, [Map<String, dynamic> par, Function func]) {
-    return new ButtonView(key: UniqueKey(), file: file, map: map, buildContext: buildContext, par: par, func: func);    
+    return ButtonView(key: UniqueKey(), file: file, map: map, buildContext: buildContext, par: par, func: func);    
   }
   
   @override
@@ -30,20 +30,19 @@ class ButtonView extends StatefulWidget {
   ButtonView({Key key, this.file, this.map, this.buildContext, this.par, this.func}) : super(key: key);
 
   @override
-  _ButtonViewState createState() {
-    //print(_map);
-    return new _ButtonViewState(file, map, buildContext, par, func);
+  ButtonViewState createState() {
+    return ButtonViewState(file, map, buildContext, par, func);
   }
 }
  
-class _ButtonViewState extends State<ButtonView> {
+class ButtonViewState extends State<ButtonView> {
   bool loaded;
   dynamic _map;
   String _file;
   BuildContext buildContext;
   dynamic _par;
   Function _func;
-  _ButtonViewState(this._file, this._map, this.buildContext, this._par, this._func);
+  ButtonViewState(this._file, this._map, this.buildContext, this._par, this._func);
 
   @override
   Widget build(BuildContext context) {

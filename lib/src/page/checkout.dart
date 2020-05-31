@@ -15,11 +15,11 @@ import 'payment.dart';
 class CheckoutPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return CheckoutPageScreenState();
+    return CheckoutState();
   }
 }
 
-class CheckoutPageScreenState extends State<CheckoutPage> {
+class CheckoutState extends State<CheckoutPage> {
   bool loaded;
   List<dynamic> address;
   int addressSelected = -1;
@@ -44,18 +44,22 @@ class CheckoutPageScreenState extends State<CheckoutPage> {
   @override
   Widget build(BuildContext context) {
     checkoutBloc = CheckoutBloc();
-    return Container(
+    return MaterialApp(
+      title: Site.name, 
+      debugShowCheckedModeBanner:false,
       color: Color(0xffe0e0e0),
-      child: FutureBuilder<Map<dynamic, dynamic>>(
-        future: getCheckout(),
-        builder: (context, snapshot) {
-          return snapshot.connectionState == ConnectionState.done
+      builder: (context, child) {
+        return FutureBuilder<Map<dynamic, dynamic>>(
+          future: getCheckout(),
+          builder: (context, snapshot) {
+            return snapshot.connectionState == ConnectionState.done
               ? snapshot.hasData
                 ? getWidget(snapshot.data)
                 : retryButton(fetch)
               : IfDialog.getLoading();
-        }
-      )
+          }
+        );
+      }
     );
   }
 
@@ -98,93 +102,91 @@ class CheckoutPageScreenState extends State<CheckoutPage> {
   }
 
   Widget getWidget(Map<dynamic, dynamic> data) {
-    return MaterialApp(
-      home: BlocProvider<CheckoutBloc>(
-        create: (context) => checkoutBloc,
-        child: Scaffold(
-          appBar: AppBar(
-            title: Text('การจัดส่ง',style: TextStyle(fontFamily: Site.font, color: Color(0xff565758))),
-            centerTitle: true,
-            leading: IconButton(
-              icon: Icon(
-                Icons.arrow_back_ios,
-                color: Colors.black,
-                size: 22.0,
-              ),      
-              onPressed: () {
-                Get.back();
-              }
-            ),
-            backgroundColor: Colors.white,
-            elevation: 0,
+    return BlocProvider<CheckoutBloc>(
+      create: (context) => checkoutBloc,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('การจัดส่ง',style: TextStyle(fontFamily: Site.font, color: Color(0xff565758))),
+          centerTitle: true,
+          leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back_ios,
+              color: Colors.black,
+              size: 22.0,
+            ),      
+            onPressed: () {
+              Get.back();
+            }
           ),
-          body: Container(
-            color: Color(0xffe0e0e0),
-            child: Column(  
-              children: <Widget>[
-                Expanded(
-                  child: Container(
-                    alignment: Alignment.centerLeft,
-                    child: ListView(
-                      primary: false,
-                      shrinkWrap: true,
-                      padding: EdgeInsets.all(0),
-                      children: <Widget>[
-                        selectedAddressSection(),
-                        standardDelivery(),
-                        priceSection(),
-                        checkoutItem(),
-                      ],
-                    ),
+          backgroundColor: Colors.white,
+          elevation: 0,
+        ),
+        body: Container(
+          color: Color(0xffe0e0e0),
+          child: Column(  
+            children: <Widget>[
+              Expanded(
+                child: Container(
+                  alignment: Alignment.centerLeft,
+                  child: ListView(
+                    primary: false,
+                    shrinkWrap: true,
+                    padding: EdgeInsets.all(0),
+                    children: <Widget>[
+                      selectedAddressSection(),
+                      standardDelivery(),
+                      priceSection(),
+                      checkoutItem(),
+                    ],
                   ),
                 ),
-              ],
-            )
-          ),
-          bottomNavigationBar: Container(
-            //height: 70,
-            decoration: BoxDecoration(
-              color: Colors.white,
-            ),
-            margin: EdgeInsets.all(0),
-            padding: EdgeInsets.only(left:10, right:10),
-            child: Container(
-              child:Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  height: 70,
-                  child:Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text('ยอดรวมต้องชำระ', style: TextStyle(fontFamily: Site.font, fontSize: Site.fontSize)),
-                      BlocBuilder<CheckoutBloc, int>(
-                        bloc: checkoutBloc,
-                        builder: (_, count) {
-                          if((addressSelected == -1) || (addressSelected >= Cart.address.length)) {
-                            return Text('กรุณาเลือกที่อยู่ในการจัดส่ง', style: TextStyle(fontFamily: Site.font, color: Colors.redAccent, fontSize: 16));
-                          } else if((shippingSelected == -1) || (shippingSelected >= shipping.length)) {
-                            return Text('กรุณาเลือกวิธีการจัดส่ง', style: TextStyle(fontFamily: Site.font, color: Colors.redAccent, fontSize: 16));
-                          } else {
-                            return Text(getCurrency(Cart.price + Cart.shipPrice), style: TextStyle(fontFamily: Site.font, color: Color(0xffff5717), fontSize: 18));
-                          }
-                        }
-                      )
-                    ],
-                  )
-                ),
-                Container(
-                  alignment: Alignment.centerRight,
-                  height: 70,
-                  child: _getButton('btn'),
-                )
-              ],
-            ))
+              ),
+            ],
           )
+        ),
+        bottomNavigationBar: Container(
+          //height: 70,
+          decoration: BoxDecoration(
+            color: Colors.white,
+          ),
+          margin: EdgeInsets.all(0),
+          padding: EdgeInsets.only(left:10, right:10),
+          child: Container(
+            child:Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                height: 70,
+                child:Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text('ยอดรวมต้องชำระ', style: TextStyle(fontFamily: Site.font, fontSize: Site.fontSize)),
+                    BlocBuilder<CheckoutBloc, int>(
+                      bloc: checkoutBloc,
+                      builder: (_, count) {
+                        if((addressSelected == -1) || (addressSelected >= Cart.address.length)) {
+                          return Text('กรุณาเลือกที่อยู่ในการจัดส่ง', style: TextStyle(fontFamily: Site.font, color: Colors.redAccent, fontSize: 16));
+                        } else if((shippingSelected == -1) || (shippingSelected >= shipping.length)) {
+                          return Text('กรุณาเลือกวิธีการจัดส่ง', style: TextStyle(fontFamily: Site.font, color: Colors.redAccent, fontSize: 16));
+                        } else {
+                          return Text(getCurrency(Cart.price + Cart.shipPrice), style: TextStyle(fontFamily: Site.font, color: Color(0xffff5717), fontSize: 18));
+                        }
+                      }
+                    )
+                  ],
+                )
+              ),
+              Container(
+                alignment: Alignment.centerRight,
+                height: 70,
+                child: _getButton('btn'),
+              )
+            ],
+          ))
         )
       )
     );
@@ -257,9 +259,9 @@ class CheckoutPageScreenState extends State<CheckoutPage> {
         child: RawMaterialButton(
           onPressed: () {           
             if((addressSelected == -1) || (addressSelected >= Cart.address.length)) {
-              Toast.show('กรุณาเลือกที่อยู่ในการจัดส่ง', context, duration: Toast.lengthShort, gravity: Toast.bottom);
+              Toast.show('กรุณาเลือกที่อยู่ในการจัดส่ง', context, duration: Toast.lengthLong, gravity: Toast.bottom);
             } else if((shippingSelected == -1) || (shippingSelected >= shipping.length)) {
-              Toast.show('กรุณาเลือกวิธีการจัดส่ง', context, duration: Toast.lengthShort, gravity: Toast.bottom);
+              Toast.show('กรุณาเลือกวิธีการจัดส่ง', context, duration: Toast.lengthLong, gravity: Toast.bottom);
             } else {
               Get.to(PaymentPage());
             }
