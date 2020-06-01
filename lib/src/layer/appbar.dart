@@ -9,14 +9,15 @@ import '../convert/util.dart';
 import '../page/cart.dart';
 import '../bloc/cart.dart';
 import '../convert/cart.dart';
+import 'tabbar.dart';
 
-AppBar getAppBar(dynamic obj, BuildContext buildContext,  Function appClick) {
-  if ((obj != null) && !(obj is List)) {
-    dynamic box = getVal(obj,'box'),
-      data = getVal(obj,'data'),
+AppBar getAppBar(BuildContext buildContext, dynamic appObj, Function appClick, TabController _tabController, [dynamic tabObj, Function tabClick]) {
+  if ((appObj != null) && !(appObj is List)) {
+    dynamic box = getVal(appObj,'box'),
+      data = getVal(appObj,'data'),
       logo = getVal(data,'logo'),
       nav = getVal(data,'nav'),
-      cart = getVal(data,'cart');;
+      cart = getVal(data,'cart');
     String logoStyle = getVal(logo,'style'),
       navStyle = getVal(nav,'style'),
       cartStyle = getVal(cart,'style');
@@ -72,11 +73,17 @@ AppBar getAppBar(dynamic obj, BuildContext buildContext,  Function appClick) {
                       width: 1,
                       height: 1,
                     ) : Container(
-                    padding: EdgeInsets.only(left:5,right:5,top:0,bottom:0),
+                    padding: EdgeInsets.all(0),
+                    margin: EdgeInsets.all(0),
                     decoration: BoxDecoration(
                       color: Colors.redAccent,
                       borderRadius: BorderRadius.circular(50),
                     ),
+                    constraints:  BoxConstraints(
+                      minWidth: 18,
+                      minHeight: 18,
+                    ),
+                    alignment: Alignment.center,
                     child: Text(Cart.amount.toString(), style: TextStyle(color: Colors.white, fontFamily: Site.font, fontSize: 14)),
                   );
                 }
@@ -87,6 +94,13 @@ AppBar getAppBar(dynamic obj, BuildContext buildContext,  Function appClick) {
       );
     }
   
+    Widget _bottom;
+
+    if((tabObj != null) && (tabClick != null)) {
+      _bottom = getTabBar(buildContext, _tabController, tabObj, tabClick);
+    }
+    
+
     return AppBar(
       title: _title,
       centerTitle: getVal(logo,'align') == 'center',
@@ -98,11 +112,12 @@ AppBar getAppBar(dynamic obj, BuildContext buildContext,  Function appClick) {
         decoration: BoxDecoration(
           gradient: getGradient(getVal(box,'bg.color')),
           image: getImageBG(getVal(box,'bg')),          
-        )
+        ),
       ),
       actions: _action != null ?
         <Widget>[_action] :
-        null
+        null,
+      bottom: _bottom,
     );
   }
   return null;

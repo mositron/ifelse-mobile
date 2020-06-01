@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
 import 'site.dart';
 import 'body.dart';
 import 'layer/appbar.dart';
 import 'layer/navbar.dart';
+import 'layer/topbar.dart';
 import 'layer/cartbar.dart';
 import 'layer/drawer.dart';
 import 'convert/align.dart';
@@ -21,18 +24,18 @@ class PageWidget extends StatefulWidget {
   _PageWidgetState createState() => _PageWidgetState(buildContext, file, par, func);
 }
 
-class _PageWidgetState extends State<PageWidget> with SingleTickerProviderStateMixin {
+class _PageWidgetState extends State<PageWidget> with TickerProviderStateMixin {
   String file;
   Map<String,dynamic> par = {};
   Function func;
   int _selectedIndex = 0;
   AppBar _appbar;
   Widget _navbar;
+  bool _isBottomBar = true;
   Widget _drawer;
   int _showNavbar;
   int _showAppbar;
   TabController _tabController;
-  List<Widget> _tabsView = [];
   List<Map<String,dynamic>> _items = [];
   Map<String,dynamic> template = {};
   dynamic _box;
@@ -49,7 +52,8 @@ class _PageWidgetState extends State<PageWidget> with SingleTickerProviderStateM
     super.initState();
     _pages = [];
     _items = [];
-    _selectedIndex = 0;    
+    _selectedIndex = 0;
+    
     if(Site.template[file] is List) {
       dynamic json = Site.template[file];
       // เทมเพลทที่มีได้หลายแบบ ให้ใช้แบบแรกไปก่อน
@@ -64,7 +68,9 @@ class _PageWidgetState extends State<PageWidget> with SingleTickerProviderStateM
         _showNavbar = getInt(getVal(data,'navbar'));
 
         if(_showNavbar > 0) {
-          //_showNavbar = 2;
+          if(file == 'home') {
+            _showNavbar = 3;
+          }
           dynamic items = getVal(template,'child.navbar.data.items');
           if((items != null) && (items is List)) {
             for(int i=0; i<items.length; i++) {
@@ -74,20 +80,16 @@ class _PageWidgetState extends State<PageWidget> with SingleTickerProviderStateM
                 _selectedIndex = i;
               }
               _items.add(v);
-              if(_showNavbar == 3) {
-                _tabsView.add(BodyWidget(key: UniqueKey(), file:v['type'], par: v['type'] == 'home' ? par : v, func: func));
-              } else {
-                _pages.add(null);
-              }
+              _pages.add(null);
+            }
+
+            if((_items.length > 1) && (_showNavbar == 3)) {
+              _isBottomBar = false;
+              _tabController = TabController(length: _items.length, vsync: this);
             }
           }
-          if((_showNavbar == 3) && (_tabsView.length < 2)) {
-            _showNavbar = 0;
-            _tabsView = [];
-          }
         }
-        _tabController = TabController(length: _items.length, vsync: this);
-        if((_showNavbar != 3) && (_pages.length == 0)) {
+        if(_pages.length == 0) {
           _pages.add(null);
         }
       }
@@ -116,21 +118,17 @@ class _PageWidgetState extends State<PageWidget> with SingleTickerProviderStateM
         dynamic data = getVal(template,'data');
         // จัดการ AppBar
         if(_showAppbar > 0) {
-          if(_showNavbar == 3) {
-            _appbar = getAppBar(context, getVal(child,'appbar'), appClick, _tabController, getVal(child,'navbar'), navClick);
-          } else {
-            _appbar = getAppBar(context, getVal(child,'appbar'), appClick, _tabController);
-          }
+            _appbar = getAppBar(context, getVal(child,'appbar'), appClick);
           if((_showAppbar == 2) && (_appbar != null)) {
             _offsetTop = MediaQuery.of(context).padding.top + _appbar.preferredSize.height;
           }
-        } else if(_showNavbar == 3) {
-          _showNavbar = 1;
         }
         // จัดการ NavBar
         if(_showNavbar > 0) {
           if(file == 'home') {
-            if(_showNavbar != 3) {
+            if(_showNavbar == 3) {
+              _navbar = TopBar(controller: _tabController, map: getVal(child,'navbar'), func: navClick);
+            } else {
               _navbar = NavBar(map: getVal(child,'navbar'), func: navClick);
             }
           } else if(file == 'cart') {
@@ -156,26 +154,49 @@ class _PageWidgetState extends State<PageWidget> with SingleTickerProviderStateM
             backgroundColor: Colors.transparent,
             appBar: _appbar,
             body: LayoutBuilder(
-              builder: (BuildContext context, BoxConstraints viewportConstraints) {              
-                return Center(
-                  child: Container(
-                    constraints: BoxConstraints(
-                      minHeight: viewportConstraints.maxHeight,
-                    ),
-                    padding: EdgeInsets.only(top:_offsetTop, bottom:_offsetBottom),
-                    alignment: getAlignScreen(getVal(data,'align')),                 
-                    child: _showNavbar == 3 ? 
+              builder: (BuildContext context, BoxConstraints viewportConstraints) {
+                if((_showNavbar == 3) && (_navbar != null)) {
+                  print(_navbar);
+                  return Stack(
+                    key: UniqueKey(),
+                    children: <Widget>[
+                      _navbar,
                       TabBarView(
                         controller: _tabController,
-                        children: _tabsView,
-                      ) : 
-                      _pages[_selectedIndex],
-                  ),
-                );
+                        children: _pages,
+                      )
+                      /*
+                      SingleChildScrollView(
+                        child: Center(
+                          child: Container(
+                            padding: EdgeInsets.only(top:_offsetTop, bottom:_offsetBottom),
+                            alignment: getAlignScreen(getVal(data,'align')),                 
+                            child: _pages[_selectedIndex],
+                          ),
+                        )
+                      )
+                      */
+                    ],
+                  );
+                } else {
+
+                  return SingleChildScrollView(
+                    child: Center(
+                      child: Container(
+                        constraints: BoxConstraints(
+                          minHeight: viewportConstraints.maxHeight,
+                        ),
+                        padding: EdgeInsets.only(top:_offsetTop, bottom:_offsetBottom),
+                        alignment: getAlignScreen(getVal(data,'align')),                 
+                        child: _pages[_selectedIndex],
+                      ),
+                    )
+                  );
+                }
               }
             ),
             drawer: _drawer,
-            bottomNavigationBar: _navbar,
+            bottomNavigationBar: _isBottomBar ? _navbar : null,
             resizeToAvoidBottomInset: true,
           )
         );
@@ -209,16 +230,12 @@ class _PageWidgetState extends State<PageWidget> with SingleTickerProviderStateM
   }
 
   void getPage(bool current) {
-    if(_showNavbar == 3) {
-
-    } else {
-      if(_pages[_selectedIndex] == null) {      
-        if(_items.length > _selectedIndex) {
-          dynamic item = _items[_selectedIndex];
-          _pages[_selectedIndex] = BodyWidget(key: UniqueKey(), file:item['type'], par: current ? par : item, func: func);
-        } else {
-          _pages[_selectedIndex] = BodyWidget(key: UniqueKey(), file:file, par: par, func: func);
-        }
+    if(_pages[_selectedIndex] == null) {      
+      if(_items.length > _selectedIndex) {
+        dynamic item = _items[_selectedIndex];
+        _pages[_selectedIndex] = BodyWidget(key: UniqueKey(), file:item['type'], par: current ? par : item, func: func);
+      } else {
+        _pages[_selectedIndex] = BodyWidget(key: UniqueKey(), file:file, par: par, func: func);
       }
     }
   }

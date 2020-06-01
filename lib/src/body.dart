@@ -7,22 +7,34 @@ class BodyWidget extends StatefulWidget {
   final String file;
   final Map<String, dynamic> par;
   final Function func;
-  BodyWidget({Key key, this.file, this.par, this.func}) : super(key: key);
+  final bool scroll;
+  BodyWidget({Key key, this.file, this.par, this.func, this.scroll}) : super(key: key);
 
   @override
-  _BodyWidgetState createState() => new _BodyWidgetState(file, par, func);
+  _BodyWidgetState createState() => new _BodyWidgetState(file, par, func, scroll);
 }
 
-class _BodyWidgetState extends State<BodyWidget> {
+class _BodyWidgetState extends State<BodyWidget> with AutomaticKeepAliveClientMixin  {
   String file;
   Map<String,dynamic> par = {};
   final Function func;
-  _BodyWidgetState(this.file, this.par, this.func);
+  final bool scroll;
+  _BodyWidgetState(this.file, this.par, this.func, this.scroll);
+
+  @override
+  bool get wantKeepAlive => true;
+  
+  @override
+  void initState() {
+    super.initState();  
+  }
 
   @override
   Widget build(BuildContext buildContext) {
     if(Site.template[file] is List) {
-      return Layer.buildBody(file, context, par, func);
+      return SingleChildScrollView(
+        child: Layer.buildBody(file, context, par, func)
+      );
     }
     return Center(
       child: Container(
