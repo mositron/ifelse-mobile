@@ -11,7 +11,7 @@ import '../bloc/cart.dart';
 import '../convert/cart.dart';
 import 'tabbar.dart';
 
-AppBar getAppBar(BuildContext buildContext, dynamic appObj, Function appClick, TabController _tabController, [dynamic tabObj, Function tabClick]) {
+AppBar getAppBar(BuildContext buildContext, int showNavBar, dynamic appObj, Function appClick, TabController _tabController) {
   if ((appObj != null) && !(appObj is List)) {
     dynamic box = getVal(appObj,'box'),
       data = getVal(appObj,'data'),
@@ -95,11 +95,9 @@ AppBar getAppBar(BuildContext buildContext, dynamic appObj, Function appClick, T
     }
   
     Widget _bottom;
-
-    if((tabObj != null) && (tabClick != null)) {
-      _bottom = getTabBar(buildContext, _tabController, tabObj, tabClick);
+    if(showNavBar == 3) {
+      _bottom = getTabBar(buildContext, _tabController, appObj, appClick);
     }
-    
 
     return AppBar(
       title: _title,

@@ -88,7 +88,6 @@ TabBar getTabBar(BuildContext buildContext, TabController _tabController, dynami
           borderRadius: indicatorRadius,
         );
       }
-      print(indicatorHeight);
       return TabBar(
         tabs: _item,
         indicatorPadding: EdgeInsets.all(0),

@@ -62,10 +62,8 @@ class _PageWidgetState extends State<PageWidget> with SingleTickerProviderStateM
         dynamic data = getVal(template,'data');
         _showAppbar = getInt(getVal(data,'appbar'));
         _showNavbar = getInt(getVal(data,'navbar'));
-
         if(_showNavbar > 0) {
-          //_showNavbar = 2;
-          dynamic items = getVal(template,'child.navbar.data.items');
+          dynamic items = getVal(template, 'child.' + (_showNavbar == 3 ? 'appbar' : 'navbar') + '.data.items');
           if((items != null) && (items is List)) {
             for(int i=0; i<items.length; i++) {
               Map v = items[i];
@@ -116,11 +114,7 @@ class _PageWidgetState extends State<PageWidget> with SingleTickerProviderStateM
         dynamic data = getVal(template,'data');
         // จัดการ AppBar
         if(_showAppbar > 0) {
-          if(_showNavbar == 3) {
-            _appbar = getAppBar(context, getVal(child,'appbar'), appClick, _tabController, getVal(child,'navbar'), navClick);
-          } else {
-            _appbar = getAppBar(context, getVal(child,'appbar'), appClick, _tabController);
-          }
+          _appbar = getAppBar(context, _showNavbar, getVal(child,'appbar'), appClick, _tabController);
           if((_showAppbar == 2) && (_appbar != null)) {
             _offsetTop = MediaQuery.of(context).padding.top + _appbar.preferredSize.height;
           }
