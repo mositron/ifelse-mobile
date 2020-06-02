@@ -22,16 +22,23 @@ class DividerParser extends WidgetParser {
         boxShadow: getBoxShadow(getVal(box,'shadow')),
       ),
       margin: getEdgeInset(getVal(box,'margin')),
-      padding: getEdgeInset(getVal(box,'padding')),
+      //padding: getEdgeInset(getVal(box,'padding')),
       alignment: getAlignBox(getVal(data,'align')),
-      child: FractionallySizedBox(
-        widthFactor: width / 100,
+      child: CustomPaint(
+        //size: Size(viewportConstraints.maxWidth, viewportConstraints.maxHeight),
+        painter: DrawCurve(getVal(box,'bg.color')),
         child: Container(
-          height: height,
-          decoration: BoxDecoration(
-            gradient: getGradient(getVal(data,'color')),
-          ),
-        ),
+          padding: getEdgeInset(getVal(box,'padding')),
+          child: FractionallySizedBox(
+            widthFactor: width / 100,
+            child: Container(
+              height: height,
+              decoration: BoxDecoration(
+                gradient: getGradient(getVal(data,'color')),
+              ),
+            ),
+          )
+        )
       )
     );
   }

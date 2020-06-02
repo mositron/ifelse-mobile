@@ -54,64 +54,71 @@ class CartViewState extends State<CartView> {
         boxShadow: getBoxShadow(getVal(box,'shadow')),
       ),
       margin: getEdgeInset(getVal(box,'margin')),
-      padding: getEdgeInset(getVal(box,'padding')),
+      //padding: getEdgeInset(getVal(box,'padding')),
       alignment: Alignment.topCenter,
       //alignment: Alignment(0.0, 0.0),
-      child: ListView.builder(
-        primary: false,
-        shrinkWrap: true,
-        padding: EdgeInsets.all(0),
-        itemCount: Cart.products.length,
-        itemBuilder: (context, index) {
-          final v = Cart.products[index];
-          return Dismissible(
-            key: UniqueKey(),
-            onDismissed: (direction) {
-              setState(() {
-                Cart.products.removeAt(index);
-                Cart.refresh();
-              });
-            },
-            confirmDismiss: (DismissDirection direction) async {
-              return await showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: const Text('ยืนยันการลบรายการสินค้า'),
-                    content: const Text('ต้องการลบรายการสินค้านี้หรือไม่?'),
-                    actions: <Widget>[
-                      FlatButton(
-                        onPressed: () => Navigator.of(context).pop(true),
-                        child: Text('ลบ', style: TextStyle(fontFamily: Site.font, fontSize: Site.fontSize, color: Colors.white)),
-                        color: Color(0xffff5717),
-                      ),
-                      FlatButton(
-                        onPressed: () => Navigator.of(context).pop(false),
-                        child: Text('ยกเลิก', style: TextStyle(fontFamily: Site.font, fontSize: Site.fontSize, color: Color(0xffff5717))),
-                      ),
-                    ],
+      child: CustomPaint(
+        //size: Size(viewportConstraints.maxWidth, viewportConstraints.maxHeight),
+        painter: DrawCurve(getVal(box,'bg.color')),
+        child: Container(
+          padding: getEdgeInset(getVal(box,'padding')),
+          child: ListView.builder(
+            primary: false,
+            shrinkWrap: true,
+            padding: EdgeInsets.all(0),
+            itemCount: Cart.products.length,
+            itemBuilder: (context, index) {
+              final v = Cart.products[index];
+              return Dismissible(
+                key: UniqueKey(),
+                onDismissed: (direction) {
+                  setState(() {
+                    Cart.products.removeAt(index);
+                    Cart.refresh();
+                  });
+                },
+                confirmDismiss: (DismissDirection direction) async {
+                  return await showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: const Text('ยืนยันการลบรายการสินค้า'),
+                        content: const Text('ต้องการลบรายการสินค้านี้หรือไม่?'),
+                        actions: <Widget>[
+                          FlatButton(
+                            onPressed: () => Navigator.of(context).pop(true),
+                            child: Text('ลบ', style: TextStyle(fontFamily: Site.font, fontSize: Site.fontSize, color: Colors.white)),
+                            color: Color(0xffff5717),
+                          ),
+                          FlatButton(
+                            onPressed: () => Navigator.of(context).pop(false),
+                            child: Text('ยกเลิก', style: TextStyle(fontFamily: Site.font, fontSize: Site.fontSize, color: Color(0xffff5717))),
+                          ),
+                        ],
+                      );
+                    },
                   );
                 },
+                child: CartCell(
+                  id: v['id'],
+                  index: v['index'],
+                  title: v['title'],
+                  image: v['image'],
+                  amount: getInt(v['amount']),
+                  price: getDouble(v['price']),
+                  name1: v['name1'],
+                  label1: v['label1'],
+                  name2: v['name2'],
+                  label2: v['label2'],
+                  unit: v['unit'],
+                  stock: getInt(v['stock']),
+                  color: _color,
+                  fsize: _fsize,
+                )
               );
-            },
-            child: CartCell(
-              id: v['id'],
-              index: v['index'],
-              title: v['title'],
-              image: v['image'],
-              amount: getInt(v['amount']),
-              price: getDouble(v['price']),
-              name1: v['name1'],
-              label1: v['label1'],
-              name2: v['name2'],
-              label2: v['label2'],
-              unit: v['unit'],
-              stock: getInt(v['stock']),
-              color: _color,
-              fsize: _fsize,
-            )
-          );
-        }
+            }
+          )
+        )
       )
     );
   }

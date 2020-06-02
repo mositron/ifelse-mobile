@@ -54,11 +54,19 @@ Widget getSplit(int col, String file, Map<String, dynamic> map, BuildContext bui
             boxShadow: getBoxShadow(getVal(box,'shadow')),
           ),
           margin: getEdgeInset(getVal(box,'margin')),
-          padding: getEdgeInset(getVal(box,'padding')),
-          child: col == 1 ? widget[0] : 
-              Row(
-                children: widget
-              )
+          //padding: getEdgeInset(getVal(box,'padding')),
+          child: CustomPaint(
+            //size: Size(viewportConstraints.maxWidth, viewportConstraints.maxHeight),
+            painter: DrawCurve(getVal(box,'bg.color')),
+            child: Container(
+              padding: getEdgeInset(getVal(box,'padding')),
+              child: col == 1 ? 
+                widget[0] : 
+                Row(
+                  children: widget
+                )
+            )
+          ),
         )
       )
   );

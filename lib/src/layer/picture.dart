@@ -47,28 +47,35 @@ class PictureParser extends WidgetParser {
             boxShadow: getBoxShadow(getVal(box,'shadow')),
           ),
           margin: getEdgeInset(getVal(box,'margin')),
-          padding: getEdgeInset(getVal(box,'padding')),
+          //padding: getEdgeInset(getVal(box,'padding')),
           alignment: getAlignBox(getVal(data,'align')),
           //width: double.infinity,
           height: colDirect == 'horizon' ? colHeight : null,
-          child: StaggeredGridView.countBuilder(
-            primary: false,
-            //addAutomaticKeepAlives: true,
-            crossAxisCount: colDirect == 'horizon' ? 1 : colMb,
-            mainAxisSpacing: 0,
-            crossAxisSpacing: 0,
-            scrollDirection: colDirect == 'horizon' ? Axis.horizontal : Axis.vertical,
-            itemCount: photo.length,
-            shrinkWrap: true,
-            padding: EdgeInsets.all(0),
-            
-            itemBuilder: (BuildContext context, int index) {
-              return GestureDetector(
-                child: photo[index],
-                onTap: () => {},
-              );
-            },
-            staggeredTileBuilder: (int index) => StaggeredTile.fit(1),
+          child: CustomPaint(
+            //size: Size(viewportConstraints.maxWidth, viewportConstraints.maxHeight),
+            painter: DrawCurve(getVal(box,'bg.color')),
+            child: Container(
+              padding: getEdgeInset(getVal(box,'padding')),
+              child: StaggeredGridView.countBuilder(
+                primary: false,
+                //addAutomaticKeepAlives: true,
+                crossAxisCount: colDirect == 'horizon' ? 1 : colMb,
+                mainAxisSpacing: 0,
+                crossAxisSpacing: 0,
+                scrollDirection: colDirect == 'horizon' ? Axis.horizontal : Axis.vertical,
+                itemCount: photo.length,
+                shrinkWrap: true,
+                padding: EdgeInsets.all(0),
+                
+                itemBuilder: (BuildContext context, int index) {
+                  return GestureDetector(
+                    child: photo[index],
+                    onTap: () => {},
+                  );
+                },
+                staggeredTileBuilder: (int index) => StaggeredTile.fit(1),
+              )
+            )
           )
         );
       }

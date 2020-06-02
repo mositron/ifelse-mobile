@@ -32,14 +32,21 @@ class HeadingParser extends WidgetParser {
         boxShadow: getBoxShadow(getVal(box,'shadow')),
       ),
       margin: getEdgeInset(getVal(box,'margin')),
-      padding: getEdgeInset(getVal(box,'padding')),
+      //padding: getEdgeInset(getVal(box,'padding')),
       alignment: Alignment(0.0, 0.0),
-      child: SizedBox(
-        width: double.infinity,
-        child: Text(
-          text,
-          style: TextStyle(fontFamily: Site.font,fontSize: getDouble(getVal(data,'size'), Site.fontSize),color: getColor(getVal(data,'color'))),
-          textAlign: getAlignText(getVal(data,'align')),
+      child: CustomPaint(
+        //size: Size(viewportConstraints.maxWidth, viewportConstraints.maxHeight),
+        painter: DrawCurve(getVal(box,'bg.color')),
+        child: Container(
+          padding: getEdgeInset(getVal(box,'padding')),
+          child: SizedBox(
+            width: double.infinity,
+            child: Text(
+              text,
+              style: TextStyle(fontFamily: Site.font,fontSize: getDouble(getVal(data,'size'), Site.fontSize),color: getColor(getVal(data,'color'))),
+              textAlign: getAlignText(getVal(data,'align')),
+            )
+          )
         )
       )
     );

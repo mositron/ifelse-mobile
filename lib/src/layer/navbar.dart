@@ -99,27 +99,34 @@ class NavBarState extends State<NavBar> {
             boxShadow: getBoxShadow(getVal(box,'shadow')),
           ),
           margin: getEdgeInset(getVal(box,'margin')),
-          padding: getEdgeInset(getVal(box,'padding')),
-          child:BottomNavigationBar(
-            items: _item,
-            type: BottomNavigationBarType.fixed,
-            backgroundColor: Colors.transparent,
-            selectedItemColor: hoverTextColor,
-            selectedFontSize: hoverTextSize,
-            selectedLabelStyle: TextStyle(fontSize: hoverTextSize, color: hoverTextColor, fontFamily: Site.font),
-            selectedIconTheme: IconThemeData(size: dataIconSize, color: dataIconColor ?? hoverTextColor),
-            unselectedItemColor: dataTextColor,
-            unselectedFontSize: dataTextSize,
-            unselectedLabelStyle: TextStyle(fontSize: dataTextSize, color: dataTextColor, fontFamily: Site.font),
-            unselectedIconTheme: IconThemeData(size: dataIconSize, color: dataIconColor ?? dataTextColor),
-            elevation: 0,
-            currentIndex: selectedIndex,
-            onTap: (index) {
-              setState(() {
-                selectedIndex = index;
-                func(index);
-              });
-            },
+          //padding: getEdgeInset(getVal(box,'padding')),
+          child: CustomPaint(
+            //size: Size(viewportConstraints.maxWidth, viewportConstraints.maxHeight),
+            painter: DrawCurve(getVal(box,'bg.color')),
+            child: Container(
+              padding: getEdgeInset(getVal(box,'padding')),
+              child:BottomNavigationBar(
+                items: _item,
+                type: BottomNavigationBarType.fixed,
+                backgroundColor: Colors.transparent,
+                selectedItemColor: hoverTextColor,
+                selectedFontSize: hoverTextSize,
+                selectedLabelStyle: TextStyle(fontSize: hoverTextSize, color: hoverTextColor, fontFamily: Site.font),
+                selectedIconTheme: IconThemeData(size: dataIconSize, color: dataIconColor ?? hoverTextColor),
+                unselectedItemColor: dataTextColor,
+                unselectedFontSize: dataTextSize,
+                unselectedLabelStyle: TextStyle(fontSize: dataTextSize, color: dataTextColor, fontFamily: Site.font),
+                unselectedIconTheme: IconThemeData(size: dataIconSize, color: dataIconColor ?? dataTextColor),
+                elevation: 0,
+                currentIndex: selectedIndex,
+                onTap: (index) {
+                  setState(() {
+                    selectedIndex = index;
+                    func(index);
+                  });
+                },
+              )
+            )
           )
         );
       }

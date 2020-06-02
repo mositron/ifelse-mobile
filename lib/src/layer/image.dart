@@ -23,15 +23,21 @@ class ImageParser extends WidgetParser {
         boxShadow: getBoxShadow(getVal(box,'shadow')),
       ),
       margin: getEdgeInset(getVal(box,'margin')),
-      padding: getEdgeInset(getVal(box,'padding')),
+      //padding: getEdgeInset(getVal(box,'padding')),
       alignment: Alignment(0.0, 0.0),
-      child: image != null ?
-        GestureDetector(
-          child: getImageWidget(image['src']),
-           onTap: () => getClicked(buildContext, click),
-        ) : 
-        null,
-      
+      child: CustomPaint(
+        //size: Size(viewportConstraints.maxWidth, viewportConstraints.maxHeight),
+        painter: DrawCurve(getVal(box,'bg.color')),
+        child: Container(
+          padding: getEdgeInset(getVal(box,'padding')),
+          child: image != null ?
+            GestureDetector(
+              child: getImageWidget(image['src']),
+              onTap: () => getClicked(buildContext, click),
+            ) : 
+            null,
+        )
+      )      
     );    
   }
 

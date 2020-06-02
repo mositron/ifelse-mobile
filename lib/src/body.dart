@@ -11,15 +11,15 @@ class BodyWidget extends StatefulWidget {
   BodyWidget({Key key, this.file, this.par, this.func, this.scroll}) : super(key: key);
 
   @override
-  _BodyWidgetState createState() => new _BodyWidgetState(file, par, func, scroll);
+  BodyWidgetState createState() => new BodyWidgetState(file, par, func, scroll);
 }
 
-class _BodyWidgetState extends State<BodyWidget> with AutomaticKeepAliveClientMixin  {
+class BodyWidgetState extends State<BodyWidget> with AutomaticKeepAliveClientMixin  {
   String file;
   Map<String,dynamic> par = {};
   final Function func;
   final bool scroll;
-  _BodyWidgetState(this.file, this.par, this.func, this.scroll);
+  BodyWidgetState(this.file, this.par, this.func, this.scroll);
 
   @override
   bool get wantKeepAlive => true;

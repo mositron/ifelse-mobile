@@ -117,19 +117,25 @@ class ButtonViewState extends State<ButtonView> {
               border: getBorder(getVal(box,'border')),
               image: getImageBG(getVal(box,'bg')),
             ),
-            padding: getEdgeInset(getVal(box,'padding')),
-            child: ipos == 'up' ?
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center ,
-                mainAxisSize: MainAxisSize.min,
-                children: widget,
-              )
-              :
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center ,
-                mainAxisSize: MainAxisSize.min,
-                children: widget,
-            )
+            child: CustomPaint(
+              //size: Size(viewportConstraints.maxWidth, viewportConstraints.maxHeight),
+              painter: DrawCurve(getVal(box,'bg.color')),
+              child: Container(
+                padding: getEdgeInset(getVal(box,'padding')),
+                child: ipos == 'up' ?
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center ,
+                    mainAxisSize: MainAxisSize.min,
+                    children: widget,
+                  )
+                  :
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center ,
+                    mainAxisSize: MainAxisSize.min,
+                    children: widget,
+                )
+              ),
+            ),
           )
         )
       )

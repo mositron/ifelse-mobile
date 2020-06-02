@@ -106,11 +106,20 @@ AppBar getAppBar(BuildContext buildContext, int showNavBar, dynamic appObj, Func
       backgroundColor: Colors.transparent,
       brightness: light == 1 ? Brightness.light : Brightness.dark,
       elevation: 0,
-      flexibleSpace: Container(
-        decoration: BoxDecoration(
-          gradient: getGradient(getVal(box,'bg.color')),
-          image: getImageBG(getVal(box,'bg')),          
-        ),
+      flexibleSpace: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints viewportConstraints) {  
+          print('$viewportConstraints'); 
+          return Container(
+            child: CustomPaint(
+              size: Size(viewportConstraints.maxWidth, viewportConstraints.maxHeight),
+              painter: DrawCurve(getVal(box,'bg.color')),
+            ),
+            decoration: BoxDecoration(
+              gradient: getGradient(getVal(box,'bg.color')),
+              image: getImageBG(getVal(box,'bg')),          
+            ),
+          );
+        }
       ),
       actions: _action != null ?
         <Widget>[_action] :

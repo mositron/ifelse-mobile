@@ -1,9 +1,15 @@
+<img src="screenshot.png">
+.  
+
 <img src="web.png">
- 
+
 ## [วิดีโอการใช้งานเบื้องต้น](http://www.youtube.com/watch?v=7Cte73w959E)
  
 
 ## Changelog ###
+02/06/2563
+* รองรับการสร้างพื้นหลังแบบเส้นโค้ง
+
 30/05/2563
 * เพิ่มระบบ Shopping Cart รองรับ Stock, คำนวนค่าจัดส่ง, แจ้งชำระเงิน
 * เริ่มเก็บ token สำหรับทำ push notification (ส่งกลับมายัง server)

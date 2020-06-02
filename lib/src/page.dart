@@ -139,39 +139,47 @@ class _PageWidgetState extends State<PageWidget> with SingleTickerProviderStateM
         //data.nav.style
         getPage(true);
         
-        return Container(        
-          decoration: BoxDecoration(
-            gradient: getGradient(getVal(_box,'bg.color')),
-          ),
-          child: Scaffold(
-            key: _drawerKey,
-            extendBody: _showNavbar == 2,
-            extendBodyBehindAppBar: _showAppbar == 2,
-            backgroundColor: Colors.transparent,
-            appBar: _appbar,
-            body: LayoutBuilder(
-              builder: (BuildContext context, BoxConstraints viewportConstraints) {              
-                return Center(
-                  child: Container(
-                    constraints: BoxConstraints(
-                      minHeight: viewportConstraints.maxHeight,
-                    ),
-                    padding: EdgeInsets.only(top:_offsetTop, bottom:_offsetBottom),
-                    alignment: getAlignScreen(getVal(data,'align')),                 
-                    child: _showNavbar == 3 ? 
-                      TabBarView(
-                        controller: _tabController,
-                        children: _tabsView,
-                      ) : 
-                      _pages[_selectedIndex],
+        return LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints viewportConstraints) {  
+            return Container(        
+              decoration: BoxDecoration(
+                gradient: getGradient(getVal(_box,'bg.color')),
+              ),
+              child: CustomPaint(
+                size: Size(viewportConstraints.maxWidth, viewportConstraints.maxHeight),
+                painter: DrawCurve(getVal(_box,'bg.color')),
+                child: Scaffold(
+                  key: _drawerKey,
+                  extendBody: _showNavbar == 2,
+                  extendBodyBehindAppBar: _showAppbar == 2,
+                  backgroundColor: Colors.transparent,
+                  appBar: _appbar,
+                  body: LayoutBuilder(
+                    builder: (BuildContext context, BoxConstraints viewportConstraints) {              
+                      return Center(
+                        child: Container(
+                          constraints: BoxConstraints(
+                            minHeight: viewportConstraints.maxHeight,
+                          ),
+                          padding: EdgeInsets.only(top:_offsetTop, bottom:_offsetBottom),
+                          alignment: getAlignScreen(getVal(data,'align')),                 
+                          child: _showNavbar == 3 ? 
+                            TabBarView(
+                              controller: _tabController,
+                              children: _tabsView,
+                            ) : 
+                            _pages[_selectedIndex],
+                        ),
+                      );
+                    }
                   ),
-                );
-              }
-            ),
-            drawer: _drawer,
-            bottomNavigationBar: _navbar,
-            resizeToAvoidBottomInset: true,
-          )
+                  drawer: _drawer,
+                  bottomNavigationBar: _navbar,
+                  resizeToAvoidBottomInset: true,
+                )
+              )
+            );
+          }
         );
       }
     }

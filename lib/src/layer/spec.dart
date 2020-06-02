@@ -234,11 +234,17 @@ class _SpecViewState extends State<SpecView> {
         boxShadow: getBoxShadow(getVal(box,'shadow')),
       ),
       margin: getEdgeInset(getVal(box,'margin')),
-      padding: getEdgeInset(getVal(box,'padding')),
+      //padding: getEdgeInset(getVal(box,'padding')),
       alignment: Alignment(0.0, 0.0),
-      child: Column(
-        children: _spec
-      ,
+      child: CustomPaint(
+        //size: Size(viewportConstraints.maxWidth, viewportConstraints.maxHeight),
+        painter: DrawCurve(getVal(box,'bg.color')),
+        child: Container(
+          padding: getEdgeInset(getVal(box,'padding')),
+          child: Column(
+            children: _spec
+          )
+        )
       )
     );
   }

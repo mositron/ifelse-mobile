@@ -113,9 +113,16 @@ class PriceParser extends WidgetParser {
         boxShadow: getBoxShadow(getVal(box,'shadow')),
       ),
       margin: getEdgeInset(getVal(box,'margin')),
-      padding: getEdgeInset(getVal(box,'padding')),
+      //padding: getEdgeInset(getVal(box,'padding')),
       alignment: Alignment(0.0, 0.0),
-      child: _widget
+      child: CustomPaint(
+        //size: Size(viewportConstraints.maxWidth, viewportConstraints.maxHeight),
+        painter: DrawCurve(getVal(box,'bg.color')),
+        child: Container(
+          padding: getEdgeInset(getVal(box,'padding')),
+          child: _widget
+        )
+      )
     );
   }
   @override
