@@ -24,6 +24,7 @@ import 'layer/request.dart';
 import 'layer/description.dart';
 import 'layer/spec.dart';
 import 'layer/cart.dart';
+import 'layer/icon.dart';
 import 'convert/util.dart';
 
 class Layer {
@@ -50,6 +51,7 @@ class Layer {
     DescriptionParser(),
     SpecParser(),
     CartParser(),
+    IconParser(),
   ];
   static final _widgetPraseMap = <String, WidgetParser>{};
   static bool _parseInit = false;

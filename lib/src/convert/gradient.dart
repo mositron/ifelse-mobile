@@ -90,6 +90,7 @@ class DrawCurve extends CustomPainter {
           cy2 = (getDouble(obj['cy2'],30) / 100) * h,
           c = w;
           int repeat = getInt(obj['repeat'],0);
+          String valign = obj['valign'] ?? 'up';
           var rect = Offset.zero & size;
           canvas.clipRect(rect);
           if(colors.length > 1) {
@@ -102,16 +103,25 @@ class DrawCurve extends CustomPainter {
           var path = Path();
           path.moveTo(x1, y1);
           path.cubicTo(cx1, cy1, cx2, cy2, x2, y2);
-          path.lineTo(x2, 0);
-          path.lineTo(x1, 0);
+          if(valign == 'down') {
+            path.lineTo(x2, h);
+            path.lineTo(x1, h);
+          } else {
+            path.lineTo(x2, 0);
+            path.lineTo(x1, 0);
+          }
           canvas.drawPath(path, paint);
           if((repeat == 1) && (w >= 100)) {
-            while (c < size.width) {    
-              //var path = Path();
+            while (c < size.width) {
               path.moveTo(c + x1, y1);
               path.cubicTo(c + cx1, cy1, c + cx2, cy2, c + x2, y2);
-              path.lineTo(c + x2, 0);
-              path.lineTo(c + x1, 0);
+              if(valign == 'down') {
+                path.lineTo(c + x2, h);
+                path.lineTo(c + x1, h);
+              } else {
+                path.lineTo(c + x2, 0);
+                path.lineTo(c + x1, 0);
+              }
               canvas.drawPath(path, paint);
               c += w;
             }

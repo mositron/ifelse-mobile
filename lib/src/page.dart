@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'site.dart';
 import 'body.dart';
@@ -112,6 +113,12 @@ class _PageWidgetState extends State<PageWidget> with SingleTickerProviderStateM
         template = json[0];
         dynamic child = getVal(template,'child');
         dynamic data = getVal(template,'data');
+        
+        SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+        ));
+        SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
+
         // จัดการ AppBar
         if(_showAppbar > 0) {
           _appbar = getAppBar(context, _showNavbar, getVal(child,'appbar'), appClick, _tabController);
