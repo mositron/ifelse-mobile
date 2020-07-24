@@ -34,11 +34,13 @@ class PictureParser extends WidgetParser {
           Widget img = getImageRatio(v,'t',ratio);
           if(img != null) {
             photo.add(img);
+            /*
             photo.add(img);
             photo.add(img);
             photo.add(img);
             photo.add(img);
             photo.add(img);
+            */
           }
         });
       }
