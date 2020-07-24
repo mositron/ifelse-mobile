@@ -77,7 +77,7 @@ class LoginState extends State<LoginPage> {
         }
       }
     } catch (err){
-
+      print(err);
     }  
     Toast.show('การล็อคอินไม่สำเร็จ', context, duration: Toast.lengthLong, gravity:  Toast.bottom);
   }

@@ -292,7 +292,7 @@ class ProductCell extends StatelessWidget {
                 children: <InlineSpan>[
                   TextSpan(
                     text: ' ',  
-                    style: TextStyle(color: Color(0xffffffff),fontSize: normalSize),
+                    style: TextStyle(color: overColor,fontSize: normalSize),
                   ),
                   TextSpan(
                     text: '฿' + getCurrency(cellProduct.price[1]),             
@@ -312,7 +312,7 @@ class ProductCell extends StatelessWidget {
             child: Text.rich(
               TextSpan(
                 text: '฿' + getCurrency(cellProduct.price[1]),
-                style: TextStyle(color: Color(0xffffffff),fontSize: Site.fontSize),
+                style: TextStyle(color: normalColor,fontSize: Site.fontSize),
               ),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,

@@ -325,6 +325,7 @@ class InformState extends State<InformPage> {
                                   groupValue: bankSelected,
                                   activeColor: Color(0xffff5717),
                                   onChanged: (int value) {
+                                    bankId = getInt(item['_id']);
                                     _bankSelect(position);
                                   },
                                 ),
