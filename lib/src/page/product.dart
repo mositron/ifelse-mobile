@@ -201,6 +201,7 @@ class ProductState extends State<ProductPage> {
         Cart.add(item);
         //amount = 1;
         productBloc.add({'event': 'clear'});
+        Toast.show('เพิ่มสินค้าเรียบร้อยแล้ว', context, duration: Toast.lengthLong, gravity: Toast.bottom);
       } else {
         if (eachStyle1 == -1) {
           Toast.show('กรุณาเลือก ' + eachName1, context, duration: Toast.lengthLong, gravity: Toast.bottom);
@@ -218,6 +219,7 @@ class ProductState extends State<ProductPage> {
           }
           if (found) {
             Cart.add(item);
+            Toast.show('เพิ่มสินค้าเรียบร้อยแล้ว', context, duration: Toast.lengthLong, gravity: Toast.bottom);
           } else {
             Toast.show('ไม่มีสินค้าที่เลือก', context, duration: Toast.lengthLong, gravity: Toast.bottom);
           }

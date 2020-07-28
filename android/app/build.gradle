@@ -38,7 +38,8 @@ android {
 
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "co.ifelse.demo"
+        // ifelse-edit: change app package
+        applicationId "co.ifelse.preview"
         minSdkVersion 18
         targetSdkVersion 29
         versionCode flutterVersionCode.toInteger()

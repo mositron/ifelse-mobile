@@ -1,4 +1,5 @@
-package co.ifelse.demo
+package co.ifelse.preview
+// ifelse-edit: change app package
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity
