@@ -1,21 +1,23 @@
-
 import 'package:bloc/bloc.dart';
 import '../convert/util.dart';
 
-class ProductBloc extends Bloc<Map, Map>  {
+class ProductBloc extends Bloc<Map, Map> {
   @override
   Map get initialState => {
-    'amount': 1,
-    'style1': -1,
-    'style2': -1,
-    'stock': 0,
-    'price': 0,
-    'unit': '',
-  };
+        'event': '',
+        'amount': 1,
+        'style1': -1,
+        'style2': -1,
+        'stock': 0,
+        'stocked': 0,
+        'price': 0,
+        'unit': '',
+        'type': '',
+      };
 
   @override
   Stream<Map> mapEventToState(Map event) async* {
-    switch (event['type']) {
+    switch (event['event']) {
       case 'style1':
         state['style1'] = getInt(event['value']);
         yield Map.from(state);
@@ -48,4 +50,3 @@ class ProductBloc extends Bloc<Map, Map>  {
     }
   }
 }
-

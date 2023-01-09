@@ -1,5 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="co.ifelse.demo">
+    package="co.ifelse.preview">
+    <!-- ifelse-edit: change app package    -->
     <!-- io.flutter.app.FlutterApplication is an android.app.Application that
          calls FlutterMain.startInitialization(this); in its onCreate method.
          In most cases you can leave this as-is, but you if you want to provide
@@ -10,7 +11,7 @@
         -->
     <application
         android:name=".Application"
-        android:label="studio"
+        android:label="If Else Preview"
         android:icon="@mipmap/ic_launcher"
         android:allowBackup="false"
         android:fullBackupContent="false"

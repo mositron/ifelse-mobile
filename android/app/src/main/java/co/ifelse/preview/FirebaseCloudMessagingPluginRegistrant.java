@@ -1,4 +1,5 @@
-package co.ifelse.demo;
+package co.ifelse.preview;
+// ifelse-edit: change app package
 
 import io.flutter.plugin.common.PluginRegistry;
 import io.flutter.plugins.firebasemessaging.FirebaseMessagingPlugin;

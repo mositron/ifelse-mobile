@@ -12,7 +12,8 @@ class Site {
     token = '',
     font = 'Kanit',
     fcm = '',
-    os = '';
+    os = '',
+    ifKey = '';
   static Gradient splashBackground;
   static double fontSize = 16;
   static Map<String, dynamic> template = {};

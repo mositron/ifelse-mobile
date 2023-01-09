@@ -7,6 +7,9 @@
  
 
 ## Changelog ###
+28/07/2563
+* รองรับการทดสอบการแสดงผลแอพที่ดีไซน์ไว้ผ่านแอพจริง โดยดาวน์โหลดแอพจาก Google Play, มาแล้วกรอกค่า Token ของแอพที่ได้จากหน้าเว็บ แอพจะสามารถแสดงผลการออกแบบแอพของเราได้ทันที  
+  
 02/06/2563
 * รองรับการสร้างพื้นหลังแบบเส้นโค้ง
 
@@ -55,11 +58,24 @@
  
 
 # การทดสอบแอพ
-- ตอนนี้ยังต้อง build เองเท่านั้น โดยแก้ IFELSE_TOKEN ที่ไฟล์ lib/main.dart เป็นค่าที่ได้จากหน้าเว็บจัดการ
-- หากลบค่า IFELSE_TOKEN ที่ไฟล์ lib/main.dart ออก ตัวแอพจะขึ้นหน้าให้กรอก token ทุกครั้งที่มีการเปิดแอพ
-
+- นำค่า Token ที่ได้จากหน้าเว็บ มากรอกที่แอพ ( [วิธีหาค่า Token](https://ifelse.co/docs/apps/token) )
+- สามารถดาวน์โหลดแอพสำหรับทดสอบได้ที่ [Google Play](https://play.google.com/store/apps/details?id=co.ifelse.preview)
 <img src="demo-page.png">
- 
+
+# การเปลี่ยน Icon ของแอพ
+1. นำไฟล์รูปภาพขนาด 512x512 px ไปวางไว้ที่ตำแหน่งไฟล์ assets/icon/icon.png
+2. แล้วรันคำสั่ง flutter pub run flutter_launcher_icons:main
+3. ระบบจะเปลี่ยนไฟล์ icon ทุกขนาดของแอพนี้ให้อัตโนมัติ
+
+
+# สั่ง build Android
+ในส่วนนี้ยังไม่มีคู่มือ คาดว่าจะสามารถทำได้เมื่อระบบทั้งหมดเสร็จเรียบร้อยแล้ว แต่สามารถอธิบายคร่าวๆได้ดังนี้
+1. สร้างแอพหรือโปรเจคใหม่ที่ firebase แล้วนำไฟล์ google-services.json มาวางไว้ที่ตำแหน่งไฟล์ android/app/google-services.json 
+2. สร้างแอพที่ facebook app เพิ่ม Android GXhO platform และกรอกชื่อ package name ที่ใช้งานจริง แล้วนำ fb app id มาใส่ไว้ที่ไฟล์ android/app/src/main/res/values/strings.xml
+* รายละเอียดจริงๆ จะทะยอยเพิ่มให้คราวหน้านะครับ
+* การสั่ง build ไฟล์สำหรับนำไปอัพโหลดบท Google Play ให้พิมพ์คำสั่งด้านล่างนี้
+  flutter build appbundle
+
 
 
 ## การจัดการภายในแอพ
